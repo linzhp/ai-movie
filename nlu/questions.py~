@@ -1,0 +1,58 @@
+import chunker
+
+
+def who(string):
+    if "directed" in string:
+        print 'director'
+    elif "made" in string:
+        print 'director'
+    elif "starred" in string:
+        print 'actor'
+    elif "was in" in string:
+        print 'actor'
+
+input = raw_input('Please enter a question: ')
+
+chk = chunker.Chunker()
+chk_tree = chk.chunk(input)
+
+print '\n'
+print chk_tree
+list = chk_tree.subtrees()
+for x in list:
+    #print x
+    print x.node
+    #print x.root()
+#    print '\n'
+    for y in x:
+     #   print y
+        print y[0]
+        print '\n'
+#print type(chk_tree)
+print '\n'
+
+#for x in chk_tree:
+    #print x
+#    print x
+#    print type(x)
+    #for y in x:
+        #print y
+        #print y[0]
+#        print type(y)
+#print '\n'
+
+print input
+input = input.lower()
+print input
+
+if "who" in input:
+    print 'who'
+#    who(input)
+elif "what" in input:
+    print 'what'
+#    where(input)
+elif "when" in input:
+    print 'when'
+#    when(input)
+
+

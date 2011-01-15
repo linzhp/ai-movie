@@ -1,0 +1,670 @@
+
+*
+*  Session id: 2010-03-161268783335.83
+*
+BOT:Welcome to the Dialogue Manager! My name is Movee, a highly original name conceived by the most brilliant of the team that designed me. The core functionalities I fascillitate are movie list generation based off of preference, basic trivia, and true/false trivia resolution.
+BOT:
+
+ Alright, how may I help you? 
+USER:who starred in star wars
+#NLU: ['trivia', 'actor']BOT:The query you asked returned false. 
+BOT:
+
+ Alright, how may I help you? 
+USER:who starred in "star wars"
+#NLU: ['trivia', 'actor', 'title', 'star wars']BOT:Mark Hamill as Luke Skywalker
+Harrison Ford as Han Solo
+Carrie Fisher as Princess Leia Organa
+Peter Cushing as Grand Moff Tarkin
+Alec Guinness as Ben Obi-Wan Kenobi
+Anthony Daniels as C-3PO
+Kenny Baker as R2-D2
+Peter Mayhew as Chewbacca
+David Prowse as Darth Vader
+James Earl Jones as Darth Vader
+
+BOT:
+
+ Alright, how may I help you? 
+USER:tell me about Alec Guinness
+#NLU: ['trivia', 'plot', 'person', 'Alec Guinness']
+*
+*  Session id: 2010-03-161268783575.22
+*
+BOT:Welcome to the Dialogue Manager! My name is Movee, a highly original name conceived by the most brilliant of the team that designed me. The core functionalities I fascillitate are movie list generation based off of preference, basic trivia, and true/false trivia resolution.
+BOT:
+
+ Alright, how may I help you? 
+USER:When was "Shaft" made
+#NLU: ['trivia', 'year', 'title', 'Shaft']BOT:You asked about year and we found one instance: 2000
+BOT:
+
+ Alright, how may I help you? 
+USER:Who starred in Shar
+#NLU: ['trivia', 'actor', 'person', 'Shar \x08 \x08']BOT:The query you asked returned false. 
+BOT:
+
+ Alright, how may I help you? 
+USER:Who starred in shaft?
+#NLU: ['trivia', 'actor']BOT:The query you asked returned false. 
+BOT:
+
+ Alright, how may I help you? 
+USER:who starred in "shaft"?
+#NLU: ['trivia', 'actor', 'title', 'shaft']BOT:Samuel L. Jackson as John Shaft
+Vanessa Williams as Carmen Vasquez
+Jeffrey Wright as Peoples Hernandez
+Christian Bale as Jr. Walter Wade
+Busta Rhymes as Rasaan
+Dan Hedaya as Jack Roselli
+Toni Collette as Diane Palmieri
+Richard Roundtree as Uncle John Shaft
+Ruben Santiago-Hudson as Jimmy Groves
+Josef Sommer as Curt Fleming
+Lynne Thigpen as Carla Howard
+Philip Bosco as Sr. Walter Wade
+Pat Hingle as Hon. Dennis Bradford
+Lee Tergesen as Luger
+Daniel von Bargen as Lt. Kearney
+Francisco 'Coqui' Taveras as Lucifer
+Sonja Sohn as Alice
+Peter McRobbie as Lt. Cromartie
+Zach Grenier as Harrison Loeb
+Richard Cocchiaro as Frank Palmieri
+Ron Castellano as Mike Palmieri
+Freddie Ricks as Big Raymond
+Sixto Ramos as Bonehead
+Andre Royo as Tattoo
+Richard Barboza as Dominican
+Mekhi Phifer as Trey Howard
+Gano Grills as Cornbread
+Catherine Kellner as Ivy
+Philip Rudolph as Uniform Sergeant
+Angela Pietropinto as Mrs. Ann Palmieri
+Joe Quintero as Assistant D.A. Hector Torres
+Lanette Ware as Terry
+Stu 'Large' Riley as Leon
+Mark Zeisler as D.A. Andrew Nicoli
+Capital Jay as Golem
+Bonz Malone as Malik
+Henry G. Thomas as Malik's Crew
+Brian Oswald Talbot as Malik's Crew
+Preston Thomas as Malik's Crew
+Marshall T. Broughton as Malik's Crew
+Ann Ducati as Aunt Toni DeCarlo
+Lisa Cooley as News Anchor
+Elizabeth Banks as Trey's Friend
+Scott Lucy as Trey's Friend
+Chris Orr as Walter's Friend
+Christopher Orr as Walter's Friend
+Evan Farmer as Walter's Friend
+Will Chase as Walter's Friend
+Jeff Branson as Walter's Friend
+Jerome Preston Bates as Desk Sergeant
+John Elsen as Uniform Cop in Metronome
+Nadine Mozon as Abused Woman
+Lawrence Taylor as Lamont
+Caprice Benedetti as Karen
+John Cunningham as Judge
+Louie Leonardo as Pistolero
+
+BOT:
+
+ Alright, how may I help you? 
+USER:When was Ace Venture a made?
+#NLU: ['trivia', 'year', 'person', 'Ace Venture', 'person', '\x08']
+*
+*  Session id: 2010-03-161268783788.08
+*
+BOT:Welcome to the Dialogue Manager! My name is Movee, a highly original name conceived by the most brilliant of the team that designed me. The core functionalities I fascillitate are movie list generation based off of preference, basic trivia, and true/false trivia resolution.
+BOT:
+
+ Alright, how may I help you? 
+USER:when was "shaft" made?
+#NLU: ['trivia', 'year', 'title', 'shaft']BOT:You asked about year and we found one instance: 2000
+BOT:
+
+ Alright, how may I help you? 
+USER:who starred in "ace ventura"?
+#NLU: ['trivia', 'actor', 'title', 'ace ventura']BOT:Michael Daingerfield as Ace Ventura
+
+BOT:
+
+ Alright, how may I help you? 
+USER:Tell me the plot of "star wars"
+#NLU: ['trivia', 'plot', 'title', 'star wars']BOT:You asked about plot and we found one instance: Part IV in a George Lucas epic, Star Wars: A New Hope opens with a rebel ship being boarded by the tyrannical Darth Vader. The plot then follows the life of a simple farmboy, Luke Skywalker, as he and his newly met allies (Han Solo, Chewbacca, Ben Kenobi, C-3PO, R2-D2) attempt to rescue a rebel leader, Princess Leia, from the clutches of the Empire. The conclusion is culminated as the Rebels, including Skywalker and flying ace Wedge Antilles make an attack on the Empires most powerful and ominous weapon, the Death Star.::P. Wong <pwong@nt.net>
+BOT:
+
+ Alright, how may I help you? 
+USER:who starred in jumanji?
+#NLU: ['trivia', 'actor']BOT:The query you asked returned false. 
+BOT:
+
+ Alright, how may I help you? 
+USER:who starred in "jumanji"?
+#NLU: ['trivia', 'actor', 'title', 'jumanji']BOT:Robin Williams as Alan Parrish
+
+BOT:
+
+ Alright, how may I help you? 
+
+*
+*  Session id: 2010-03-161268783983.41
+*
+BOT:Welcome to the Dialogue Manager! My name is Movee, a highly original name conceived by the most brilliant of the team that designed me. The core functionalities I fascillitate are movie list generation based off of preference, basic trivia, and true/false trivia resolution.
+BOT:
+
+ Alright, how may I help you? 
+USER:Tell me about "shaft in africa"
+#NLU: ['trivia', 'plot', 'title', 'shaft in africa']BOT:You asked about plot and we found one instance: John Shaft is persuaded by threats of physical force, the promise of money, and the lure of a pretty tutor, to assume the identity of a native-speaking itinerant worker in Africa. His job is to help break a racket that is smuggling immigrants into Europe then exploiting them. But the villains have heard that he is on his way.::Jeremy Perkins <jwp@aber.ac.uk>
+BOT:
+
+ Alright, how may I help you? 
+USER:who is the star in "primer"?
+#NLU: ['trivia', 'actor', 'title', 'primer']BOT:Shane Carruth as Aaron
+
+BOT:
+
+ Alright, how may I help you? 
+USER:tell me the plot of "primer"
+#NLU: ['trivia', 'plot', 'title', 'primer']BOT:You asked about plot and we found one instance: At night and on weekends, four men in a suburban garage have built a cottage industry of error-checking devices. But, they know that there is something more. There is some idea, some mechanism, some accidental side effect that is standing between them and a pure leap of innovation. And so, through trial and error they are building the device that is missing most. However, two of these men find the device and immediately realize that it is too valuable to market. The limit of their trust in each other is strained when they are faced with the question, If you always want what you can't have, what do you want when you can have anything?::Sujit R. Varma
+BOT:
+
+ Alright, how may I help you? 
+USER:What movies is Robin Williams in?
+#NLU: ['trivia', 'title', 'person', 'Robin Williams']
+*
+*  Session id: 2010-03-161268784179.19
+*
+BOT:Welcome to the Dialogue Manager! My name is Movee, a highly original name conceived by the most brilliant of the team that designed me. The core functionalities I fascillitate are movie list generation based off of preference, basic trivia, and true/false trivia resolution.
+BOT:
+
+ Alright, how may I help you? 
+USER:I like movies with Bruce Willis
+#NLU: ['like', 'person', 'Bruce Willis']BOT:Present list size = 78Are there any actors you like or dislike? Perhaps specifying one will help you find your dream movie! 
+BOT:
+
+ Alright, how may I help you? 
+USER:I like movies with Justin Long
+#NLU: ['like', 'person', 'Justin Long']BOT:Present list size = 78IMDb has a lot of plot related keywords going anywhere from 'licking-toilet-bowl' to 'sucking-toes.' Of course, there are more conventional ones like 'snake' and 'plane,' but what's the fun of that? 
+BOT:
+
+ Alright, how may I help you? 
+USER:snake
+#NLU: NoneBOT:Sorry, that inquiry is too vague. Can you elaborate please?
+BOT:
+
+ Alright, how may I help you? 
+USER:I like Die Hard
+#NLU: ['like', 'person', 'Die Hard']BOT:Present list size = 78Do you have a favorite movie? You can ask for characteristics of a movie you like, then try a further search based on the found characteristics. Just don't forget to put quotations around the movie title, or else I won't be able to determine whether it is a movie or not. 
+BOT:
+
+ Alright, how may I help you? 
+USER:I like Action movies
+#NLU: ['like', 'genre', 'Action']BOT:Present list size = 27Do you have a preference for a particular genre? Perhaps there is a genre you utterly despise? 
+BOT:
+
+ Alright, how may I help you? 
+USER:I hate romance movies
+#NLU: ['dislike', 'genre', 'romance']BOT:Present list size = 27Hmm... Do you have any favorite directors? Or directors you absolutely despise? We can parse the movie list by that too. 
+BOT:
+
+ Alright, how may I help you? 
+USER:I hate romantic movies
+#NLU: ['dislike', 'genre', 'romantic']BOT:Present list size = 27Well that's a toughie... Not sure what advice to give you. Seems you've hit all of the parameters. You can however try parameters multiple times for further refinement...
+BOT:
+
+ Alright, how may I help you? 
+USER:I like movies about hacking
+#NLU: ['like']BOT:Sorry, that inquiry is too vague. Can you elaborate please?
+BOT:
+
+ Alright, how may I help you? 
+USER:I like movies with car chases
+#NLU: ['like']BOT:Sorry, that inquiry is too vague. Can you elaborate please?
+BOT:
+
+ Alright, how may I help you? 
+USER:I like car chases
+#NLU: ['like', 'other', 'car chases']BOT:Present list size = 27Do you want me to start repeating the query advice again?
+BOT:
+
+ Alright, how may I help you? 
+USER:yes
+#NLU: ['yes']BOT:
+BOT:
+
+ Alright, how may I help you? 
+USER:I like FBI
+#NLU: ['like', 'person', 'FBI']BOT:Present list size = 27Do you want me to start repeating the query advice again?
+BOT:
+
+ Alright, how may I help you? 
+USER:I like movies about the FBI
+#NLU: ['like', 'person', 'FBI']BOT:Present list size = 27Do you want me to start repeating the query advice again?
+BOT:
+
+ Alright, how may I help you? 
+USER:I like movies about FBI
+#NLU: ['like', 'person', 'FBI']BOT:Present list size = 27Do you want me to start repeating the query advice again?
+BOT:
+
+ Alright, how may I help you? 
+USER:I like movies with helicopters
+#NLU: ['like']BOT:Sorry, that inquiry is too vague. Can you elaborate please?
+BOT:
+
+ Alright, how may I help you? 
+USER:I like movies with terrorists
+#NLU: ['like']BOT:Sorry, that inquiry is too vague. Can you elaborate please?
+BOT:
+
+ Alright, how may I help you? 
+USER:I like terrorists
+#NLU: ['like', 'other', 'terrorists']BOT:Present list size = 27Do you want me to start repeating the query advice again?
+BOT:
+
+ Alright, how may I help you? 
+USER:Who starred in Die Hard
+#NLU: ['trivia', 'actor', 'person', 'Die Hard']BOT:The query you asked returned false. 
+BOT:
+
+ Alright, how may I help you? 
+USER:Who starred in "die hard"
+#NLU: ['trivia', 'actor', 'title', 'die hard']
+*
+*  Session id: 2010-03-161268784916.41
+*
+BOT:Welcome to the Dialogue Manager! My name is Movee, a highly original name conceived by the most brilliant of the team that designed me. The core functionalities I fascillitate are movie list generation based off of preference, basic trivia, and true/false trivia resolution.
+BOT:
+
+ Alright, how may I help you? 
+USER:who is in "shaft"
+#NLU: ['trivia', 'person', 'title', 'shaft']BOT:Samuel L. Jackson as John Shaft
+Vanessa Williams as Carmen Vasquez
+Jeffrey Wright as Peoples Hernandez
+Christian Bale as Jr. Walter Wade
+Busta Rhymes as Rasaan
+
+BOT:
+
+ Alright, how may I help you? 
+USER:when was "shaft" made
+#NLU: ['trivia', 'year', 'title', 'shaft']BOT:You asked about year and we found one instance: 2000
+BOT:
+
+ Alright, how may I help you? 
+USER:I like movies with brad pitt
+#NLU: ['like']BOT:Sorry, that inquiry is too vague. Can you elaborate please?
+BOT:
+
+ Alright, how may I help you? 
+USER:Who was in "Shutter Island"
+#NLU: ['trivia', 'person', 'title', 'Shutter Island']BOT:Leonardo DiCaprio as Teddy Daniels
+Mark Ruffalo as Chuck Aule
+Ben Kingsley as Dr. John Cawley
+Emily Mortimer as Rachel Solando
+Michelle Williams as Dolores Chanal
+Max von Sydow as Dr. Jeremiah Naehring
+Patricia Clarkson as Ethel Barton
+Jackie Earle Haley as George Noyce
+Ruby Jerins as Little Girl
+Drew Beasley as Henry
+Frederick William Ahlholm as Hospital Security Officer
+Leigh Belair as US Soldier / German Officer
+Steve Bocsi as Orderly
+Daniel Burress as Mental Patient
+Patrick Canty as German SS Guard
+Ken Cheeseman as Doctor 1
+Curtiss Cook as Trey Washington
+Jeffrey Corazzini as Boardroom Guard
+Matthew Cowles as Ferry Boat Captain
+Christopher Denham as Peter Breene
+
+BOT:
+
+ Alright, how may I help you? 
+USER:tell me the plot of "Shutter Island"
+#NLU: ['trivia', 'plot', 'title', 'Shutter Island']BOT:You asked about plot and we found one instance: It's 1954, and up-and-coming U.S. marshal Teddy Daniels is assigned to investigate the disappearance of a patient from Boston's Shutter Island Ashecliffe Hospital. He's been pushing for an assignment on the island for personal reasons, but before long he wonders whether he hasn't been brought there as part of a twisted plot by hospital doctors whose radical treatments range from unethical to illegal to downright sinister. Teddy's shrewd investigating skills soon provide a promising lead, but the hospital refuses him access to records he suspects would break the case wide open. As a hurricane cuts off communication with the mainland, more dangerous criminals "escape" in the confusion, and the puzzling, improbable clues multiply, Teddy begins to doubt everything - his memory, his partner, even his own sanity.::alfiehitchie
+BOT:
+
+ Alright, how may I help you? 
+USER:reset
+#NLU: []BOT:Sorry, that inquiry is too vague. Can you elaborate please?
+BOT:
+
+ Alright, how may I help you? 
+USER:start over
+#NLU: ['restart']BOT:
+BOT:
+
+ Alright, how may I help you? 
+
+*
+*  Session id: 2010-03-161268785251.81
+*
+BOT:Welcome to the Dialogue Manager! My name is Movee, a highly original name conceived by the most brilliant of the team that designed me. The core functionalities I fascillitate are movie list generation based off of preference, basic trivia, and true/false trivia resolution.
+BOT:
+
+ Alright, how may I help you? 
+USER:I am looking for a movie
+#NLU: ['like']BOT:Sorry, that inquiry is too vague. Can you elaborate please?
+BOT:
+
+ Alright, how may I help you? 
+USER:I want to watch an action movie
+#NLU: ['like', 'genre', 'action']BOT:Present list size = 21859Hmm... Do you have any favorite directors? Or directors you absolutely despise? We can parse the movie list by that too. 
+BOT:
+
+ Alright, how may I help you? 
+USER:I hate michael bay
+#NLU: ['dislike', 'other', 'michael bay']BOT:Present list size = 21859IMDb has a lot of plot related keywords going anywhere from 'licking-toilet-bowl' to 'sucking-toes.' Of course, there are more conventional ones like 'snake' and 'plane,' but what's the fun of that? 
+BOT:
+
+ Alright, how may I help you? 
+USER:I want a movie with will smith
+#NLU: ['like']BOT:Sorry, that inquiry is too vague. Can you elaborate please?
+BOT:
+
+ Alright, how may I help you? 
+USER:I want a movie with Will Smith
+#NLU: ['like', 'person', 'Smith']BOT:Present list size = 21859Do you have a favorite movie? You can ask for characteristics of a movie you like, then try a further search based on the found characteristics. Just don't forget to put quotations around the movie title, or else I won't be able to determine whether it is a movie or not. 
+BOT:
+
+ Alright, how may I help you? 
+USER:I like movies with explosions
+#NLU: ['like']BOT:Sorry, that inquiry is too vague. Can you elaborate please?
+BOT:
+
+ Alright, how may I help you? 
+USER:I want to watch a movie that has aliens and romance
+#NLU: ['like', 'other', 'aliens', 'genre', 'romance']BOT:Present list size = 21859Are there any actors you like or dislike? Perhaps specifying one will help you find your dream movie! 
+BOT:
+
+ Alright, how may I help you? 
+USER:I like Matt Damon
+#NLU: ['like', 'person', 'Matt Damon']BOT:Present list size = 21859Well that's a toughie... Not sure what advice to give you. Seems you've hit all of the parameters. You can however try parameters multiple times for further refinement...
+BOT:
+
+ Alright, how may I help you? 
+USER:I really like Matt Damon
+#NLU: ['like', 'other', 'that']BOT:Present list size = 21859Do you want me to start repeating the query advice again?
+BOT:
+
+ Alright, how may I help you? 
+USER:I like Star Wars
+#NLU: ['like', 'person', 'Star Wars']BOT:Present list size = 21859Do you want me to start repeating the query advice again?
+BOT:
+
+ Alright, how may I help you? 
+USER:yes
+#NLU: ['yes']BOT:
+BOT:
+
+ Alright, how may I help you? 
+USER:I like Action movies
+#NLU: ['like', 'genre', 'Action']BOT:Present list size = 21859Do you want me to start repeating the query advice again?
+BOT:
+
+ Alright, how may I help you? 
+USER:good bye
+#NLU: ['like', 'other', 'that']BOT:Present list size = 21859Do you want me to start repeating the query advice again?
+BOT:
+
+ Alright, how may I help you? 
+USER:bye
+#NLU: ['bye']
+*
+*  Session id: 2010-03-161268785671.35
+*
+BOT:Welcome to the Dialogue Manager! My name is Movee, a highly original name conceived by the most brilliant of the team that designed me. The core functionalities I fascillitate are movie list generation based off of preference, basic trivia, and true/false trivia resolution.
+BOT:
+
+ Alright, how may I help you? 
+USER:I like movies with Samuel L. Jackson
+#NLU: ['like', 'person', 'Samuel L. Jackson']BOT:Present list size = 120IMDb has a lot of plot related keywords going anywhere from 'licking-toilet-bowl' to 'sucking-toes.' Of course, there are more conventional ones like 'snake' and 'plane,' but what's the fun of that? 
+BOT:
+
+ Alright, how may I help you? 
+USER:I like snakes
+#NLU: ['like', 'other', 'snakes']BOT:Present list size = 120Do you have a favorite movie? You can ask for characteristics of a movie you like, then try a further search based on the found characteristics. Just don't forget to put quotations around the movie title, or else I won't be able to determine whether it is a movie or not. 
+BOT:
+
+ Alright, how may I help you? 
+USER:I like snake
+#NLU: ['like', 'other', 'snake']BOT:Present list size = 120Hmm... Do you have any favorite directors? Or directors you absolutely despise? We can parse the movie list by that too. 
+BOT:
+
+ Alright, how may I help you? 
+USER:Was Samuel L. Jackson in "Snakes on a Plane"?
+#NLU: ['True_False', 'person', 'Samuel L. Jackson', 'title', 'Snakes on a Plane']BOT:Yep!Alright, here it is: Snakes on a Plane
+BOT:
+
+ Alright, how may I help you? 
+USER:Are there any movies with Jackie Chan?
+#NLU: ['True_False', 'person', 'Jackie Chan']BOT:Yep!Alright, here it is: Cinema of Vengeance
+BOT:
+
+ Alright, how may I help you? 
+USER:bye
+#NLU: ['bye']
+*
+*  Session id: 2010-03-161268786000.53
+*
+BOT:Welcome to the Dialogue Manager! My name is Movee, a highly original name conceived by the most brilliant of the team that designed me. The core functionalities I fascillitate are movie list generation based off of preference, basic trivia, and true/false trivia resolution.
+BOT:
+
+ Alright, how may I help you? 
+USER:um, I'm looking for a movie
+#NLU: []BOT:Sorry, that inquiry is too vague. Can you elaborate please?
+BOT:
+
+ Alright, how may I help you? 
+USER:how about an action movie
+#NLU: ['True_False', 'genre', 'Action']BOT:No
+BOT:
+
+ Alright, how may I help you? 
+USER:action
+#NLU: ['genre', 'action']BOT:
+BOT:
+
+ Alright, how may I help you? 
+USER:comedy?
+#NLU: ['genre', 'comedy']BOT:
+BOT:
+
+ Alright, how may I help you? 
+USER:I like movies with Mel Gibson
+#NLU: ['like', 'person', 'Mel Gibson']BOT:Present list size = 56Hmm... Do you have any favorite directors? Or directors you absolutely despise? We can parse the movie list by that too. 
+BOT:
+
+ Alright, how may I help you? 
+USER:I disilike movies starring Mel Gibson
+#NLU: []BOT:Sorry, that inquiry is too vague. Can you elaborate please?
+BOT:
+
+ Alright, how may I help you? 
+USER:find actor
+#NLU: []BOT:Sorry, that inquiry is too vague. Can you elaborate please?
+BOT:
+
+ Alright, how may I help you? 
+USER:who starred in "Shaft"?
+#NLU: ['trivia', 'actor', 'title', 'Shaft']BOT:Samuel L. Jackson as John Shaft
+Vanessa Williams as Carmen Vasquez
+Jeffrey Wright as Peoples Hernandez
+Christian Bale as Jr. Walter Wade
+Busta Rhymes as Rasaan
+
+BOT:
+
+ Alright, how may I help you? 
+USER:when was "Shaft" made
+#NLU: ['trivia', 'year', 'title', 'Shaft']BOT:You asked about year and we found one instance: 2000
+BOT:
+
+ Alright, how may I help you? 
+USER:tell me the plot of avatar
+#NLU: ['trivia', 'plot']BOT:The query you asked returned false. 
+BOT:
+
+ Alright, how may I help you? 
+USER:tell me the plot of "Avatar"
+#NLU: ['trivia', 'plot', 'title', 'Avatar']BOT:You asked about plot and we found one instance: In the future, Jake, a paraplegic war veteran, is brought to another planet, Pandora, which is inhabited by the Na'vi, a humanoid race with their own language and culture. Those from Earth find themselves at odds with each other and the local culture.::Giorgio_C
+BOT:
+
+ Alright, how may I help you? 
+USER:tell me a review of "Avatar"
+#NLU: ['trivia', 'other', 'title', 'Avatar']
+*
+*  Session id: 2010-03-161268786233.19
+*
+BOT:Welcome to the Dialogue Manager! My name is Movee, a highly original name conceived by the most brilliant of the team that designed me. The core functionalities I fascillitate are movie list generation based off of preference, basic trivia, and true/false trivia resolution.
+BOT:
+
+ Alright, how may I help you? 
+USER:tell me about "Avatar"
+#NLU: ['trivia', 'plot', 'title', 'Avatar']BOT:You asked about plot and we found one instance: In the future, Jake, a paraplegic war veteran, is brought to another planet, Pandora, which is inhabited by the Na'vi, a humanoid race with their own language and culture. Those from Earth find themselves at odds with each other and the local culture.::Giorgio_C
+BOT:
+
+ Alright, how may I help you? 
+USER:who played in "Avatar"?
+#NLU: ['trivia', 'person', 'title', 'Avatar']BOT:Sam Worthington as Jake Sully
+Zoe Saldana as Neytiri
+Sigourney Weaver as Dr. Grace Augustine
+Stephen Lang as Colonel Miles Quaritch
+Joel Moore as Norm Spellman
+
+BOT:
+
+ Alright, how may I help you? 
+USER:what characters were in "Avatar"
+#NLU: ['trivia', 'other', 'title', 'Avatar']
+*
+*  Session id: 2010-03-161268786379.68
+*
+BOT:Welcome to the Dialogue Manager! My name is Movee, a highly original name conceived by the most brilliant of the team that designed me. The core functionalities I fascillitate are movie list generation based off of preference, basic trivia, and true/false trivia resolution.
+BOT:
+
+ Alright, how may I help you? 
+USER:movies with Mel Gibson
+#NLU: []BOT:Sorry, that inquiry is too vague. Can you elaborate please?
+BOT:
+
+ Alright, how may I help you? 
+USER:i want movies with Mel Gibson
+#NLU: ['like', 'person', 'Mel Gibson']BOT:Present list size = 56Perhaps a more general person search might help quite a bit. Don't forget to capitalize the name, else I simply won't be able to determine whether you want a name or not! 
+BOT:
+
+ Alright, how may I help you? 
+USER:i dislike movies starring Mel Gibson
+#NLU: ['dislike', 'actor', 'Mel Gibson']BOT:Present list size = 3This is present movie list: Apocalypto Untitled Mel Gibson/Leonardo DiCaprio The Passion of the Christ 
+BOT:
+
+ Alright, how may I help you? 
+USER:3
+#NLU: []BOT:Sorry, that inquiry is too vague. Can you elaborate please?
+BOT:
+
+ Alright, how may I help you? 
+USER:2
+#NLU: []BOT:Sorry, that inquiry is too vague. Can you elaborate please?
+BOT:
+
+ Alright, how may I help you? 
+USER:what is the plot of Apocalypto
+#NLU: ['trivia', 'plot', 'person', 'Apocalypto']BOT:The query you asked returned false. 
+BOT:
+
+ Alright, how may I help you? 
+USER:bye
+#NLU: ['bye']
+*
+*  Session id: 2010-03-161268786589.09
+*
+BOT:Welcome to the Dialogue Manager! My name is Movee, a highly original name conceived by the most brilliant of the team that designed me. The core functionalities I fascillitate are movie list generation based off of preference, basic trivia, and true/false trivia resolution.
+BOT:
+
+ Alright, how may I help you? 
+USER:tell me the plot of "Avatar"
+#NLU: ['trivia', 'plot', 'title', 'Avatar']BOT:You asked about plot and we found one instance: In the future, Jake, a paraplegic war veteran, is brought to another planet, Pandora, which is inhabited by the Na'vi, a humanoid race with their own language and culture. Those from Earth find themselves at odds with each other and the local culture.::Giorgio_C
+BOT:
+
+ Alright, how may I help you? 
+USER:who directed Shaft
+#NLU: ['trivia', 'director', 'person', 'Shaft']BOT:Julian Gilbey
+
+BOT:
+
+ Alright, how may I help you? 
+USER:who directed "Shaft"
+#NLU: ['trivia', 'director', 'title', 'Shaft']BOT:You asked about director and we found one instance: John Singleton
+BOT:
+
+ Alright, how may I help you? 
+USER:did Samuel l jackson star in "Shaft"?
+#NLU: ['True_False', 'person', 'Samuel', 'title', 'Shaft']BOT:No
+BOT:
+
+ Alright, how may I help you? 
+USER:who starred in "avatar"?
+#NLU: ['trivia', 'actor', 'title', 'avatar']BOT:Sam Worthington as Jake Sully
+Zoe Saldana as Neytiri
+Sigourney Weaver as Dr. Grace Augustine
+Stephen Lang as Colonel Miles Quaritch
+Joel Moore as Norm Spellman
+
+BOT:
+
+ Alright, how may I help you? 
+USER:What genge is "shaft" in?
+#NLU: ['trivia', 'other', 'title', 'shaft']
+*
+*  Session id: 2010-03-161268786855.7
+*
+BOT:Welcome to the Dialogue Manager! My name is Movee, a highly original name conceived by the most brilliant of the team that designed me. The core functionalities I fascillitate are movie list generation based off of preference, basic trivia, and true/false trivia resolution.
+BOT:
+
+ Alright, how may I help you? 
+USER:What movies has Samuel Jackson been in?
+#NLU: ['trivia', 'title', 'person', 'Samuel Jackson']
+*
+*  Session id: 2010-03-161268787133.24
+*
+BOT:Welcome to the Dialogue Manager! My name is Movee, a highly original name conceived by the most brilliant of the team that designed me. The core functionalities I fascillitate are movie list generation based off of preference, basic trivia, and true/false trivia resolution.
+BOT:
+
+ Alright, how may I help you? 
+USER:has Bruce Willis been in a comedy?
+#NLU: ['True_False', 'person', 'Bruce Willis', 'genre', 'Comedy']BOT:Yep!Alright, here it is: Four Rooms
+BOT:
+
+ Alright, how may I help you? 
+USER:who starred in "the terminator"?
+#NLU: ['trivia', 'actor', 'title', 'the terminator']BOT:Arnold Schwarzenegger as The Terminator
+Michael Biehn as Kyle Reese
+Linda Hamilton as Sarah Connor
+Paul Winfield as Lieutenant Ed Traxler
+Lance Henriksen as Detective Hal Vukovich
+Bess Motta as Ginger Ventura
+Earl Boen as Dr. Peter Silberman
+Rick Rossovich as Matt Buchanan
+Dick Miller as Pawnshop Clerk
+Shawn Schepps as Nancy
+
+BOT:
+
+ Alright, how may I help you? 
+USER:is there a movie with Bruce Willis and not Samuel L. Jackson?
+#NLU: ['True_False', 'person', 'Bruce Willis', '!person', 'Samuel L. Jackson']BOT:Yep!Alright, here it is: Four Rooms
+BOT:
+
+ Alright, how may I help you? 
+USER:quit
+#NLU: NoneBOT:Sorry, that inquiry is too vague. Can you elaborate please?
+BOT:
+
+ Alright, how may I help you? 
+USER:exit
+#NLU: ['bye']
