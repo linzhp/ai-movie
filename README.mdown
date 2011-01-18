@@ -2,22 +2,15 @@ The movie selector uses a MySQL database generated from IMDB plain text data. Fo
 
 Before running the movie selector, you need to configure it first:
 
-cp movie.cfg.sample movie.cfg
+	cp movie.cfg.sample movie.cfg
 
 Then change it configure in movie.cfg according to your MySQL database configuration.
 
 To run the movie selector cd to the dm directory and run 
 the python script movie.py:
 
-cd dm
-python movie.py
-
-
-****** This only works on computers with a Baskin Engineering ip address!
-****** This is because of security protocols in place for the sql server:
-****** mysql.cse.ucsc.edu
-
-This can be resolved if the mysql client on unix.ic.ucsc.edu is updated.
+	cd dm
+	python movie.py
 
 Python module dependencies:
 	MySQLdb
