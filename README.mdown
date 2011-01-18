@@ -13,6 +13,7 @@ the python script movie.py:
 	python movie.py
 
 Python module dependencies:
+
 * MySQLdb
 * numpy
 * imdbpy 
