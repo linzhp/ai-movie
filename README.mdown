@@ -13,19 +13,18 @@ the python script movie.py:
 	python movie.py
 
 Python module dependencies:
-	MySQLdb
-	numpy
-	imdbpy 
+*MySQLdb
+*numpy
+*imdbpy 
 
 Note: there are two log files session.log and session2.log. Initially both instances of our bot were writing to the same log file during evaluation. Because of this the first half of session.log has interlaced data from both sessions. session2.log is more readable.
 
 
-
 Description of directories in /usr/share/project
 
-./nlu/		Natural Language Understanding
-./dm/		Dialog Manager
-./dbi/		Database Interface 
-./nlg/		Natural Language Generation
-./sample_input/	Sample user input
-./doc/		Documentation
+	./nlu/		Natural Language Understanding
+	./dm/		Dialog Manager
+	./dbi/		Database Interface 
+	./nlg/		Natural Language Generation
+	./sample_input/	Sample user input
+	./doc/		Documentation
