@@ -1,6 +1,9 @@
-////////////// note - Andrew //////////////
+////////////// note by Andrew //////////////
+
 //   This is just a try out of github.
+
 //   No changes to code have been made. No need to fetch/pull.
+
 
 The movie selector uses a MySQL database generated from IMDB plain text data. Follow the instructions in <http://imdbpy.sourceforge.net/docs/README.sqldb.txt> to load data from IMDB plain text into a MySQL database.
 
