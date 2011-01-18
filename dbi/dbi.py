@@ -1,8 +1,16 @@
 import nltk
 import MySQLdb
 import imdb
-i =  imdb.IMDb('sql', uri='mysql://maw_imdb:pugOrz2u@mysql.cse.ucsc.edu/maw_imdb')
-conn = MySQLdb.connect (host = "mysql.cse.ucsc.edu", user = "maw_imdb", password = "pugOrz2u" db = "maw_imdb")
+import ConfigParser
+config = ConfigParser.RawConfigParser()
+config.read('../movie.cfg')
+user_name = config.get("database", "user_name")
+password = config.get("database", "password")
+host = config.get("database", "host")
+db_name = config.get("database", "db_name")
+#i =  imdb.IMDb('sql', uri='mysql://maw_imdb:pugOrz2u@mysql.cse.ucsc.edu/maw_imdb')
+i =  imdb.IMDb('sql', uri='mysql://%s:%s@%s/%s'%(user_name,password,host,db_name))
+conn = MySQLdb.connect (host = host, user = user_name, db = db_name)
 
 #Takes in movie title(string), returns movie ID.
 def get_id_movie(fn_input):

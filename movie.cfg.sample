@@ -1,0 +1,5 @@
+[database]
+host=localhost
+user_name=root
+password=
+db_name=imdb
