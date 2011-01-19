@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Delete 6 resources" deleteContents="false" description="Delete 6 resources" element1="/AI-Movie/dbi" element2="/AI-Movie/dm" element3="/AI-Movie/doc" element4="/AI-Movie/nlu" element5="/AI-Movie/sample_input" element6="/AI-Movie/README" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="6" stamp="1295415385099"/>
-</session>

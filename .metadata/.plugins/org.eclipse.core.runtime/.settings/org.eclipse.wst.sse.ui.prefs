@@ -1,9 +1,0 @@
-#Mon Jan 17 00:37:27 PST 2011
-useAnnotationsPrefPage=true
-content_assist_parameters_background=13,13,13
-eclipse.preferences.version=1
-content_assist_parameters_foreground=181,181,181
-content_assist_proposals_background=5,5,5
-content_assist_proposals_foreground=201,201,201
-hoverModifiers=combinationHover|true|0;problemHover|false|0;documentationHover|false|0;annotationHover|true|Shift;
-useQuickDiffPrefPage=true
