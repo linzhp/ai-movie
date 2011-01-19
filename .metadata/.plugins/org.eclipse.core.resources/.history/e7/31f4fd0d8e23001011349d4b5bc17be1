@@ -1,0 +1,130 @@
+To get acquainted with sql queries it's probably easier to just login
+to the server -- later you can use the same queries in your scripts. 
+
+To login to the mysql server:
+
+	bash# mysql -u imdb
+
+And then once logged in, connect to our imdb database:
+
+	mysql> \r imdb
+
+To see the tables in the database:
+
+	mysql> show tables;
++-----------------+
+| Tables_in_imdb  |
++-----------------+
+| aka_name        | 
+| aka_title       | 
+| cast_info       | 
+| char_name       | 
+| comp_cast_type  | 
+| company_name    | 
+| company_type    | 
+| complete_cast   | 
+| info_type       | 
+| keyword         | 
+| kind_type       | 
+| link_type       | 
+| movie_companies | 
+| movie_info      | 
+| movie_info_idx  | 
+| movie_keyword   | 
+| movie_link      | 
+| name            | 
+| person_info     | 
+| role_type       | 
+| title           | 
++-----------------+
+
+
+To see the schema of the table called 'title':
+
+	mysql> show columns in title;
+
++-----------------+-------------+------+-----+---------+----------------+
+| Field           | Type        | Null | Key | Default | Extra          |
++-----------------+-------------+------+-----+---------+----------------+
+| id              | int(11)     | NO   | PRI | NULL    | auto_increment | 
+| title           | text        | NO   | MUL | NULL    |                | 
+| imdb_index      | varchar(12) | YES  |     | NULL    |                | 
+| kind_id         | int(11)     | NO   | MUL | NULL    |                | 
+| production_year | int(11)     | YES  |     | NULL    |                | 
+| imdb_id         | int(11)     | YES  |     | NULL    |                | 
+| phonetic_code   | varchar(5)  | YES  | MUL | NULL    |                | 
+| episode_of_id   | int(11)     | YES  | MUL | NULL    |                | 
+| season_nr       | int(11)     | YES  |     | NULL    |                | 
+| episode_nr      | int(11)     | YES  |     | NULL    |                | 
+| series_years    | varchar(49) | YES  |     | NULL    |                | 
++-----------------+-------------+------+-----+---------+----------------+
+
+Now that we have some information about the structure of the database we 
+can do some queries. 
+
+SQL queries have the general form:
+
+	SELECT (column name1)
+	FROM (table)
+	WHERE (column name2) = (value);
+
+SQL is NOT case sensitive -- capitalization is only for readability. All 
+commands are terminated with a semicolon and newlines are ignored. 
+So the query:
+
+	SELECT id
+	FROM title
+	WHERE title = "The Big Lebowski";
+
+can be written as
+
+	select id from title where title = "The Big Lebowski";
+
+This returns the movie id of The Big Lebowski (note that in this example 
+the table 'title' also has a column by the same name). One thing to 
+mention is that the WHERE clause is optional -- omitting it is the same
+as saying WHERE TRUE. Also, you can use the wildcard * in the SELECT 
+clause. So if, for some odd reason, you wanted to fetch an entire table 
+you could say:
+
+	SELECT *
+	FROM title
+	
+These queries can be executed while logged in to the database (from the 
+mysql> prompt) or from the python sqlobject scripts you will be 
+generating.
+
+Let's build a query that returns all keywords associated with a movie.
+Movie keywords are stored in a separate table called 'keyword' and each
+keyword has a unique identifier (numerical id). Each movie in the 
+'movie_keyword' table is associated with a number of keyword ids (not
+the keywords themselves). Let's assume we already have the id of the 
+movie we're looking at. We need to get the keyword ids associated
+with it and finally, we need to lookup the keywords based on their ids.
+
+	SELECT kw.keyword 
+	FROM keyword kw, movie_keyword mk
+	WHERE mk.movie_id = 517746 AND mk.keyword_id = kw.id
+
+This query says, return all the keywords from the keyword table such that
+the movie_id in movie_keyword matches 517746 AND all the keyword ids 
+associated with said movie_id match the ids in the keyword table. 
+
+Also note the syntactic sugar in the FROM clause:
+
+	FROM (tablename1) (tablevar1), (tablename2) (tablevar2), ...
+
+The purpose of this is simply to assign shorter names to the tables you
+are working with. This is helpful when you need to disambiguate between
+column names, e.g. two tables might both have a column named 'title' in
+which case you would always have to specify tablename1.title and
+tablename2.title. By assigning shorter variable names to these tables in
+the FROM clause it just makes it a little easier: t1.title and t2.title.
+
+NOTE: when looking up keywords to compare to similar movies, there's no
+reason to convert them to the actual keywords. It is undoubtedly more
+efficient to leave them as numerical ids when comparing movies.
+
+Use:
+	mysql> \q
+to quit.

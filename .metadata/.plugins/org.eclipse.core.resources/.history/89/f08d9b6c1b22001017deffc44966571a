@@ -1,0 +1,34 @@
+To run the movie selector cd to the dm directory and run 
+the python script movie.py:
+
+cd dm
+
+python movie.py
+
+
+****** This only works on computers with a Baskin Engineering ip address!
+****** This is because of security protocols in place for the sql server:
+****** mysql.cse.ucsc.edu
+
+This can be resolved if the mysql client on unix.ic.ucsc.edu is updated.
+
+Python module dependencies:
+	MySQLdb
+	numpy
+	imdbpy 
+
+Note: there are two log files session.log and session2.log. 
+Initially both instances of our bot were writing to the same log file during
+evaluation. Because of this the first half of session.log has interlaced data
+from both sessions. session2.log is more readable.
+
+
+
+Description of directories in /usr/share/project
+
+./nlu/		Natural Language Understanding
+./dm/		Dialog Manager
+./dbi/		Database Interface
+./nlg/		Natural Language Generation
+./sample_input/	Sample user input
+./doc/		Documentation

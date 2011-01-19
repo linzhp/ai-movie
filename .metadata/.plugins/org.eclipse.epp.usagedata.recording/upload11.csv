@@ -1,0 +1,218 @@
+what,kind,bundleId,bundleVersion,description,time
+stopped,bundle,org.python.pydev.customizations,1.6.4.2011010200,"org.python.pydev.customizations",1295415344111
+stopped,bundle,org.python.pydev.red_core,1.6.4.2011010200,"org.python.pydev.red_core",1295415344112
+stopped,bundle,org.python.pydev.debug,1.6.4.2011010200,"org.python.pydev.debug",1295415344125
+stopped,bundle,org.python.pydev.refactoring,1.6.4.2011010200,"org.python.pydev.refactoring",1295415344125
+stopped,bundle,org.python.pydev,1.6.4.2011010200,"org.python.pydev",1295415344150
+stopped,bundle,org.eclipse.jdt.ui,3.6.1.r361_v20100825-0800,"org.eclipse.jdt.ui",1295415344193
+stopped,bundle,org.eclipse.wst.dtd.ui,1.0.500.v201004290328,"org.eclipse.wst.dtd.ui",1295415344193
+stopped,bundle,org.eclipse.wst.xsd.ui,1.2.303.v201004290328,"org.eclipse.wst.xsd.ui",1295415344193
+stopped,bundle,org.eclipse.wst.xml.ui,1.1.102.v201008251905,"org.eclipse.wst.xml.ui",1295415344193
+stopped,bundle,org.eclipse.wst.common.ui,1.1.500.v200911190730,"org.eclipse.wst.common.ui",1295415344193
+stopped,bundle,org.eclipse.wst.sse.ui,1.2.2.v201008232126,"org.eclipse.wst.sse.ui",1295415344193
+stopped,bundle,org.eclipse.search,3.6.0.v20100520-0800,"org.eclipse.search",1295415344201
+stopped,bundle,org.eclipse.mylyn.team.ui,3.4.2.v20100909-0100-e3x,"org.eclipse.mylyn.team.ui",1295415344201
+stopped,bundle,org.eclipse.ui.navigator.resources,3.4.201.M20100707-0800,"org.eclipse.ui.navigator.resources",1295415344204
+stopped,bundle,org.eclipse.ltk.ui.refactoring,3.5.0.v20100526-0800,"org.eclipse.ltk.ui.refactoring",1295415344209
+stopped,bundle,org.eclipse.mylyn.bugzilla.ui,3.4.2.v20100909-0100-e3x,"org.eclipse.mylyn.bugzilla.ui",1295415344210
+stopped,bundle,org.eclipse.mylyn.ide.ui,3.4.0.v20100608-0100-e3x,"org.eclipse.mylyn.ide.ui",1295415344210
+stopped,bundle,org.eclipse.mylyn.resources.ui,3.4.1.v20100909-0100-e3x,"org.eclipse.mylyn.resources.ui",1295415344210
+stopped,bundle,org.eclipse.mylyn.wikitext.tasks.ui,1.3.1.v20100823-0100-e3x,"org.eclipse.mylyn.wikitext.tasks.ui",1295415344210
+stopped,bundle,org.eclipse.mylyn.context.ui,3.4.1.v20100909-0100-e3x,"org.eclipse.mylyn.context.ui",1295415344210
+stopped,bundle,org.eclipse.mylyn.help.ui,3.4.1.v20100823-0100-e3x,"org.eclipse.mylyn.help.ui",1295415344210
+stopped,bundle,org.eclipse.mylyn.tasks.bugs,3.4.1.v20100823-0100-e3x,"org.eclipse.mylyn.tasks.bugs",1295415344212
+stopped,bundle,org.eclipse.mylyn.tasks.ui,3.4.2.v20100902-0100-e3x,"org.eclipse.mylyn.tasks.ui",1295415344213
+stopped,bundle,org.eclipse.team.cvs.ui,3.3.301.R36x_v20100825-0800,"org.eclipse.team.cvs.ui",1295415344213
+stopped,bundle,org.eclipse.team.ui,3.5.101.R36x_v20100825-0800,"org.eclipse.team.ui",1295415344214
+stopped,bundle,org.eclipse.compare,3.5.100.I20100526-0800,"org.eclipse.compare",1295415344215
+stopped,bundle,org.eclipse.ui.externaltools,3.2.0.v20100427,"org.eclipse.ui.externaltools",1295415344215
+stopped,bundle,org.eclipse.debug.ui,3.6.1.v20100901_r361,"org.eclipse.debug.ui",1295415344248
+stopped,bundle,org.eclipse.mylyn.wikitext.ui,1.3.0.v20100608-0100-e3x,"org.eclipse.mylyn.wikitext.ui",1295415344248
+stopped,bundle,org.python.pydev.jython,1.6.4.2011010200,"org.python.pydev.jython",1295415344248
+stopped,bundle,org.python.pydev.parser,1.6.4.2011010200,"org.python.pydev.parser",1295415344250
+stopped,bundle,org.python.pydev.core,1.6.4.2011010200,"org.python.pydev.core",1295415344251
+stopped,bundle,org.eclipse.ui.console,3.5.0.v20100526,"org.eclipse.ui.console",1295415344252
+stopped,bundle,org.eclipse.mylyn.commons.ui,3.4.0.v20100608-0100-e3x,"org.eclipse.mylyn.commons.ui",1295415344252
+stopped,bundle,org.eclipse.ui.editors,3.6.1.r361_v20100825-0800,"org.eclipse.ui.editors",1295415344252
+stopped,bundle,org.eclipse.wst.common.snippets,1.2.1.v201008251905,"org.eclipse.wst.common.snippets",1295415344252
+stopped,bundle,org.eclipse.ui.workbench.texteditor,3.6.1.r361_v20100714-0800,"org.eclipse.ui.workbench.texteditor",1295415344252
+stopped,bundle,org.eclipse.compare.core,3.5.100.I20100526-0800,"org.eclipse.compare.core",1295415344252
+stopped,bundle,org.eclipse.emf.edit.ui,2.6.0.v20100914-1218,"org.eclipse.emf.edit.ui",1295415344252
+stopped,bundle,org.eclipse.gef,3.6.1.v20100712-1224,"org.eclipse.gef",1295415344252
+stopped,bundle,org.eclipse.emf.common.ui,2.6.0.v20100914-1218,"org.eclipse.emf.common.ui",1295415344253
+stopped,bundle,org.eclipse.epp.mpc.ui,1.0.1.v20100826-2143,"org.eclipse.epp.mpc.ui",1295415344253
+activated,perspective,org.python.pydev,,"org.python.pydev.ui.PythonPerspective",1295415364337
+started,bundle,org.eclipse.osgi,3.6.1.R36x_v20100806,"org.eclipse.osgi",1295415364338
+started,bundle,org.eclipse.equinox.simpleconfigurator,1.0.200.v20100503,"org.eclipse.equinox.simpleconfigurator",1295415364338
+started,bundle,com.ibm.icu,4.2.1.v20100412,"com.ibm.icu",1295415364338
+started,bundle,org.eclipse.compare.core,3.5.100.I20100526-0800,"org.eclipse.compare.core",1295415364338
+started,bundle,org.eclipse.core.contenttype,3.4.100.v20100505-1235,"org.eclipse.core.contenttype",1295415364338
+started,bundle,org.eclipse.core.databinding.observable,1.3.0.I20100601-0800,"org.eclipse.core.databinding.observable",1295415364338
+started,bundle,org.eclipse.core.expressions,3.4.200.v20100505,"org.eclipse.core.expressions",1295415364338
+started,bundle,org.eclipse.core.filebuffers,3.5.100.v20100520-0800,"org.eclipse.core.filebuffers",1295415364338
+started,bundle,org.eclipse.core.filesystem,1.3.1.R36x_v20100727-0745,"org.eclipse.core.filesystem",1295415364338
+started,bundle,org.eclipse.core.jobs,3.5.1.R36x_v20100824,"org.eclipse.core.jobs",1295415364338
+started,bundle,org.eclipse.core.net,1.2.100.I20100511-0800,"org.eclipse.core.net",1295415364338
+started,bundle,org.eclipse.core.resources,3.6.0.R36x_v20100825-0600,"org.eclipse.core.resources",1295415364338
+started,bundle,org.eclipse.core.runtime,3.6.0.v20100505,"org.eclipse.core.runtime",1295415364338
+started,bundle,org.eclipse.core.runtime.compatibility,3.2.100.v20100505,"org.eclipse.core.runtime.compatibility",1295415364338
+started,bundle,org.eclipse.core.runtime.compatibility.auth,3.2.200.v20100517,"org.eclipse.core.runtime.compatibility.auth",1295415364338
+started,bundle,org.eclipse.core.variables,3.2.400.v20100505,"org.eclipse.core.variables",1295415364338
+started,bundle,org.eclipse.debug.core,3.6.0.v20100519,"org.eclipse.debug.core",1295415364338
+started,bundle,org.eclipse.debug.ui,3.6.1.v20100901_r361,"org.eclipse.debug.ui",1295415364338
+started,bundle,org.eclipse.epp.usagedata.gathering,1.3.0.R201005261100,"org.eclipse.epp.usagedata.gathering",1295415364338
+started,bundle,org.eclipse.epp.usagedata.recording,1.3.0.R201005261100,"org.eclipse.epp.usagedata.recording",1295415364338
+started,bundle,org.eclipse.equinox.app,1.3.1.R36x_v20100803,"org.eclipse.equinox.app",1295415364338
+started,bundle,org.eclipse.equinox.common,3.6.0.v20100503,"org.eclipse.equinox.common",1295415364338
+started,bundle,org.eclipse.equinox.ds,1.2.1.R36x_v20100803,"org.eclipse.equinox.ds",1295415364338
+started,bundle,org.eclipse.equinox.event,1.2.0.v20100503,"org.eclipse.equinox.event",1295415364338
+started,bundle,org.eclipse.equinox.p2.core,2.0.2.R36x_v20100804,"org.eclipse.equinox.p2.core",1295415364338
+started,bundle,org.eclipse.equinox.p2.directorywatcher,1.0.202.R36x_v20100727,"org.eclipse.equinox.p2.directorywatcher",1295415364338
+started,bundle,org.eclipse.equinox.p2.engine,2.0.0.v20100606,"org.eclipse.equinox.p2.engine",1295415364338
+started,bundle,org.eclipse.equinox.p2.metadata,2.0.0.v20100601,"org.eclipse.equinox.p2.metadata",1295415364338
+started,bundle,org.eclipse.equinox.p2.metadata.repository,1.1.0.v20100513,"org.eclipse.equinox.p2.metadata.repository",1295415364338
+started,bundle,org.eclipse.equinox.p2.operations,2.0.0.v20100510,"org.eclipse.equinox.p2.operations",1295415364338
+started,bundle,org.eclipse.equinox.p2.reconciler.dropins,1.1.0.v20100525,"org.eclipse.equinox.p2.reconciler.dropins",1295415364338
+started,bundle,org.eclipse.equinox.p2.repository,2.0.1.R36x_v20100823,"org.eclipse.equinox.p2.repository",1295415364338
+started,bundle,org.eclipse.equinox.p2.ui.sdk.scheduler,1.0.0.v20100507-1815,"org.eclipse.equinox.p2.ui.sdk.scheduler",1295415364338
+started,bundle,org.eclipse.equinox.p2.updatechecker,1.1.101.R36x_v20100823,"org.eclipse.equinox.p2.updatechecker",1295415364338
+started,bundle,org.eclipse.equinox.preferences,3.3.0.v20100503,"org.eclipse.equinox.preferences",1295415364338
+started,bundle,org.eclipse.equinox.registry,3.5.0.v20100503,"org.eclipse.equinox.registry",1295415364338
+started,bundle,org.eclipse.equinox.security,1.0.200.v20100503,"org.eclipse.equinox.security",1295415364338
+started,bundle,org.eclipse.equinox.util,1.0.200.v20100503,"org.eclipse.equinox.util",1295415364338
+started,bundle,org.eclipse.help,3.5.0.v20100524,"org.eclipse.help",1295415364338
+started,bundle,org.eclipse.jdt.core,3.6.1.v_A68_R36x,"org.eclipse.jdt.core",1295415364338
+started,bundle,org.eclipse.jdt.core.manipulation,1.3.0.v20100520-0800,"org.eclipse.jdt.core.manipulation",1295415364338
+started,bundle,org.eclipse.jdt.ui,3.6.1.r361_v20100825-0800,"org.eclipse.jdt.ui",1295415364338
+started,bundle,org.eclipse.jface,3.6.1.M20100825-0800,"org.eclipse.jface",1295415364338
+started,bundle,org.eclipse.jsch.core,1.1.200.I20100505-1245,"org.eclipse.jsch.core",1295415364338
+started,bundle,org.eclipse.ltk.core.refactoring,3.5.100.v20100526-0800,"org.eclipse.ltk.core.refactoring",1295415364338
+started,bundle,org.eclipse.ltk.ui.refactoring,3.5.0.v20100526-0800,"org.eclipse.ltk.ui.refactoring",1295415364338
+started,bundle,org.eclipse.mylyn.bugzilla.core,3.4.2.v20100902-0100-e3x,"org.eclipse.mylyn.bugzilla.core",1295415364338
+started,bundle,org.eclipse.mylyn.bugzilla.ui,3.4.2.v20100909-0100-e3x,"org.eclipse.mylyn.bugzilla.ui",1295415364338
+started,bundle,org.eclipse.mylyn.commons.net,3.4.1.v20100625-2100-e3x,"org.eclipse.mylyn.commons.net",1295415364340
+started,bundle,org.eclipse.mylyn.commons.ui,3.4.0.v20100608-0100-e3x,"org.eclipse.mylyn.commons.ui",1295415364340
+started,bundle,org.eclipse.mylyn.context.core,3.4.1.v20100909-0100-e3x,"org.eclipse.mylyn.context.core",1295415364340
+started,bundle,org.eclipse.mylyn.context.ui,3.4.1.v20100909-0100-e3x,"org.eclipse.mylyn.context.ui",1295415364340
+started,bundle,org.eclipse.mylyn.monitor.ui,3.4.0.v20100608-0100-e3x,"org.eclipse.mylyn.monitor.ui",1295415364340
+started,bundle,org.eclipse.mylyn.tasks.ui,3.4.2.v20100902-0100-e3x,"org.eclipse.mylyn.tasks.ui",1295415364340
+started,bundle,org.eclipse.mylyn.team.ui,3.4.2.v20100909-0100-e3x,"org.eclipse.mylyn.team.ui",1295415364340
+started,bundle,org.eclipse.search,3.6.0.v20100520-0800,"org.eclipse.search",1295415364340
+started,bundle,org.eclipse.team.core,3.5.100.R36x_v20100825-0800,"org.eclipse.team.core",1295415364340
+started,bundle,org.eclipse.team.cvs.core,3.3.300.I20100526-0800,"org.eclipse.team.cvs.core",1295415364340
+started,bundle,org.eclipse.team.cvs.ui,3.3.301.R36x_v20100825-0800,"org.eclipse.team.cvs.ui",1295415364340
+started,bundle,org.eclipse.team.ui,3.5.101.R36x_v20100825-0800,"org.eclipse.team.ui",1295415364340
+started,bundle,org.eclipse.ui,3.6.1.M20100826-1330,"org.eclipse.ui",1295415364340
+started,bundle,org.eclipse.ui.console,3.5.0.v20100526,"org.eclipse.ui.console",1295415364340
+started,bundle,org.eclipse.ui.editors,3.6.1.r361_v20100825-0800,"org.eclipse.ui.editors",1295415364340
+started,bundle,org.eclipse.ui.forms,3.5.2.r36_v20100702,"org.eclipse.ui.forms",1295415364340
+started,bundle,org.eclipse.ui.ide,3.6.1.M20100825-0800,"org.eclipse.ui.ide",1295415364340
+started,bundle,org.eclipse.ui.navigator,3.5.0.I20100601-0800,"org.eclipse.ui.navigator",1295415364340
+started,bundle,org.eclipse.ui.navigator.resources,3.4.201.M20100707-0800,"org.eclipse.ui.navigator.resources",1295415364340
+started,bundle,org.eclipse.ui.net,1.2.100.I20100505-1245,"org.eclipse.ui.net",1295415364340
+started,bundle,org.eclipse.ui.views,3.5.0.I20100527-0800,"org.eclipse.ui.views",1295415364340
+started,bundle,org.eclipse.ui.workbench,3.6.1.M20100826-1330,"org.eclipse.ui.workbench",1295415364340
+started,bundle,org.eclipse.ui.workbench.texteditor,3.6.1.r361_v20100714-0800,"org.eclipse.ui.workbench.texteditor",1295415364340
+started,bundle,com.python.pydev,1.6.4.2011010200,"com.python.pydev",1295415364340
+started,bundle,com.python.pydev.analysis,1.6.4.2011010200,"com.python.pydev.analysis",1295415364340
+started,bundle,com.python.pydev.codecompletion,1.6.4.2011010200,"com.python.pydev.codecompletion",1295415364340
+started,bundle,com.python.pydev.refactoring,1.6.4.2011010200,"com.python.pydev.refactoring",1295415364340
+started,bundle,org.python.pydev,1.6.4.2011010200,"org.python.pydev",1295415364340
+started,bundle,org.python.pydev.core,1.6.4.2011010200,"org.python.pydev.core",1295415364340
+started,bundle,org.python.pydev.debug,1.6.4.2011010200,"org.python.pydev.debug",1295415364340
+started,bundle,org.python.pydev.django,1.6.4.2011010200,"org.python.pydev.django",1295415364340
+started,bundle,org.python.pydev.jython,1.6.4.2011010200,"org.python.pydev.jython",1295415364340
+started,bundle,org.python.pydev.parser,1.6.4.2011010200,"org.python.pydev.parser",1295415364340
+started,bundle,org.python.pydev.red_core,1.6.4.2011010200,"org.python.pydev.red_core",1295415364340
+started,bundle,org.python.pydev.refactoring,1.6.4.2011010200,"org.python.pydev.refactoring",1295415364340
+os,sysinfo,,,"macosx",1295415364349
+arch,sysinfo,,,"x86_64",1295415364349
+ws,sysinfo,,,"cocoa",1295415364349
+locale,sysinfo,,,"en_US",1295415364349
+processors,sysinfo,,,"2",1295415364349
+java.runtime.name,sysinfo,,,"Java(TM) SE Runtime Environment",1295415364349
+java.runtime.version,sysinfo,,,"1.6.0_22-b04-307-10M3261",1295415364349
+java.specification.name,sysinfo,,,"Java Platform API Specification",1295415364349
+java.specification.vendor,sysinfo,,,"Sun Microsystems Inc.",1295415364349
+java.specification.version,sysinfo,,,"1.6",1295415364349
+java.vendor,sysinfo,,,"Apple Inc.",1295415364349
+java.version,sysinfo,,,"1.6.0_22",1295415364349
+java.vm.info,sysinfo,,,"mixed mode",1295415364349
+java.vm.name,sysinfo,,,"Java HotSpot(TM) 64-Bit Server VM",1295415364349
+java.vm.specification.name,sysinfo,,,"Java Virtual Machine Specification",1295415364349
+java.vm.specification.vendor,sysinfo,,,"Sun Microsystems Inc.",1295415364349
+java.vm.specification.version,sysinfo,,,"1.0",1295415364349
+java.vm.vendor,sysinfo,,,"Apple Inc.",1295415364349
+java.vm.version,sysinfo,,,"17.1-b03-307",1295415364349
+started,bundle,org.eclipse.update.scheduler,3.2.300.v20100512,"org.eclipse.update.scheduler",1295415364387
+started,bundle,org.eclipse.update.configurator,3.3.100.v20100512,"org.eclipse.update.configurator",1295415364514
+started,bundle,org.eclipse.update.core,3.2.402.R36x_v20100629,"org.eclipse.update.core",1295415364517
+started,bundle,org.eclipse.wst.sse.core,1.1.502.v201008311901,"org.eclipse.wst.sse.core",1295415365072
+activated,view,org.python.pydev,1.6.4.2011010200,"org.python.pydev.navigator.view",1295415365110
+opened,editor,org.eclipse.ui.editors,3.6.1.r361_v20100825-0800,"org.eclipse.ui.DefaultTextEditor",1295415366054
+activated,editor,org.eclipse.ui.editors,3.6.1.r361_v20100825-0800,"org.eclipse.ui.DefaultTextEditor",1295415366920
+started,bundle,org.eclipse.equinox.p2.extensionlocation,1.2.0.v20100518,"org.eclipse.equinox.p2.extensionlocation",1295415367429
+started,bundle,org.eclipse.equinox.p2.artifact.repository,1.1.1.R36x_v20100901,"org.eclipse.equinox.p2.artifact.repository",1295415367479
+started,bundle,org.eclipse.equinox.p2.publisher,1.1.2.v20100824-2220,"org.eclipse.equinox.p2.publisher",1295415367537
+started,bundle,org.eclipse.equinox.p2.touchpoint.eclipse,2.0.2.R36x_v20100823,"org.eclipse.equinox.p2.touchpoint.eclipse",1295415367574
+started,bundle,org.eclipse.ecf.filetransfer,4.0.0.v20100529-0735,"org.eclipse.ecf.filetransfer",1295415367910
+started,bundle,org.eclipse.ecf.identity,3.1.0.v20100529-0735,"org.eclipse.ecf.identity",1295415368065
+started,bundle,org.eclipse.ecf,3.1.0.v20100529-0735,"org.eclipse.ecf",1295415368094
+started,bundle,org.eclipse.ecf.provider.filetransfer.httpclient,4.0.0.v20100529-0735,"org.eclipse.ecf.provider.filetransfer.httpclient",1295415368117
+started,bundle,org.eclipse.ecf.provider.filetransfer,3.1.0.v20100529-0735,"org.eclipse.ecf.provider.filetransfer",1295415368120
+activated,editor,org.python.pydev,1.6.4.2011010200,"org.python.pydev.editor.PythonEditor",1295415372003
+closed,editor,org.eclipse.ui.editors,3.6.1.r361_v20100825-0800,"org.eclipse.ui.DefaultTextEditor",1295415372004
+activated,view,org.python.pydev,1.6.4.2011010200,"org.python.pydev.navigator.view",1295415373656
+started,bundle,org.eclipse.compare,3.5.100.I20100526-0800,"org.eclipse.compare",1295415378697
+activated,workbench,org.eclipse.ui.workbench,3.6.1.M20100826-1330,"",1295415381528
+deactivated,workbench,org.eclipse.ui.workbench,3.6.1.M20100826-1330,"",1295415381754
+error,log,,,"Could not move: /Users/andrew/Documents/workspace/AI-Movie/dbi/dbi2.py.",1295415384804
+error,log,,,"Could not move: /Users/andrew/Documents/workspace/AI-Movie/dbi/dialogManager02.py.",1295415384807
+error,log,,,"Could not move: /Users/andrew/Documents/workspace/AI-Movie/dm/session.log.",1295415384889
+error,log,,,"Could not move: /Users/andrew/Documents/workspace/AI-Movie/dm/session2.log.",1295415384891
+error,log,,,"Could not move: /Users/andrew/Documents/workspace/AI-Movie/nlu/old.",1295415384923
+error,log,,,"Could not move: /Users/andrew/Documents/workspace/AI-Movie/nlu/questions2.py.",1295415384932
+activated,workbench,org.eclipse.ui.workbench,3.6.1.M20100826-1330,"",1295415385562
+executed,command,org.eclipse.ltk.ui.refactoring,3.5.0.v20100526-0800,"org.eclipse.ltk.ui.refactoring.commands.deleteResources",1295415385594
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385616
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385618
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385618
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385626
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385628
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385629
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385642
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385643
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385645
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385647
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385649
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385649
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385653
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385654
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385655
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385657
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385657
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385658
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385660
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385661
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385661
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385664
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385664
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385665
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385667
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385668
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385668
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385670
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385671
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385671
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385673
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385674
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385675
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385677
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385677
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385678
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385680
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385681
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385681
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385684
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385685
+error,log,,,"Unable to find interpreter named: python2.6. Available: Python 2.6.6  (/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python)",1295415385685

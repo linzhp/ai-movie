@@ -1,0 +1,52 @@
+NLU categories:
+
+		Truth
+			<did>
+			<has>
+			<have>
+			<was>
+			<are>
+			<is>
+		Trivia
+			<who>
+			<what>
+			<when>
+
+
+
+	Question:
+		Movie
+			Truth
+			Trivia		
+
+		Bot-Personal
+			Truth
+			Trivia
+
+		Bot-ability  (convert to command)	
+			<can you>
+			<will you>
+
+		User personal
+			Truth
+			Trivia
+
+	Command:
+		<start over>
+		<bye>
+		<list>
+		<tell>
+
+	Preference:
+		<I Like>
+			PERSON
+			TITLE
+			Keyword(s)
+		<I don't like>
+
+
+
+
+		
+
+

@@ -1,0 +1,12 @@
+#Mon Jan 17 02:18:24 PST 2011
+EDITOR_MATCHING_BRACKETS_COLOR=82,171,169
+CODE_COLOR=253,253,253
+INTERPRETER_PATH_NEW=Name\:Python 2.6.6\:EndName\:Version2.6Executable\:/opt/local/Library/Frameworks/Python.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/Python|/opt/local/Library/Frameworks/Python.framework/Versions/2.6/lib/python2.6|/opt/local/Library/Frameworks/Python.framework/Versions/2.6/lib/python2.6/lib-dynload|/opt/local/Library/Frameworks/Python.framework/Versions/2.6/lib/python2.6/lib-old|/opt/local/Library/Frameworks/Python.framework/Versions/2.6/lib/python2.6/lib-tk|/opt/local/Library/Frameworks/Python.framework/Versions/2.6/lib/python2.6/plat-darwin|/opt/local/Library/Frameworks/Python.framework/Versions/2.6/lib/python2.6/plat-mac|/opt/local/Library/Frameworks/Python.framework/Versions/2.6/lib/python2.6/plat-mac/lib-scriptpackages|/opt/local/Library/Frameworks/Python.framework/Versions/2.6/lib/python2.6/site-packages|/opt/local/Library/Frameworks/Python.framework/Versions/2.6/lib/python2.6/site-packages/MySQL_python-1.2.3-py2.6-macosx-10.6-x86_64.egg|/opt/local/Library/Frameworks/Python.framework/Versions/2.6/lib/python2.6/site-packages/PyObjC|/opt/local/Library/Frameworks/Python.framework/Versions/2.6/lib/python2.6/site-packages/setuptools-0.6c11-py2.6.egg-info|/opt/local/Library/Frameworks/Python.framework/Versions/2.6/lib/python26.zip@$|Image|OpenGL|__builtin__|__main__|_ast|_bisect|_bytesio|_codecs|_codecs_cn|_codecs_hk|_codecs_iso2022|_codecs_jp|_codecs_kr|_codecs_tw|_collections|_csv|_fileio|_functools|_heapq|_hotshot|_json|_locale|_lsprof|_md5|_multibytecodec|_random|_sha|_sha256|_sha512|_sre|_struct|_subprocess|_symtable|_warnings|_weakref|_winreg|array|audioop|binascii|cPickle|cStringIO|cmath|datetime|email|errno|exceptions|future_builtins|gc|imageop|imp|itertools|marshal|math|mmap|msvcrt|nt|numpy|operator|os|os.path|parser|posix|pwd|signal|socket|strop|sys|thread|time|wx|wxPython|xxsubtype|zipimport|zlib&&&&&
+FUNC_NAME_COLOR=242,242,242
+BACKQUOTES_COLOR=244,244,244
+NUMBER_COLOR=183,0,4
+DONT_GENERATE_TYPETAGS_PREFIXES=sz\u0000n\u0000f\u0000
+com.aptana.db.ide-idUUID=885fb618-e5a0-465f-b3ce-350b4d5fa9cd
+eclipse.preferences.version=1
+CLASS_NAME_COLOR=225,225,225
+org.python.pydev.editor.templates.PyTemplatePreferencesPage=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><templates/>

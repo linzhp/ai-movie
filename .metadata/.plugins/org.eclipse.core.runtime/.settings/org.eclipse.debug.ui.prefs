@@ -1,0 +1,12 @@
+#Mon Jan 17 02:18:24 PST 2011
+org.eclipse.debug.ui.PREF_LAUNCH_PERSPECTIVES=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\n<launchPerspectives/>\n
+org.eclipse.debug.ui.consoleBackground=3,3,3
+StringVariablePreferencePage=168,139,139,111,
+org.eclipse.debug.ui.outColor=251,251,251
+Console.highWaterMark=88000
+org.eclipse.debug.ui.manage_view_perspectives=org.python.pydev.ui.PythonPerspective,org.eclipse.debug.ui.DebugPerspective,
+preferredDetailPanes=DefaultDetailPane\:DefaultDetailPane|
+Console.console_tab_width=4
+preferredTargets=default\:default|
+eclipse.preferences.version=1
+org.eclipse.debug.ui.user_view_bindings=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\n<viewBindings>\n<view id\="org.eclipse.ui.console.ConsoleView">\n<perspective id\="org.python.pydev.ui.PythonPerspective" userAction\="opened"/>\n</view>\n</viewBindings>\n

@@ -1,0 +1,13 @@
+#Mon Jan 17 01:22:16 PST 2011
+AbstractTextEditor.Color.Background.SystemDefault=false
+AbstractTextEditor.Color.Foreground.SystemDefault=false
+lineNumberRuler=true
+AbstractTextEditor.Color.Foreground=255,255,255
+currentLineColor=166,175,190
+printMargin=true
+spacesForTabs=true
+AbstractTextEditor.Color.Background=0,0,0
+printMarginColor=192,199,204
+eclipse.preferences.version=1
+AbstractTextEditor.Navigation.SmartHomeEnd=false
+overviewRuler_migration=migrated_3.1
