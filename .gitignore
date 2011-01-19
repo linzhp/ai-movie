@@ -1,3 +1,5 @@
 movie.cfg
 dm/session.log
+.settings
 *.pyc
+*~
