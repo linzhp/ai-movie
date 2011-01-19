@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // Note by Andrew
 
 // Just to test github.com
