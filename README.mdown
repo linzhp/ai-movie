@@ -2,9 +2,8 @@
 
 // IMDB Database works locally now. Thanks, Clive.
 
-// No other changes have been made.
+// The current version doesn't include Eclipse config files(.project .pydevproject .settings/) so you will not lose your own configuration.
 
-// No need to fetch/pull !!!
 
 The movie selector uses a MySQL database generated from IMDB plain text data. Follow the instructions in <http://imdbpy.sourceforge.net/docs/README.sqldb.txt> to load data from IMDB plain text into a MySQL database.
 
