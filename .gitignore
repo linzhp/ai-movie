@@ -1,5 +1,7 @@
-movie.cfg
-dm/session.log
+.project
+.pydevproject
 .settings
+dm/session.log
+movie.cfg
 *.pyc
 *~
