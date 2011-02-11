@@ -15,6 +15,7 @@
 
 import nltk
 import pickle
+from os import path
 
 class Chunker:
 
@@ -30,7 +31,7 @@ class Chunker:
 			print "   Loading POS tagged training sentences."
 
 		# Load the tagged training sentences.
-		f = open( './training_sentences', 'r' )
+		f = open( path.dirname(__file__)+'/training_sentences', 'r' )
 		train_sents = pickle.load(f)
 
 	

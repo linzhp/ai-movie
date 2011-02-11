@@ -298,7 +298,6 @@ class NLU:
 	##	tuples of strings where each tuple starts with a dialog classifier
 	##	type followed by a number of arguments.
 	def process(self, input_string):
-
 		list = False
 		if 'list' in input_string:
 			list = True
