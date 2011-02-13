@@ -9,8 +9,8 @@ password = config.get("database", "password")
 host = config.get("database", "host")
 db_name = config.get("database", "db_name")
 #i =  imdb.IMDb('sql', uri='mysql://maw_imdb:pugOrz2u@mysql.cse.ucsc.edu/maw_imdb')
-i =  imdb.IMDb('sql', uri='mysql://%s:%s@%s/%s'%(user_name,password,host,db_name))
-conn = MySQLdb.connect (host = host, user = user_name, db = db_name)
+i =  imdb.IMDb('sql', uri='mysql://%s:%s@%s:3306/%s'%(user_name,password,host,db_name))
+conn = MySQLdb.connect (host = host, user = user_name, db = db_name, passwd = password)
 
 #Takes in movie title(string), returns movie ID.
 def get_id_movie(fn_input):
