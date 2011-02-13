@@ -7,4 +7,7 @@
 <pydev_pathproperty name="org.python.pydev.PROJECT_SOURCE_PATH">
 <path>/movie_selector</path>
 </pydev_pathproperty>
+<pydev_pathproperty name="org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH">
+<path>/home/linzhp/python/howie</path>
+</pydev_pathproperty>
 </pydev_project>
