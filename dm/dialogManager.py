@@ -12,6 +12,7 @@ def __response(dict):
     pass
 
 def __off_topic(dict):
+    pass
 
 def input(list):
     for dict in list:
