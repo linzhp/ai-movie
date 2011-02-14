@@ -3,5 +3,6 @@
 .settings
 *.log
 movie.cfg
+*/*.pyc
 *.pyc
 *~

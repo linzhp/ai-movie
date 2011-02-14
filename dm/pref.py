@@ -1,8 +1,8 @@
 import sys
 sys.path.append("../")
 from dbi import dbi
-
 from nlu import nlu
+
 N = nlu.NLU()
 
 class Preference:
