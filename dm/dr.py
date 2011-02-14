@@ -1,5 +1,6 @@
 import sys
 sys.path.append("../dbi")
+sys.path.append("../dm")
 import dbi
 import pref
 
