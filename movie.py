@@ -13,10 +13,10 @@ greeting=nlg.greet()
 logging.info(greeting)
 input = raw_input(greeting+'\n')
 while input is not None:
-    nlu_out = nlu.process(input)
+    nlu_out = nlu.process(input)#TODO EOF, 
+    dm_out=dialogManager.input(nlu_out)
+    output=nlg.process(dm_out)
     for dict in nlu_out:
         if dict.get("command")=="exit":
             exit(0)
-    dm_out=dialogManager.input(nlu_out)
-    output=nlg.process(dm_out)
     input = raw_input(output+'\n')

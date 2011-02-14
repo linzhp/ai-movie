@@ -1,7 +1,6 @@
 import sys
-sys.path.append("../dbi")
-sys.path.append("../nlu")
-import nlu
+sys.path.append("../")
+from nlu import nlu
 import dmp
 import dm
 import dr

@@ -1,7 +1,7 @@
 import nltk
 import MySQLdb
 
-conn = MySQLdb.connect (host = "localhost", user = "imdb", db = "imdb")
+conn = MySQLdb.connect (host = "localhost", user = "root", db = "imdb")
 
 cursor = conn.cursor()
 

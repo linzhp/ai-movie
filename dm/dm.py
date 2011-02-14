@@ -1,6 +1,6 @@
 import sys
-sys.path.append("../dbi")
-import dbi
+sys.path.append("../")
+from dbi import dbi
 
 def trivia(list):
     include = set()

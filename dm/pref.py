@@ -1,8 +1,8 @@
 import sys
-sys.path.append("../dbi")
-import dbi
+sys.path.append("../")
+from dbi import dbi
 
-import nlu
+from nlu import nlu
 N = nlu.NLU()
 
 class Preference:
