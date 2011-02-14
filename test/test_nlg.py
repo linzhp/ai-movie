@@ -9,7 +9,7 @@ import unittest
 class Test(unittest.TestCase):
 
     def testnlg(self):
-        with open('nlg.txt') as fixture:
+        with open('corpus.txt') as fixture:
             nlg_output=None
             for line in fixture:
                 line = line.strip()

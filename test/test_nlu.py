@@ -9,7 +9,7 @@ import unittest
 class Test(unittest.TestCase):
 
     def testNLU(self):
-        with open('nlu.txt') as fixture:
+        with open('nlg.txt') as fixture:
             nlu_output=None
             nlu = NLU()
             for line in fixture:
