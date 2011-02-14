@@ -11,12 +11,15 @@ nlu = NLU()
 
 greeting=nlg.greet()
 logging.info(greeting)
-input = raw_input(greeting+'\n')
-while input is not None:
-    nlu_out = nlu.process(input)#TODO EOF, 
-    dm_out=dialogManager.input(nlu_out)
-    output=nlg.process(dm_out)
-    for dict in nlu_out:
-        if dict.get("command")=="exit":
-            exit(0)
-    input = raw_input(output+'\n')
+try:
+    input = raw_input(greeting+'\n')
+    while input is not None:
+        nlu_out = nlu.process(input)
+        dm_out=dialogManager.input(nlu_out)
+        output=nlg.process(dm_out)
+        for dict in nlu_out:
+            if dict.get("command")=="exit":
+                exit()
+        input = raw_input(output+'\n')
+except EOFError:
+    exit()

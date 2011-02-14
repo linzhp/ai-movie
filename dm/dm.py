@@ -12,64 +12,18 @@ def trivia(list):
     tuple = list[2:]
     object = list[1]
 
-    #print "\ntrivia input"
-    #print list
-    #print tuple
-
     for i,x in enumerate(tuple):
 
         if("actor" in x or "person" in x):
-            #print "actor reached"
-            #print dbi.get_id_person(tuple[i+1])
-            #include.append(search_actor(tuple[id+1]))
-
             id_num = dbi.get_id_person(tuple[i+1])
-
-            #print id_num
-            #print type(id_num)
-            #print dbi.get_name(id_num)
-            #print dbi.m_w_a(id_num)
-            #print dbi.m_w_a_id(id_num)
-
-            #print dbi.m_w_a(id_num)
-
-            """print x
-            print id_num
-            print type(id_num)
-            print tuple[i+1]
-            print type(tuple[i+1])"""
-
-            #print"\n"
-            #print dbi.m_w_a_id(id_num)
-            #print"\n"
-
             if("!" in x):
-                #exclude.append(dbi.m_w_a(id_num))
-
-                #exclude = exclude.union(dbi.m_w_a(id_num))
                 exclude = exclude.union(dbi.m_w_a_id(id_num))
                 
             else:
-                #include.append(dbi.m_w_a(id_num))
-
-                #print dbi.m_w_a(id_num)
-
                 if(include):
-                    #print include
-                    #print "printing ids of actor's movies"
-                    #print dbi.m_w_a_id(id_num)
-
                     include = include & dbi.m_w_a_id(id_num)
-
-                    #print include
                 else:
                     include = include.union(dbi.m_w_a_id(id_num))
-
-            #print "\nend of actor"
-            #print include
-            #print exclude
-            #print "\n"
-
         elif("director" in x):
             id_num = dbi.get_id_person(tuple[i+1])
 
@@ -78,66 +32,24 @@ def trivia(list):
 
                 exclude = exclude.union(dbi.m_w_d_id(id_num))
             else:
-                #include.append(dbi.m_w_a(id_num))
-
-                #print dbi.m_w_d(id_num)
-
                 if(include):
                     include = include & dbi.m_w_d_id(id_num)
                 else:
                     include = include.union(dbi.m_w_d_id(id_num))
-
-            #print "\nend of director"
-            #print include
-            #print exclude
-            #print "\n"
-
-            #include.append(search_director(tuple[id+1]))
-            #print x
-            #print tuple[i+1]
-
         elif("title" in x):
             id_num = dbi.get_id_movie(tuple[i+1])
-
-            #print id_num
-            #print dbi.get_title(id_num)
-
-            #set(id_num)
-            #print id_num
-
-            #include.append(search_title(tuple[id+1]))
-            #print x
-            #print tuple[i+1]
-
-            #str = dbi.get_title(id_num)
-            #title_set = set()
-            #title_set.add(str)
-
             id_set = set()
             id_set.add(str(id_num))
 
             if("!" in x):
-                #exclude.append(dbi.m_w_a(id_num))
-
-                #exclude = exclude.union(title_set)
                 exclude = exclude.union(id_set)
             else:
-                #include.append(dbi.m_w_a(id_num))
-
                 if(include):
                     #include = include & title_set
                     include = include & id_set
                 else:
                     #include = include.union(title_set)
                     include = include.union(id_set)                    
-
-            #print "\nend of title"
-            #print include
-            #print exclude
-            #print "\n"
-
-            #include.append(title_set)
-            #include.append(dbi.get_title(id_num))
 
         elif("genre" in x):
             if("!" in x):
@@ -149,52 +61,13 @@ def trivia(list):
             #print tuple[i+1]
 
         elif("keyword" in x):
-            #print "\nreached keyword"
-            #print dbi.m_w_k(tuple[i+1])
-            #print dbi.m_w_k_id(tuple[i+1])
-            #print len(dbi.m_w_k_id(tuple[i+1]))
-            #print tuple[i+1]
-            #print x
-            #print "printing include"
-            #print include
-
-            #print "\n printing union"
-            #print include.union(dbi.m_w_k_id(tuple[i+1]))
-
-            #for x in dbi.m_w_k_id(tuple[i+1]):
-            #    print dbi.get_title(x)
-
             if("!" in x):
-                #exclude.append(dbi.m_w_a(id_num))
-
-                #exclude = exclude.union(dbi.m_w_a(id_num))
-
                 exclude = exclude.union(dbi.m_w_k_id(tuple[i+1]))
-                #print "\n printing exclude"
-                #print exclude
-                
             else:
-                #print "\n positive keyword"
-                #include.append(dbi.m_w_a(id_num))
-
-                #print dbi.m_w_a(id_num
-
                 if(include):
-                    #print dbi.m_w_k_id(tuple[i+1])
-
                     include = include.intersection(dbi.m_w_k_id(tuple[i+1]))
-
-                    #print include & dbi.m_w_k_id(tuple[i+1])
-                    #print "\n printing include 1"
-                    #print include
                 else:
-                    #print dbi.m_w_k_id(tuple[i+1])
-                    #print dbi.get_title(567875)
-
                     include = include.union(dbi.m_w_k_id(tuple[i+1]))
-
-                    #print "\n printing include 1"
-                    #print include
 
         elif("year" in x):
             if("!" in x):
@@ -221,17 +94,6 @@ def trivia(list):
                     #print include
                 else:
                     include = include.union(dbi.m_w_y_id(tuple[i+1]))
-
-    #print "\nfinal include exclude"
-    #print include
-    #print exclude
-    #print "\nfinal genre sets"
-    #print genre_in
-    #print genre_ex
-    #print "\ninclude - exclude"
-    #print include - exclude
-    #print len(include-exclude)
-    #print "\n"
 
     final_include = include-exclude
 
