@@ -19,7 +19,7 @@ class Test(unittest.TestCase):
                 elif line[:colon].find('NLU')>=0:
                     nlu_input = eval(line[colon+1:])
                     #print nlu_input
-                elif line[:colon].find('NLG')>=0:
+                elif line[:colon].find('DM')>=0:
                     nlg_input = eval(line[colon+1:])
                     print nlg_input
                     nlg_output = nlg.process(nlu_input,nlg_input)
