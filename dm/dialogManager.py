@@ -50,5 +50,3 @@ def input(list):
             return off_topic(dict)
         else:
             return None
-
-
