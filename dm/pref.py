@@ -1,7 +1,7 @@
 import sys
 sys.path.append("../dbi")
 import dbi
-
+sys.path.append("../nlu")
 import nlu
 N = nlu.NLU()
 
