@@ -92,3 +92,23 @@ NLU:[{"command":"clear"}]
 DM:[{}]
 NLG:Okay, what would you like to look at?
 
+user:I want to see some super-hero movie
+NLU:[{"request":"title","keyword":"super-hero"}]
+DM:[{"list":"some large number", "question":"MORE_PREF"}]
+NLG:There are (some large number) movies with super-heroes. Would you like to refine your
+search?
+
+user:Yes, I want to see movies by Marvel
+NLU:[{"request":"title","company":"Marvel"}]
+DM:[{"list":"some large number", "question":"CHOISE","option":["animated","non-animated"]}]
+NLG:The list is still very long. Would you like to see animated or non-animated movies?
+
+user:non-animated
+NLU:[{"response":"non-animated"}]
+DM:[{"list":"some large number", "question":"MORE_PREF"}]
+NLG:The list is still very long. Do you have a specific super-hero in mind?
+
+user:Just show me the list
+NLU:[{"request":"current_list"}]
+DM:[{}]
+NLG:<Display list>
