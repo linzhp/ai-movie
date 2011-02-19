@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .project
 .pydevproject
 .settings
@@ -6,3 +7,6 @@ movie.cfg
 */*.pyc
 *.pyc
 *~
+=======
+*.pyc
+>>>>>>> c7aa0eb5ea55065870d10fdbc95baff243fac1dc
