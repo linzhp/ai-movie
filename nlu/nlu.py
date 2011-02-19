@@ -1,4 +1,3 @@
-
 import nltk
 from nltk.corpus import wordnet as wn
 import chunker
@@ -498,5 +497,3 @@ class NLU:
 			similarity = .35
 
 		return similarity
-
-

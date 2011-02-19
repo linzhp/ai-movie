@@ -39,5 +39,3 @@ def process(NLUinput, NLGinput):
         likeResponse(NLUinput,NLGinput)
     elif NLGinput[0].has_key("list"):
         listOutput(NLUinput,NLGinput)
-
-
