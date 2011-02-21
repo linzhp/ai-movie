@@ -1,13 +1,14 @@
 import logging
 from nlg import nlg
 from nlu.nlu import NLU
-from dm import dialogManager
+from dm import DialogManager
 
 logging.basicConfig(level=logging.DEBUG,
                     filename='session.log',
                     format='%(message)s',
                     filemode='w')
 nlu = NLU()
+dialogManager = DialogManager()
 
 try:
     greeting=nlg.greet()
