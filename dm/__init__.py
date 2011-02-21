@@ -27,7 +27,8 @@ class DialogManager:
                 continue
             kernel.setBotPredicate(k[8:], v)
         
-        howie.core.kernel=kernel    
+        howie.core.kernel=kernel
+        self.pending_question = None
 
     def request(self, dict):
         # Resolve role of a person
@@ -37,41 +38,54 @@ class DialogManager:
             dict[role]=name
         # NLG does not need to be aware of below operations
         # to dict, make a copy of dict to hide the operations
-        in_dict = dict.copy()
+        internal_dict = dict.copy()
         # Resolve pronouns
-        for key in in_dict:
-            if in_dict[key] in ["PRE_HE", "PRE_IT"]:
-                in_dict[key] = state.resolve_pronoun(in_dict[key])
-                
-        if in_dict["request"] == "opinion":
+        for key in internal_dict:
+            if internal_dict[key] in ["PRE_HE", "PRE_IT"]:
+                internal_dict[key] = state.resolve_pronoun(internal_dict[key])
+        
+        request_type = internal_dict["request"]
+        state.add_condition(internal_dict)
+        internal_dict = state.get_all()
+        if request_type == "opinion":
+            internal_dict["request"]="count"
+            internal_dict["of"]="title"
+            self.pending_question = "SEE_RESULT?"
+            dbi.query(internal_dict)
+        elif request_type == "true_false":
             pass
-    #    dbi.query("director", {"genre":"action","keyword":"dream"}
+            
     
     def command(self, dict):
-        pass
+        if dict["command"]=="clear":
+            state.clear()
     
     def response(self, dict):
-        query_dict = {}
-        if dict["response"]=="no":
+        internal_dict = dict.copy()
+        response = internal_dict.pop("response")
+        if response=="no":
             state.clear()
-        elif dict["response"] == "yes":
-            query_dict.update(state.get_all())
+        elif response == "yes":
+            internal_dict["request"]="title"
         elif self.pending_question:
-            state.add({self.pending_question, dict["response"]})
-            query_dict.update(state.get_all())
+            internal_dict[self.pending_question]=response
+            self.pending_question = None
+            internal_dict["request"]="title"
+        return self.request(internal_dict)
     
     def off_topic(self, dict):
         return howie.core.submit(dict["off_topic"], "ai-movie-dialog-manager")
     
     def input(self, list):
-        query_dict=dict()
+        result_dict={}
         for dict in list:
             if dict.has_key("request"):
-                query_dict.update(self.request(dict))
+                result_dict.update(self.request(dict))
             elif dict.has_key("command"):
                 self.command(dict)
             elif dict.has_key("response"):
-                self.response(dict)
+                result_dict.update(self.response(dict))
             elif dict.has_key("off_topic"):
-                self.off_topic(dict)
+                result_dict=self.off_topic(dict)
+        return result_dict
         
