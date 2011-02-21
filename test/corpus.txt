@@ -25,7 +25,7 @@ NLG:I'm glad you like it.  Is there anything else I can help you with?
  
 user:did Wes Anderson act in any movies?
 NLU:[{"request":"true_false","actor":"Wes Anderson"}]
-DM:[{"answer":"yes","list":"7"}]
+DM:[{"answer":"yes","list":"7", "question":"SEE_RESULT?"}]
 NLG:Yes, Wes Anderson acted in 7 movies.  Would you like to see the list?
  
 user:what was his highest grossing film
@@ -62,12 +62,12 @@ DM:[{"print":"director","results":["NAME"]}]
 NLG:NAME directed the departed.
  
 user:what else has he directed?
-NLU:[{"request":"title","director":"prev_he"}]
+NLU:[{"request":"title","director":"PREV_HE"}]
 DM:[{"print":"movie","results":["A","B"]}]
 NLG:He directed A and B.
  
 user:has he won any academy awards?
-NLU:[{"request":"true_false","award": "Academy Award", "person": "prev_he"}]
+NLU:[{"request":"true_false","award": "Academy Award", "person": "PREV_HE"}]
 DM:[{"answer":"yes","results":["3247"]}]
 NLG:He won an award in 3247.
  
@@ -78,7 +78,7 @@ DM:[{"list":"SIZE","like":" character"}]
 NLG:That's nice.
  
 user:what animated movies has he been in?
-NLU:[{"request":"title","genre":"animation","person":"prev_he"}]
+NLU:[{"request":"title","genre":"animation","person":"PREV_HE"}]
 DM:[{"print":"title","results":["Batman Beyond","The Original Batman"]}]
 NLG:He was in "Batman Byeond" and "The Original Batman".
  

@@ -80,9 +80,13 @@ class Chunker:
 
 		tokd = nltk.word_tokenize(sentence)
 		tagged = self.tagger.tag(tokd)
+		print tagged
 		chunked = self.cp.parse(tagged)
 
 		#print "\n\nChunked - tree\n"
 		#print chunked
 
 		return chunked
+
+chk = Chunker()
+print chk.chunk("Who directed \"The Big Lebowski\"?")
