@@ -22,7 +22,7 @@ try:
         logging.debug('dm_out: '+dm_out)
         output=nlg.process(nlu_out,dm_out)
         for dict in nlu_out:
-            if dict.get("command")=="exit":
+            if dict.get("command")=="EXIT":
                 exit()
         logging.info('Bot: '+output)
         input = raw_input(output+'\n')

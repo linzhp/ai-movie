@@ -1,6 +1,6 @@
 user: Action movies about dreams.
-NLU:[{"request":"opinion","genre":"action","keyword":"dream"}]
-DM:[{"list":" 7","question":" HOW_MANY"}] 
+NLU:[{"request":"OPINION","genre":"action","keyword":"dream"}]
+DM:[{"list":7,"question":" HOW_MANY"}] 
 NLG:I found 7 action movies about dreams"," how many would you like to see?
 
 user:3
@@ -24,8 +24,8 @@ NLG:I'm glad you like it.  Is there anything else I can help you with?
 ///////////////////////////////////////////
  
 user:did Wes Anderson act in any movies?
-NLU:[{"request":"true_false","actor":"Wes Anderson"}]
-DM:[{"answer":"yes","list":"7", "question":"SEE_RESULT?"}]
+NLU:[{"request":"TRUE_FALSE","actor":"Wes Anderson"}]
+DM:[{"answer":"yes","list":7, "question":"SEE_RESULT?"}]
 NLG:Yes, Wes Anderson acted in 7 movies.  Would you like to see the list?
  
 user:what was his highest grossing film
@@ -35,19 +35,19 @@ NLG:His highest grossing movie was A.
  
 user:what other films came out that year?
 NLU:[{"request":"title","year":"prev_it"}]
-DM:[{"list":"243","year":"YEAR","question":"MORE_PREF"}]
+DM:[{"list":243,"year":"YEAR","question":"MORE_PREF"}]
 NLG:243 other movies came out in YEAR.  Could you be more specific?
  
 /////////////////////////////////////////////
  
 user: i like robin williams
-NLU:[{"request":"opinion","person":"robin williams"}]
+NLU:[{"request":"OPINION","person":"robin williams"}]
 DM:[{"like":"actor","question":"MORE_PREF"}]
 NLG:Robin Williams is a prolific actor. Is there anything else you like?
  
 user:how many movies has he been in?
 NLU:[{"request":"count","of":"title"}]
-DM:[{"list":"30"}]
+DM:[{"list":30}]
 NLG:He has been in 30 movies.
  
 user:what kinds of movies has he been in?
@@ -67,14 +67,14 @@ DM:[{"print":"movie","results":["A","B"]}]
 NLG:He directed A and B.
  
 user:has he won any academy awards?
-NLU:[{"request":"true_false","award": "Academy Award", "person": "PREV_HE"}]
-DM:[{"answer":"yes","results":["3247"]}]
-NLG:He won an award in 3247.
+NLU:[{"request":"TRUE_FALSE","award": "Academy Award", "person": "PREV_HE"}]
+DM:[{"answer":"yes","list":2}]
+NLG:He won 2 Academy Awards. Do you want to see them?
  
 /////////////////////////////////////////////////////////
-user:i like batman
-NLU:[{"request":"opinion","person":"batman"}]
-DM:[{"list":"SIZE","like":" character"}]
+user:i like Batman
+NLU:[{"request":"OPINION","person":"Batman"}]
+DM:[{"list":70, "question":"HOW_MANY"}]
 NLG:That's nice.
  
 user:what animated movies has he been in?
@@ -83,7 +83,7 @@ DM:[{"print":"title","results":["Batman Beyond","The Original Batman"]}]
 NLG:He was in "Batman Byeond" and "The Original Batman".
  
 user:who voiced him?
-NLU:[{"request":"voice actor", "part":"prev_he"}]
+NLU:[{"request":"voice actor", "part":"PRE_HE"}]
 DM:[{"print":"voice actor","results":["Brian"]}]
 NLG:Brian voiced him.
 
@@ -109,6 +109,6 @@ DM:[{"list":"some large number", "question":"MORE_PREF"}]
 NLG:The list is still very long. Do you have a specific super-hero in mind?
 
 user:Just show me the list
-NLU:[{"request":"current_list"}]
+NLU:[{"request":"title"}]
 DM:[{}]
 NLG:<Display list>
