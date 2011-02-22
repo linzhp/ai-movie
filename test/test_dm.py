@@ -30,8 +30,8 @@ class Test(unittest.TestCase):
         result=self.dm.request({'request':'title','director':'James Cameron'})
         self.dm.dbi.mockCheckCall(0, 'query','title',condition)
         self.dm.state.mockCheckCall(0, 'add_request',{'request':'title','director':'James Cameron'})
-        self.assertEqual({'print':'title', 'list':30, 'question':'HOW_MANY'}, result)
-        self.assertEqual('result_length', self.dm.pending_question)
+        self.assertEqual({'question':'MORE_PREF'}, result)
+        self.assertEqual('MORE_PREF', self.dm.pending_question)
         
     def test_request_opinion1(self):
         condition = {"genre":"action","keyword":"dream"}
@@ -62,6 +62,7 @@ class Test(unittest.TestCase):
         self.assertEqual({'list':2,'question':"SEE_RESULT?"},result)
         
     def test_response_yes(self):
+        self.dm.pending_question='SEE_RESULT?'
         self.dm.dbi.mockAddReturnValues(query=["Titanic", "The Reader"])
         self.dm.state.mockAddReturnValues(get_all={'request':'title','actor':'Kate Winslet'},last_request='title')
         result = self.dm.response({'response':'yes'})

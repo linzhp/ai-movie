@@ -42,7 +42,8 @@ NLG:243 other movies came out in YEAR.  Could you be more specific?
  
 user: i like robin williams
 NLU:[{"request":"OPINION","person":"robin williams"}]
-DM:[{"like":"actor","question":"MORE_PREF"}]
+DM:[{"question":"MORE_PREF"}]
+NLU:[{"request":"OPINION","actor":"robin williams"}]
 NLG:Robin Williams is a prolific actor. Is there anything else you like?
  
 user:how many movies has he been in?

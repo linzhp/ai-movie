@@ -34,6 +34,7 @@ class DialogManager:
             self.state.add_request(internal_dict)
         internal_dict = self.state.get_all()
         request_type = internal_dict.pop("request")
+        #TODO empty dict
         if request_type == "OPINION":
             self.pending_question = "HOW_MANY"
             count=self.dbi.query('title',internal_dict, count=True)
@@ -56,8 +57,12 @@ class DialogManager:
         else:
             results=self.dbi.query(request_type, internal_dict)
             if isinstance(results, int):
-                self.pending_question = "result_length"
-                return {'print':request_type,"list":results, "question":"HOW_MANY"}
+                if len(internal_dict)<2:
+                    self.pending_question='MORE_PREF'
+                    return {"question":"MORE_PREF"}
+                else:
+                    self.pending_question = "result_length"
+                    return {'print':request_type,"list":results, "question":"HOW_MANY"}
             else:
                 self.state.add_result(results)
                 return {'print':request_type,'results':results}
@@ -71,9 +76,17 @@ class DialogManager:
         internal_dict = dict.copy()
         response = internal_dict.pop("response")
         if response=="no":
-            self.state.clear()
+            if self.pending_question=="SEE_RESULT?":
+                self.state.clear()
+                dict.pop("response")
+                dict['command']='CLEAR'
+                return {}
+            elif self.pending_question=="MORE_PREF":
+                internal_dict["request"]=self.state.last_request()
+                internal_dict['result_length']=10
         elif response == "yes":
-            internal_dict["request"]=self.state.last_request()
+            if self.pending_question:
+                internal_dict["request"]=self.state.last_request()
         elif self.pending_question:
             internal_dict[self.pending_question]=response
             internal_dict["request"]=self.state.last_request()
