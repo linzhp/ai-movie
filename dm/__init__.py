@@ -26,10 +26,14 @@ class DialogManager:
         for key in internal_dict:
             if internal_dict[key] in ["PRE_HE", "PRE_IT"]:
                 internal_dict[key] = self.state.resolve_pronoun(internal_dict[key])
-        
-        self.state.add_condition(internal_dict)
-        request_type = internal_dict.pop("request")
+        if internal_dict.has_key("result_length"):
+            state_dict=internal_dict.copy()
+            state_dict.pop("result_length")
+            self.state.add_request(state_dict)
+        else:
+            self.state.add_request(internal_dict)
         internal_dict = self.state.get_all()
+        request_type = internal_dict.pop("request")
         if request_type == "OPINION":
             self.pending_question = "HOW_MANY"
             count=self.dbi.query('title',internal_dict, count=True)
@@ -42,16 +46,12 @@ class DialogManager:
             of = internal_dict.pop("of")
             count=self.dbi.query(of, internal_dict, count=True)
             result={}
-#            if count>0:
-#                result["answer"]="yes"
-#            else:
-#                result["answer"]="no"
             if count>10:
                 self.pending_question = "result_length"
-                result.update({"list":count, "question":"HOW_MANY"})
+                result={"list":count, "question":"HOW_MANY"}
             else:
                 self.pending_question = "SEE_RESULT?"
-                result.update({"list":count, "question":self.pending_question})
+                result={"list":count, "question":self.pending_question}
             return result
         else:
             results=self.dbi.query(request_type, internal_dict)
@@ -59,6 +59,7 @@ class DialogManager:
                 self.pending_question = "result_length"
                 return {'print':request_type,"list":results, "question":"HOW_MANY"}
             else:
+                self.state.add_result(results)
                 return {'print':request_type,'results':results}
             
     
@@ -71,7 +72,7 @@ class DialogManager:
         response = internal_dict.pop("response")
         if response=="no":
             self.state.clear()
-        elif response == "yes":#TODO check
+        elif response == "yes":
             internal_dict["request"]=self.state.last_request()
         elif self.pending_question:
             internal_dict[self.pending_question]=response
@@ -114,5 +115,6 @@ class DialogManager:
                 result_dict.update(self.response(dict))
             elif dict.has_key("off_topic"):
                 result_dict=self.off_topic(dict)
+        #TODO add to state
         return result_dict
         
