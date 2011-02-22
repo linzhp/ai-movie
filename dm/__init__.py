@@ -88,4 +88,3 @@ class DialogManager:
             elif dict.has_key("off_topic"):
                 result_dict=self.off_topic(dict)
         return result_dict
-        

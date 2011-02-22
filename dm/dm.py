@@ -18,7 +18,7 @@ def trivia(list):
             id_num = dbi.get_id_person(tuple[i+1])
             if("!" in x):
                 exclude = exclude.union(dbi.m_w_a_id(id_num))
-                
+
             else:
                 if(include):
                     include = include & dbi.m_w_a_id(id_num)
