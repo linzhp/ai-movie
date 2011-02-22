@@ -128,6 +128,6 @@ class DialogManager:
                 result_dict.update(self.response(dict))
             elif dict.has_key("off_topic"):
                 result_dict=self.off_topic(dict)
-        #TODO add to state
+        self.state.add_result(result_dict)
         return result_dict
         
