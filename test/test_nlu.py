@@ -17,9 +17,10 @@ class Test(unittest.TestCase):
                 colon = line.find(':')
                 if line[:colon].find('user')>=0:
                     nlu_output = nlu.process(line[colon+1:])
-                elif line[:colon].find('NLU')>=0:
+                elif line[:colon].find('NLU')>=0 and nlu_output is not None:
                     expected_output = eval(line[colon+1:])
                     self.assertEqual(expected_output, nlu_output)
+                    nlu_output = None
                 
 if __name__ == "__main__":
     import sys

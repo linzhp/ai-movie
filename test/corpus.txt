@@ -42,7 +42,8 @@ NLG:243 other movies came out in YEAR.  Could you be more specific?
  
 user: i like robin williams
 NLU:[{"request":"OPINION","person":"robin williams"}]
-DM:[{"like":"actor","question":"MORE_PREF"}]
+DM:[{"question":"MORE_PREF"}]
+NLU:[{"request":"OPINION","actor":"robin williams"}]
 NLG:Robin Williams is a prolific actor. Is there anything else you like?
  
 user:how many movies has he been in?
@@ -67,15 +68,15 @@ DM:[{"print":"movie","results":["A","B"]}]
 NLG:He directed A and B.
  
 user:has he won any academy awards?
-NLU:[{"request":"TRUE_FALSE","award": "Academy Award", "person": "PREV_HE"}]
-DM:[{"answer":"yes","list":2}]
+NLU:[{"request":"count","of": "Academy Award", "person": "PREV_HE"}]
+DM:[{"list":2}]
 NLG:He won 2 Academy Awards. Do you want to see them?
  
 /////////////////////////////////////////////////////////
 user:i like Batman
 NLU:[{"request":"OPINION","person":"Batman"}]
-DM:[{"list":70, "question":"HOW_MANY"}]
-NLG:That's nice.
+DM:[{"question":"MORE_PREF"}]
+NLG:What kind of movies about Batman do you like?
  
 user:what animated movies has he been in?
 NLU:[{"request":"title","genre":"animation","person":"PREV_HE"}]
@@ -100,15 +101,10 @@ search?
 
 user:Yes, I want to see movies by Marvel
 NLU:[{"request":"title","company":"Marvel"}]
-DM:[{"list":"some large number", "question":"CHOISE","option":["animated","non-animated"]}]
-NLG:The list is still very long. Would you like to see animated or non-animated movies?
+DM:[{"list":"some large number", "question":"HOW_MANY"]}]
+NLG:The list is still very long. How many do you want to see?
 
-user:non-animated
-NLU:[{"response":"non-animated"}]
-DM:[{"list":"some large number", "question":"MORE_PREF"}]
-NLG:The list is still very long. Do you have a specific super-hero in mind?
-
-user:Just show me the list
-NLU:[{"request":"title"}]
-DM:[{}]
+user:50
+NLU:[{"response":50}]
+DM:[{"print":"title","result":[""]}]
 NLG:<Display list>
