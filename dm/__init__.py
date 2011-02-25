@@ -10,7 +10,7 @@ import dbi
 class DialogManager:
     def __init__(self):
         self.pending_question = None
-        self.state = None #TODO initialize state here
+        self.state = State() #TODO initialize state here
         self.dbi = None #TODO initialize dbi here
 
     def request(self, dict):
@@ -26,6 +26,8 @@ class DialogManager:
         for key in internal_dict:
             if internal_dict[key] in ["PRE_HE", "PRE_IT"]:
                 internal_dict[key] = self.state.resolve_pronoun(internal_dict[key])
+                # NODE: if there is PRE_HE or PRE_IT but state is empty then error
+                # handling is needed here.
         if internal_dict.has_key("result_length"):
             state_dict=internal_dict.copy()
             state_dict.pop("result_length")
@@ -62,11 +64,11 @@ class DialogManager:
                 self.state.add_result(results)
                 return {'print':request_type,'results':results}
             
-    
+
     def command(self, dict):
         if dict["command"]=="CLEAR":
             self.state.clear()
-    
+
     def response(self, dict):
         internal_dict = dict.copy()
         response = internal_dict.pop("response")
@@ -79,7 +81,7 @@ class DialogManager:
             internal_dict["request"]=self.state.last_request()
         self.pending_question = None
         return self.request(internal_dict)
-    
+
     def off_topic(self, dict):
         if howie.core.kernel is None:
             config = howie.configFile.load(path.join(current_dir, "../howie.ini"))
@@ -103,7 +105,7 @@ class DialogManager:
             howie.core.kernel=kernel
 
         return howie.core.submit(dict["off_topic"], "ai-movie-dialog-manager")
-    
+
     def input(self, list):
         result_dict={}
         for dict in list:
@@ -116,4 +118,5 @@ class DialogManager:
             elif dict.has_key("off_topic"):
                 result_dict=self.off_topic(dict)
         #TODO add to state
+        state.add_result(result_dict)
         return result_dict
