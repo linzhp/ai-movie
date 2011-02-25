@@ -1,4 +1,3 @@
-
 import nltk
 from nltk.corpus import wordnet as wn
 import chunker
@@ -62,25 +61,31 @@ class NLU:
 		
 		
 		if chktree[0][0][1] == 'MD':
+			#print "calling parse as what\n"
 			parameter_list = self._parse_as_what(chktree)
-			parameter_list.insert(0, 'trivia')
+			#parameter_list.insert(0, 'trivia')
 	
 		qtype = chktree[0][0][0].lower()			
 		if qtype == "who":
+			#print "calling parse as who\n"
 			parameter_list = self._parse_as_who(chktree) 	
-			parameter_list.insert(0, 'trivia')
+			#parameter_list.insert(0, 'trivia')
 		elif qtype == "what":
+			#print "calling parse as what\n"
 			parameter_list = self._parse_as_what(chktree) 	
-			parameter_list.insert(0, 'trivia')
+			#parameter_list.insert(0, 'trivia')
 		elif qtype == "when":
+			#print "calling parse as when\n"
 			parameter_list = self._parse_as_when(chktree) 	
-			parameter_list.insert(0, 'trivia')
+			#parameter_list.insert(0, 'trivia')
 		elif qtype == "why":
+			#print "calling parse as why\n"
 			parameter_list = self._parse_as_why(chktree) 
-			parameter_list.insert(0, 'trivia')
+			#parameter_list.insert(0, 'trivia')
 		else:
+			#print "calling parse as tf\n"
 			parameter_list = self._parse_as_TF(chktree) 
-			parameter_list.insert(0, 'True_False')
+			#parameter_list.insert(0, 'True_False')
 
 		return parameter_list
 
@@ -88,38 +93,40 @@ class NLU:
 	def _parse_as_who(self, chktree):
 		object_found = False
 		negation = False
-		parameter_list = ["person"]
+		parameter_list = {}
 		looking_for = 'person'
 		for x in chktree:
 			if ( "tuple" in str(type(x)) ):
 				negation = self._negator(x[0], negation)
 				if x[1] == "KW_DIRECTOR":
 					if object_found == False:
-						parameter_list[0] = "director"
+						parameter_list['request'] = "director"
 						object_found = True
 					else:
 						looking_for = "director"
 				elif x[1] == "KW_STAR":
 					if object_found == False:
-						parameter_list[0] = "actor"
+						parameter_list['request'] = "actor"
 						object_found = True
 					else:
 						looking_for = "actor"
 			else:
 				if x.node == "TITLE":
 					if negation:
-						parameter_list.append('!title')
+						#parameter_list.append('!title')
+						parameter_list['title'] = '!'+self._untag_subtree(x)
 					else:
-						parameter_list.append('title')
-					parameter_list.append(self._untag_subtree(x))
+						parameter_list['title'] = self._untag_subtree(x)
+					#parameter_list.append(self._untag_subtree(x))
 				elif x.node == "PERSON":
+					if not object_found:
+						parameter_list['request'] = 'person'
 					if negation:
-						subject = "!"
+						parameter_list['name'] = '!'+self._untag_subtree(x)
 					else:
-						subject = ""
-					subject += looking_for                  
-					parameter_list.append(subject)
-					parameter_list.append(self._untag_subtree(x))
+						parameter_list['name'] = self._untag_subtree(x)                 
+					#parameter_list.append(subject)
+					#parameter_list.append(self._untag_subtree(x))
 		return parameter_list
 
 	## 'What' (a piece of garbage) question parser
@@ -127,14 +134,14 @@ class NLU:
 		looking_for = 'other'
 		object_found = False
 		negation = False
-		parameter_list = ["other"]
+		parameter_list = {}
 		flat = chktree.leaves()
 		if flat[ len(flat) - 1 ][1] == ":":
 			last = flat[ len(flat) - 2 ]
 		else:
 			last = flat[ len(flat) - 1 ]
 		if last[1] == "KW_PLOT":
-			parameter_list[0] = 'plot'
+			parameter_list['request'] = 'plot'
 			object_found = True
 		for i,x in enumerate(chktree):
 			if ( "tuple" in str(type(x)) ):
@@ -144,19 +151,19 @@ class NLU:
 					elif ( x[1] == "KW_DIRECTOR" ) | ( x[1] == "KW_STAR" ):
 						return self._parse_as_who(chktree)
 					elif x[1] == "KW_GENRE":
-						parameter_list[0] = 'genre'
+						parameter_list['request'] = 'genre'
 						object_found = 'True'
 					elif x[1] == "KW_MOVIE":
-						parameter_list[0] = 'title'
+						parameter_list['request'] = 'title'
 						object_found = 'True'		
 					elif x[1] == "KW_PLOT":
-						parameter_list[0] = 'plot'
+						parameter_list['request'] = 'plot'
 						object_found = 'True'
 					elif x[1] == "GNRE":
-						parameter_list[0] = 'title'
+						#parameter_list['request'] = 'title'
 						object_found = 'True'	
-						parameter_list.append('genre')
-						parameter_list.append(x[0].title())
+						parameter_list['title'] = x[0].title()
+						#parameter_list.append(x[0].title())
 				else:
 					negation = self._negator(x[0], negation)
 					if x[1] == "KW_DIRECTOR":
@@ -167,51 +174,48 @@ class NLU:
 						looking_for = "plot"
 					elif x[1] == "GNRE":
 						if negation:
-							parameter_list.append('!genre')
+							parameter_list['genre'] = '!'+x[0].title()
 						else:
-							parameter_list.append('genre')
+							parameter_list['genre'] = x[0].title()
 						parameter_list.append(x[0].title())
 						
 			else:
 				if x.node == "TITLE":
 					if negation:
-						parameter_list.append('!title')
+						parameter_list['title'] = '!'+ self._untag_subtree(x)
 					else:
-						parameter_list.append('title')
-					parameter_list.append(self._untag_subtree(x))
+						parameter_list['title']=self._untag_subtree(x)
+					#parameter_list.append(self._untag_subtree(x))
 				elif x.node == "PERSON":               
+					if not object_found:
+						parameter_list['request'] = 'person'
 					if negation:
-						subject = "!"
+						parameter_list['name'] = '!'+self._untag_subtree(x)
 					else:
-						subject = ""
-					if looking_for == 'other':
-						looking_for = 'person'
-					subject += looking_for                  
-					parameter_list.append(subject)
-					parameter_list.append(self._untag_subtree(x))
-		if len(parameter_list) % 2 == 0:
-			parameter_list.append('that')
+						parameter_list['name'] = self._untag_subtree(x)
+		
 		return parameter_list
 					
 
 	## 'When' question parser
 	def _parse_as_when(self, chktree):
-		parameter_list = ["year"]
-		found_subject = False
+		parameter_list = {}
+		parameter_list['request'] = 'year'
+		#found_subject = False
 		for x in chktree:
 			if "Tree" in str(type(x)) :
 				if x.node == "TITLE":
-					found_subject = True
-					parameter_list.append('title')
-					parameter_list.append(self._untag_subtree(x)) 
+					#found_subject = True
+					parameter_list['title'] = self._untag_subtree(x)
+					#parameter_list.append(self._untag_subtree(x)) 
 				elif x.node == "PERSON":
-					found_subject = True
-					parameter_list.append('person')
-					parameter_list.append(self._untag_subtree(x)) 
+					#found_subject = True
+					parameter_list.append['person'] = self._untag_subtree(x)
+					#parameter_list.append(self._untag_subtree(x)) 
 
-		if found_subject == False:
-			parameter_list.append('other')
-			parameter_list.append('that')
+		#if found_subject == False:
+			#parameter_list.append('other')
+			#parameter_list.append('that')
 
 		return parameter_list
 
@@ -219,13 +223,15 @@ class NLU:
 	def _parse_as_TF(self, chktree):
 		looking_for = "person"
 		negation = False
-		parameter_list = []
+		parameter_list = {}
+		parameter_list['request'] = 'true_false'
+		#print "in tf, chktree is ",chktree
 		for x in chktree:
 			if "tuple" in str(type(x)):
 				negation = self._negator(x[0], negation)
 				if x[1] == "CD":
-					parameter_list.append('year')
-					parameter_list.append(x[0])
+					parameter_list['year'] = x[0]
+					#parameter_list.append(x[0])
 				elif ( x[1] == "KW_DIRECTOR" ):
 					looking_for = 'director'
 				elif ( x[1] == "KW_STAR" ):
@@ -236,32 +242,33 @@ class NLU:
 					
 				elif x[1] == "GNRE":
 					if negation:
-						parameter_list.append('!genre')
+						parameter_list['genre'] = '!'+x[0].title()
 					else:
-						parameter_list.append('genre')
-					parameter_list.append(x[0].title())
+						parameter_list['genre'] = x[0].title()
+					#parameter_list.append(x[0].title())
 			else:
+				#print "else branch ",x.node
 				if x.node == "TITLE":
-					parameter_list.append('title')
-					parameter_list.append(self._untag_subtree(x))
+					parameter_list['title'] = self._untag_subtree(x)
+					#parameter_list.append(self._untag_subtree(x))
 				elif x.node == "PERSON":
 					if looking_for == "actor":
 						if negation:
-							parameter_list.append('!actor')
+							parameter_list['actor'] = '!'+self._untag_subtree(x)
 						else:
-							parameter_list.append('actor')
+							parameter_list['actor'] = self._untag_subtree(x)
 					elif looking_for == "director":
 						if negation:
-							parameter_list.append('!director')
+							parameter_list['director'] = '!'+self._untag_subtree(x)
 						else:
-							parameter_list.append('director')
+							parameter_list['director'] = self._untag_subtree(x)
 					else:
 						if negation:
-							parameter_list.append('!person')
+							parameter_list['person'] = '!'+self._untag_subtree(x)
 						else:
-							parameter_list.append('person')
+							parameter_list['person'] = self._untag_subtree(x)
 
-					parameter_list.append(self._untag_subtree(x))
+					#parameter_list.append(self._untag_subtree(x))
 		return parameter_list
 
 			
@@ -316,13 +323,13 @@ class NLU:
 					return self._parse_question(chunked)
 				elif x.node == "COMMAND":
 					parameter_list = self._parse_as_what(chunked)
-					parameter_list.insert(0, 'trivia')
+					#parameter_list.insert(0, 'trivia')
 					return parameter_list
 			else:
 				if x[1] == 'YES':
-					return ['yes']
+					return {'response':'yes'}
 				elif x[1] == 'NO':
-					return ['no']
+					return {'response':'no'}
 				elif x[1] == 'HI':
 					return ['hi']
 				elif x[1] == 'BYE':
@@ -335,6 +342,8 @@ class NLU:
 	## Parse sentences starting with a personal pronoun (hopefully the sentence
 	## is something like "I like action movies" or "I thought that movie was bad" ).
 	def _parse_PRP(self, chktree):
+		parameter_lista = {}
+		parameter_lista['request'] = 'opinion'
 		parameter_list = []
 		looking_for = "other"
 		negation = False
@@ -346,13 +355,16 @@ class NLU:
 		#if chktree[0][0].lower() == 'i':
 		if True:
 			for x in chktree:
+				#print str(type(x))
 				if 'Tree' in str(type(x)):
+					#print "got to tree stuff",x
 					if x.node == "VP" and collect_subjects == False and have_subject_waiting_for_opinion == False:
 						for y in x:
 							if 'tuple' in str(type(y)):
+								
 								verb = self._classify_word(y[0])
-								if self.vb:
-									print verb
+								
+								#print verb
 								if verb[0] == 'like':
 									if negation:
 										parameter_list.append('dislike')
@@ -381,7 +393,14 @@ class NLU:
 								elif verb[0] == 'think':
 									#collect_subjects = True
 									collect_adjectives = True
-					elif x.node == "NP":						
+					#print parameter_list," ",x.node
+					if 'dislike' in parameter_list:
+						like = "dislike"
+						#print "LIKE WAS FALSE"
+					elif 'like' in parameter_list:
+						#print "LIKE WAS TRUE"
+						like = "like"
+					if x.node == "NP":						
 						if collect_subjects:
 							if negation:
 								parameter_list.append('!other')
@@ -403,6 +422,8 @@ class NLU:
 							waiting_type = 'title'			
 							waiting_subject = self._untag_subtree(x)
 					elif x.node == "PERSON":
+						#print "got to person noder\n\n\n"
+						#print "looking for is ",looking_for
 						if collect_subjects:
 							if looking_for == "actor":
 								if negation:
@@ -415,10 +436,16 @@ class NLU:
 								else:
 									parameter_list.append('director')
 							else:
-								if negation:
-									parameter_list.append('!person')
-								else:
-									parameter_list.append('person')
+								if like == 'like':
+									if negation:
+										parameter_lista['person'] = '!'+self._untag_subtree(x)
+									else:
+										parameter_lista['person'] = self._untag_subtree(x)
+								elif like == 'dislike':
+									if negation:
+										parameter_lista['person'] = self._untag_subtree(x)
+									else:
+										paramter_lista['person'] = self._untag_subtree(x)
 							parameter_list.append(self._untag_subtree(x))
 						else:
 							have_subject_waiting_for_opinion = True			
@@ -426,6 +453,7 @@ class NLU:
 							waiting_subject = self._untag_subtree(x)	
 						 
 				else:
+					#print "in super else ",x
 					negation = self._negator(x[0], negation) 
 					if x[1] == 'KW_DIRECTOR':
 						looking_for = 'director'
@@ -455,10 +483,11 @@ class NLU:
 						elif adj == 'bad':
 							parameter_list.append('dislike')
 							parameter_list.append(waiting_type)
-							parameter_list.append(waiting_subject)	
+							parameter_list.append(waiting_subject)
+					#print parameter_list	
 			
 	
-		return parameter_list
+		return parameter_lista
 
 	## Classify an adjective as 'good' or 'bad' or 'unknown'
 	def _classify_adjective(self, word):
@@ -499,5 +528,8 @@ class NLU:
 			similarity = .35
 
 		return similarity
+
+
+
 
 
