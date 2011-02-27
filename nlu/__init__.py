@@ -2,6 +2,7 @@ from os import path
 import sys
 import re
 import nltk
+from nltk.corpus import wordnet
 import dm
 
 """
@@ -27,41 +28,50 @@ Output: A list of dictionaries. Each dictionary contains one of the four
 
 class NLUnderstanding:
     def __init__(self):
-        self.expect = None
+        self.expect = None        
 
     def process(self, input_string):
         chunked = self.chk.chunk(input_string)
         
         result = []
             
+        if self.expect:
+            response = self._response(chunked)
+            if response:
+                result.append(response) 
+
         for x in chunked:
             if isinstance(x, nltk.Tree):
+                index = chunked.index(x)
                 if x.node == "B-QUESTION":
-                    index = chunked.index(x)
                     request = self._parse_question(chunked,index)
                     if request:
                         result.append(request)
                     break
                 elif x.node == "COMMAND":
-                    #TODO implement it
-                    break
+                    next=chunked[index+1]
+                    if isinstance(next, nltk.Tree):
+                        next=next.leaves()[0]
+                    all_leaves=chunked.leaves()
+                    next_index = all_leaves.index(next)
+                    keywords=self._search_keywords(all_leaves[next_index:])
+                    if len(keywords)>0:
+                        request=self._parse_pref(chunked, request=self._keyword2request(keywords[0]))
+                        if request:
+                            result.append(request)
+                        break
+                    #else: keywords not found, continue searching
             elif x[1]=="BYE":
                 return {"command":dm.EXIT}
             elif x[1]=="RESTART":
                 result.append({"command":dm.CLEAR})
                 # Don't break here, there may be more preference
         else:
-            preference=self._parse_PRP(chunked)
+            preference=self._parse_pref(chunked)
             if preference:
-                #TODO implement it
-                pass
+                result.append(preference)
                 
                     
-        if self.expect:
-            response = self._response(chunked)
-            if response:
-                result.append(response) 
-
         if len(result==0):
             result.append(self._off_topic(input_string))
     """
@@ -69,25 +79,22 @@ class NLUnderstanding:
     Precondition: self.expect is not None    
     """
     def _response(self, chuncked):
-        if self.expect == dm.HOW_MANY:
+        if self.expect == "result_length":
             for node in chuncked:
-                if node[1]=='CD':
+                if isinstance(node, tuple) and node[1]=='CD':
+                    chuncked.remove(node)
                     return {'response':int(node[0])}
-            else:
-                return None
-        elif self.expect == dm.SEE_RESULT:
-            for node in chuncked:
-                if node[1]=='YES' or node[1]=='NO':
+        elif self.expect == dm.SEE_RESULT or self.expect == dm.MORE_PREF:
+            for node in chuncked.leaves():
+                if isinstance(node, tuple) and (node[1]=='YES' or node[1]=='NO'):
+                    chuncked.remove(node)
                     return {'response':node[1]}
-        elif self.expect == dm.MORE_PREF:
-            # TODO Modify _request not to merge with this dict
-            return {'response': dm.MORE_PREF}
-     
+        return None
 
     def _parse_question(self, chunked, question_index):
         question_tree = chunked[question_index]
         qtype = question_tree[0][0].lower()
-        keywords = self._search_keywords(question_tree)
+        keywords = self._search_keywords(question_tree.leaves())
         if qtype=="who":
             return self._parse_pref(chunked, request="person")
         elif qtype=="when":
@@ -107,7 +114,7 @@ class NLUnderstanding:
         return self._parse_pref(chunked)
     
     def _off_topic(self, input_string):
-        pass
+        return {'off_topic':input_string}
     
     """  
     Possible keywords are: KW_YEAR, KW_MOVIE, KW_MOVIES
@@ -129,4 +136,7 @@ class NLUnderstanding:
     
     def _parse_pref(self, chunked, **kargs):
         #TODO try to resolve pronoun locally
-        pass
+        negation = False
+        all_pref={'request':dm.OPINION}
+        all_pref.update(kargs)
+        

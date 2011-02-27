@@ -90,8 +90,6 @@ class Chunker:
 
 if __name__ == '__main__':
 	chk = Chunker()
-	result = chk.chunk("Which actor played Rose?")
-	print result[0][0][1]
-	for node in result:
-		print isinstance(node, nltk.Tree)
+	result = chk.chunk("want to see movies about dreams")
 	result.draw()
+	

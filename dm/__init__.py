@@ -35,8 +35,7 @@ class DialogManager:
             self.state.add_request(internal_dict)
         internal_dict = self.state.get_all()
         request_type = internal_dict.pop("request")
-        #TODO empty dict
-        if request_type == "OPINION":
+        if request_type == OPINION:
             self.pending_question = HOW_MANY
             count=self.dbi.query('title',internal_dict, count=True)
             if count>10:
@@ -78,14 +77,7 @@ class DialogManager:
         response = internal_dict.pop("response")
         if response=="NO":
             # FIXME check any problem here 
-            if self.pending_question==SEE_RESULT:
-                self.state.clear()
-                dict.pop("response")
-                dict['command']=CLEAR
-                return {}
-            elif self.pending_question==MORE_PREF:
-                internal_dict["request"]=self.state.last_request()
-                internal_dict['result_length']=10
+            return {}
         elif response == "YES":
             if self.pending_question:
                 internal_dict["request"]=self.state.last_request()
@@ -140,3 +132,4 @@ MORE_PREF="More preference please"
 EXIT="Exit the program"
 CLEAR="Clear the state"
 COUNT="I want the number of results"
+OPINION='opinion'
