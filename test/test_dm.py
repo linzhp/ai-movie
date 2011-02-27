@@ -1,4 +1,3 @@
-
 import unittest
 from mock import Mock
 
@@ -14,7 +13,7 @@ class Test(unittest.TestCase):
     def test_command(self):
         self.dm.command({"command":"CLEAR"})
         self.dm.state.mockCheckCall(0, 'clear')
-        
+
     def test_request_director(self):
         self.dm.dbi.mockAddReturnValues(query=['James Cameron'])
         self.dm.state.mockAddReturnValues(get_all={'request':'director','title':'Titanic'})
@@ -22,7 +21,7 @@ class Test(unittest.TestCase):
         self.dm.dbi.mockCheckCall(0, 'query','director',{'title':'Titanic'})
         self.dm.state.mockCheckCall(0, 'add_request',{'request':'director','title':'Titanic'})
         self.assertEqual({'print':'director','results':['James Cameron']},result)
-        
+
     def test_request_movies(self):
         condition={'director':'James Cameron'}
         self.dm.dbi.mockAddReturnValues(query=30)
@@ -32,7 +31,7 @@ class Test(unittest.TestCase):
         self.dm.state.mockCheckCall(0, 'add_request',{'request':'title','director':'James Cameron'})
         self.assertEqual({'question':'MORE_PREF'}, result)
         self.assertEqual('MORE_PREF', self.dm.pending_question)
-        
+
     def test_request_opinion1(self):
         condition = {"genre":"action","keyword":"dream"}
         self.dm.dbi.mockAddReturnValues(query=7)
