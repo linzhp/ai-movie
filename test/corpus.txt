@@ -108,3 +108,9 @@ user:50
 NLU:[{"response":50}]
 DM:[{"print":"title","result":[""]}]
 NLG:<Display list>
+
+user: New search
+NLU:[{"command":"clear"}]
+DM:[{}]
+NLG:Okay, what would you like to look at?
+
