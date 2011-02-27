@@ -1,16 +1,17 @@
 import sys
 from os import path 
-import howie.core    
+import howie.core
 import howie.configFile
 from howie import aiml
 current_dir = path.dirname(__file__)
 sys.path.append(path.join(current_dir, ".."))
 import dbi
+import state
 
 class DialogManager:
     def __init__(self):
         self.pending_question = None
-        self.state = State() #TODO initialize state here
+        self.state = state.State() #TODO initialize state here
         self.dbi = None #TODO initialize dbi here
 
     def request(self, dict):
@@ -26,7 +27,7 @@ class DialogManager:
         for key in internal_dict:
             if internal_dict[key] in ["PRE_HE", "PRE_IT"]:
                 internal_dict[key] = self.state.resolve_pronoun(internal_dict[key])
-                # NODE: if there is PRE_HE or PRE_IT but state is empty then error
+                # NOTE: if there is a PRE_HE or PRE_IT but state is empty then error
                 # handling is needed here.
         if internal_dict.has_key("result_length"):
             state_dict=internal_dict.copy()
@@ -69,7 +70,6 @@ class DialogManager:
                 self.state.add_result(results)
                 return {'print':request_type,'results':results}
             
-
     def command(self, dict):
         if dict["command"]=="CLEAR":
             self.state.clear()
