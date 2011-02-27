@@ -40,7 +40,7 @@ class State:
         lists.reverse()
         for dict in lists:
             if value == 'PRE_HE':
-                # Assuming actor/director is the only person we care about!
+                # Assuming actor/director are the only people we care about!
                 if dict.has_key('actor') and dict['actor'] != 'PRE_HE':
                     return dict['actor']
                 elif dict.has_key('director') and dict['director'] != 'PRE_HE':
@@ -54,52 +54,52 @@ class State:
 
 
 #################################### Tests ####################################
-def print_dict(dict):
-    for key in dict:
-        print dict[key]
+if __name__ == '__main__':
+    def print_dict(dict):
+        for key in dict:
+            print dict[key]
 
-state = State()
-state.add_request({'request':'director', 'title':'Titanic'})
-print '1st add => get_all:::::::'
-print state.get_all()
-print '1st add => last_request::::'
-print state.last_request() + '\n'
+    state = State()
+    state.add_request({'request':'director', 'title':'Titanic'})
+    print '1st add => get_all:::::::'
+    print state.get_all()
+    print '1st add => last_request::::'
+    print state.last_request() + '\n'
 
-state.add_request({'request':'title', 'director':'James Cameron'})
-print '2nd add => get_all:::::::'
-print state.get_all()
-print '2nd add => last_request::::::'
-print state.last_request() + '\n'
+    state.add_request({'request':'title', 'director':'James Cameron'})
+    print '2nd add => get_all:::::::'
+    print state.get_all()
+    print '2nd add => last_request::::::'
+    print state.last_request() + '\n'
 
-state.add_request({'request':'OPINION', 'genre':'action', 'keyword':'dream'})
-print '3nd add => get_all:::::::'
-print state.get_all()
-print '3nd add => last_request::::::'
-print state.last_request() + '\n'
+    state.add_request({'request':'OPINION', 'genre':'action', 
+'keyword':'dream'})
+    print '3nd add => get_all:::::::'
+    print state.get_all()
+    print '3nd add => last_request::::::'
+    print state.last_request() + '\n'
 
-state.add_request({'request':'OPINION', 'character':'Batman'})
-print '4nd add => get_all:::::::'
-print state.get_all()
-print '4nd add => last_request::::::'
-print state.last_request() + '\n'
+    state.add_request({'request':'OPINION', 'character':'Batman'})
+    print '4nd add => get_all:::::::'
+    print state.get_all()
+    print '4nd add => last_request::::::'
+    print state.last_request() + '\n'
 
-state.add_request({'request':'COUNT', 'of':'Academy Award', 'actor':'Kate Winslet'})
-print '5rd add => get_all:::::::'
-print state.get_all()
-print '5rd add => last_request::::::'
-print state.last_request() + '\n'
+    state.add_request({'request':'COUNT', 'of':'Academy Award', 'actor':'Kate Winslet'})
+    print '5rd add => get_all:::::::'
+    print state.get_all()
+    print '5rd add => last_request::::::'
+    print state.last_request() + '\n'
 
+    print 'resolve PRE_IT ::::::::::::::::::::::::::'
+    print state.resolve_pronoun('PRE_IT')
+    print 'resolve PRE_HE ::::::::::::::::::::::::::'
+    print state.resolve_pronoun('PRE_HE') + '\n'
 
-print 'resolve PRE_IT ::::::::::::::::::::::::::'
-print state.resolve_pronoun('PRE_IT')
-print 'resolve PRE_HE ::::::::::::::::::::::::::'
-print state.resolve_pronoun('PRE_HE') + '\n'
-
-
-print 'before clear:::::::::::::::::::::::'
-print 'len(states) = ', len(state.states)
-for dict1 in state.states:
-    print_dict(dict1)
-print 'after clear::::::::::::::::::::::::'
-state.clear()
-print 'len(states) = ', len(state.states), '\n'
+    print 'before clear:::::::::::::::::::::::'
+    print 'len(states) = ', len(state.states)
+    for dict1 in state.states:
+        print_dict(dict1)
+    print 'after clear::::::::::::::::::::::::'
+    state.clear()
+    print 'len(states) = ', len(state.states), '\n'
