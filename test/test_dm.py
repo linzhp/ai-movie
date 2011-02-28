@@ -1,9 +1,10 @@
+
 import unittest
 from mock import Mock
 
 class Test(unittest.TestCase):
     def setUp(self):
-        self.dm = DialogManager()
+        self.dm = dm.DialogManager()
         self.dm.state = Mock()
         self.dm.dbi = Mock()
 
@@ -11,9 +12,9 @@ class Test(unittest.TestCase):
         self.assertEqual("What can I call you?", self.dm.off_topic({"off_topic":"Hi"}))
         
     def test_command(self):
-        self.dm.command({"command":"CLEAR"})
+        self.dm.command({"command":dm.CLEAR})
         self.dm.state.mockCheckCall(0, 'clear')
-
+        
     def test_request_director(self):
         self.dm.dbi.mockAddReturnValues(query=['James Cameron'])
         self.dm.state.mockAddReturnValues(get_all={'request':'director','title':'Titanic'})
@@ -21,7 +22,7 @@ class Test(unittest.TestCase):
         self.dm.dbi.mockCheckCall(0, 'query','director',{'title':'Titanic'})
         self.dm.state.mockCheckCall(0, 'add_request',{'request':'director','title':'Titanic'})
         self.assertEqual({'print':'director','results':['James Cameron']},result)
-
+        
     def test_request_movies(self):
         condition={'director':'James Cameron'}
         self.dm.dbi.mockAddReturnValues(query=30)
@@ -29,42 +30,42 @@ class Test(unittest.TestCase):
         result=self.dm.request({'request':'title','director':'James Cameron'})
         self.dm.dbi.mockCheckCall(0, 'query','title',condition)
         self.dm.state.mockCheckCall(0, 'add_request',{'request':'title','director':'James Cameron'})
-        self.assertEqual({'question':'MORE_PREF'}, result)
-        self.assertEqual('MORE_PREF', self.dm.pending_question)
-
+        self.assertEqual({'question':dm.MORE_PREF}, result)
+        self.assertEqual(dm.MORE_PREF, self.dm.pending_question)
+        
     def test_request_opinion1(self):
-        condition = {"genre":"action","keyword":"dream"}
+        condition = {"genre":"action","keyword":["dream","love"]}
         self.dm.dbi.mockAddReturnValues(query=7)
-        self.dm.state.mockAddReturnValues(get_all={"genre":"action","keyword":"dream",'request':'OPINION'})
-        request=dict(condition.items()+[('request','OPINION')])
+        self.dm.state.mockAddReturnValues(get_all={"genre":"action","keyword":["dream","love"],'request':dm.OPINION})
+        request=dict(condition.items()+[('request',dm.OPINION)])
         result=self.dm.request(request)
         self.dm.dbi.mockCheckCall(0, 'query', 'title',condition, count=True)
-        self.dm.state.mockCheckCall(0, 'add_request',{"genre":"action","keyword":"dream",'request':'OPINION'})
-        self.assertEqual({"list":7,"question":"SEE_RESULT?"}, result)
+        self.dm.state.mockCheckCall(0, 'add_request',{"genre":"action","keyword":["dream","love"],'request':dm.OPINION})
+        self.assertEqual({"list":7,"question":dm.SEE_RESULT}, result)
 
     def test_request_opinion2(self):
         condition = {"character":"Batman"}
         self.dm.dbi.mockAddReturnValues(query=70,resolve_person='character')
-        self.dm.state.mockAddReturnValues(get_all={'request':'OPINION', "character":"Batman"})
-        result=self.dm.request({'request':'OPINION', "person":"Batman"})
+        self.dm.state.mockAddReturnValues(get_all={'request':dm.OPINION, "character":"Batman"})
+        result=self.dm.request({'request':dm.OPINION, "person":"Batman"})
         self.dm.dbi.mockCheckCall(1, 'query', 'title',condition, count=True)
-        self.dm.state.mockCheckCall(0, 'add_request',{'request':'OPINION', "character":"Batman"})
-        self.assertEqual({"list":70,"question":"HOW_MANY"}, result)
+        self.dm.state.mockCheckCall(0, 'add_request',{'request':dm.OPINION, "character":"Batman"})
+        self.assertEqual({"list":70,"question":dm.HOW_MANY}, result)
         
     def test_request_count(self):
         condition={"actor":"Kate Winslet"}
         self.dm.dbi.mockAddReturnValues(query=2)
-        self.dm.state.mockAddReturnValues(get_all={'request':'COUNT',"actor":"Kate Winslet", 'of':"Academy Award"})
-        result=self.dm.request({'request':'COUNT','of':'Academy Award',"actor":"Kate Winslet"})
+        self.dm.state.mockAddReturnValues(get_all={'request':dm.COUNT,"actor":"Kate Winslet", 'of':"Academy Award"})
+        result=self.dm.request({'request':dm.COUNT,'of':'Academy Award',"actor":"Kate Winslet"})
         self.dm.dbi.mockCheckCall(0, 'query', 'Academy Award',condition, count=True)
-        self.dm.state.mockCheckCall(0, 'add_request',{'request':'COUNT',"actor":"Kate Winslet", 'of':"Academy Award"})
-        self.assertEqual({'list':2,'question':"SEE_RESULT?"},result)
+        self.dm.state.mockCheckCall(0, 'add_request',{'request':dm.COUNT,"actor":"Kate Winslet", 'of':"Academy Award"})
+        self.assertEqual({'list':2,'question':dm.SEE_RESULT},result)
         
     def test_response_yes(self):
-        self.dm.pending_question='SEE_RESULT?'
+        self.dm.pending_question=dm.SEE_RESULT
         self.dm.dbi.mockAddReturnValues(query=["Titanic", "The Reader"])
         self.dm.state.mockAddReturnValues(get_all={'request':'title','actor':'Kate Winslet'},last_request='title')
-        result = self.dm.response({'response':'yes'})
+        result = self.dm.response({'response':'YES'})
         self.dm.dbi.mockCheckCall(0, 'query', 'title', {'actor':'Kate Winslet'})
         self.dm.state.mockCheckCall(1, 'add_request',{'request':'title'})
         self.assertEqual({'print':'title','results':["Titanic", "The Reader"]},result)
@@ -81,5 +82,5 @@ class Test(unittest.TestCase):
 if __name__ == "__main__":
     import sys
     sys.path.append("../dm")
-    from dm import DialogManager
+    import dm
     unittest.main()
