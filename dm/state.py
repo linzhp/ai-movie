@@ -12,17 +12,18 @@ class State:
             for key in dict:
                 # if: a key is in all_states already
                 if all_states.has_key(key):
-                    # if: the value of the key is not a list yet, make it to
-                    #     a list then append old value and new value
-                    if type(all_states[key]).__name__ != 'list':
-                        if dict[key] in all_states[key]:
-                            continue
+                    if dict[key] in all_states[key]:
+                        # if: eliminate duplicated values
+                        continue
+                    elif type(all_states[key]).__name__ != 'list':
+                        # elif: the value of the key is not a list yet, make it to
+                        #     a list then append old value and new value
                         temp = all_states[key]
                         all_states[key] = []
                         all_states[key].append(temp)
                         all_states[key].append(dict[key])
-                    # else: the value of the key is a list, append directly
                     else:
+                        # else: the value of the key is a list, append directly
                         if dict[key] in all_states[key]:
                             continue
                         all_states[key].append(dict[key])
