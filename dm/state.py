@@ -6,20 +6,32 @@ class State:
         self.states[:] = []
 
     def get_all(self):
-        # Note: need clarification for this funtion, for example:
-        # sen1 is "I like action and Jet Lee." // slot1 in states
-        # sen2 is "I also like drama and Johnny Deep." // slot2 in states
-        # get_all can only return a dict however we need to return "action"
-        # + "drama"(2 genres) and "Jet Lee" + "Johnny Deep"(2 actors) since
-        # all of them are required.
-        dict = self.states[-1].copy()
-        return dict
+        lists = self.states[:]
+        all_states = {}
+        for dict in lists:
+            for key in dict:
+                # if: a key is in all_states already
+                if all_states.has_key(key):
+                    # if: the value of the key is not a list yet, make it to
+                    #     a list then append old value and new value
+                    if type(all_states[key]).__name__ != 'list':
+                        temp = all_states[key]
+                        all_states[key] = []
+                        all_states[key].append(temp)
+                        all_states[key].append(dict[key])
+                    # else: the value of the key is a list, append directly
+                    else:
+                        all_states[key].append(dict[key])
+                # else: add the key:value pair directly into the all_states dict
+                else:
+                    all_states[key] = dict[key]
+        return all_states
 
     def add_request(self, dict):
         self.states.append(dict)
 
+    # need work more
     def add_result(self, dict):
-        # same clarification needed as get_all()
         self.states.append(dict)
 
     def last_request(self):
