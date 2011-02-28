@@ -3,9 +3,9 @@ import nlg_utils as nlgu
 
 def questionToUser(NLUOutput,DMOutput):
     # DMOutput should contain [question:FLAG]
-    if DMOutput[0]['question'] == 'HOW_MANY':
+    if DMOutput['question'] == 'HOW_MANY':
         print "How many would you like to see?"
-    elif DMOutput[0]['question'] == 'MORE_PREF':
+    elif DMOutput['question'] == 'MORE_PREF':
         print "Could you help me narrow it down a bit?"
     else:
         print"NLG Error: Unknown Question Type"
@@ -13,7 +13,7 @@ def questionToUser(NLUOutput,DMOutput):
 
 def listOutput(NLUOutput,DMOutput):
     # DMOutput should be [list:SIZE,question:FLAG]
-    resultNum = DMOutput[0]['list']
+    resultNum = DMOutput['list']
     #print listSize #different response depending on size
     if resultNum < 0:
         print "NLG Error: List Size less than zero"
@@ -24,19 +24,19 @@ def listOutput(NLUOutput,DMOutput):
     else:
         print "There were {0} results.".format(resultNum),
         
-    if DMOutput[0].has_key("question"):
+    if DMOutput.has_key("question"):
         questionToUser(NLUOutput,DMOutput)
     else:
         print ""
     pass
 
 def printResults(NLUOutput,DMOutput):
-    if not DMOutput[0].has_key('results'):
+    if not DMOutput.has_key('results'):
         print "NLG Error: invalid print request\n"
         return
     # DMOutput should be [print:ITEM_TYPE,results:[list,of,results,of,item,type]]
-    itemType = DMOutput[0]['print']
-    resultList = DMOutput[0]['results']
+    itemType = DMOutput['print']
+    resultList = DMOutput['results']
     if NLUOutput[0].has_key('response'):
         print "okay, here you go:"
         print rp.printItems(itemType,resultList)
@@ -51,26 +51,26 @@ def likeResponse(NLUOutput,DMOutput):
 
 def answerResponse(NLUOutput,DMOutput):
     # DMOutput should be [like:thing]or[like:thing,list:#]
-    if DMOutput[0]['answer'] == 'yes':
+    if DMOutput['answer'] == 'yes':
         print 'Yes.',
-    elif DMOutput[0]['answer'] == 'no':
+    elif DMOutput['answer'] == 'no':
         print 'No.',
     else:
         print 'Unknown.',
-    if DMOutput[0].has_key("list"):
+    if DMOutput.has_key("list"):
         listOutput(NLUOutput,DMOutput)
     pass
 
 def process(NLUOutput, DMOutput):
-    if DMOutput[0].has_key("answer"):
+    if DMOutput.has_key("answer"):
         answerResponse(NLUOutput,DMOutput)
-    elif DMOutput[0].has_key("print"):
+    elif DMOutput.has_key("print"):
         printResults(NLUOutput,DMOutput)
-    elif DMOutput[0].has_key("like"):
+    elif DMOutput.has_key("like"):
         likeResponse(NLUOutput,DMOutput)
-    elif DMOutput[0].has_key("list"):
+    elif DMOutput.has_key("list"):
         listOutput(NLUOutput,DMOutput)
-    elif DMOutput[0].has_key("question"):
+    elif DMOutput.has_key("question"):
         questionToUser(NLUOutput,DMOutput)
     else:
         print "Well then, what would you like to talk about?"

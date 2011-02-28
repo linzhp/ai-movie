@@ -1,11 +1,11 @@
 user: Action movies about dreams.
 NLU:[{"request":"OPINION","genre":"action","keyword":"dream"}]
-DM:[{"list":7,"question":"HOW_MANY"}] 
+DM:{"list":7,"question":"HOW_MANY"}
 NLG:I found 7 action movies about dreams, how many would you like to see?
 
 user:3
 NLU:[{"response":3}]
-DM:[{"print":"title","results":["Inception","The Matrix","Clouds"]}]
+DM:{"print":"title","results":["Inception","The Matrix","Clouds"]}]
 NLG: Okay, here they are:
 Inception
 The Matrix
@@ -13,98 +13,98 @@ Clouds
 
 user:tell me about inception
 NLU:[{"request":"plot","title":"inception"}]
-DM:[{"print":"plot","results":["A movie about dreams..."]}]
+DM:{"print":"plot","results":["A movie about dreams..."]}
 NLG:A movie about dreams...
 
 user:that looks good
 NLU:[{"response":"yes"}]
-DM:[{"like":"title"}]
+DM:{"like":"title"}
 NLG:I'm glad you like it.  Is there anything else I can help you with?
 
 ///////////////////////////////////////////
  
 user:did Wes Anderson act in any movies?
 NLU:[{"request":"TRUE_FALSE","actor":"Wes Anderson"}]
-DM:[{"answer":"yes","list":7,"question":"SEE_RESULT?"}]
+DM:{"answer":"yes","list":7,"question":"SEE_RESULT?"}
 NLG:Yes, Wes Anderson acted in 7 movies.  Would you like to see the list?
  
 user:what was his highest grossing film
 NLU:[{"request":"title","sort":"profit","order":"desc","result_length":1}]
-DM:[{"print":"title","results":["A"]}]
+DM:{"print":"title","results":["A"]}
 NLG:His highest grossing movie was A.
  
 user:what other films came out that year?
 NLU:[{"request":"title","year":"prev_it"}]
-DM:[{"list":243,"year":"YEAR","question":"MORE_PREF"}]
+DM:{"list":243,"year":"YEAR","question":"MORE_PREF"}
 NLG:243 other movies came out in YEAR.  Could you be more specific?
  
 /////////////////////////////////////////////
  
 user: i like robin williams
 NLU:[{"request":"OPINION","person":"robin williams"}]
-DM:[{"question":"MORE_PREF"}]
+DM:{"question":"MORE_PREF"}
 NLU:[{"request":"OPINION","actor":"robin williams"}]
 NLG:Robin Williams is a prolific actor. Is there anything else you like?
  
 user:how many movies has he been in?
 NLU:[{"request":"count","of":"title"}]
-DM:[{"list":30}]
+DM:{"list":30}
 NLG:He has been in 30 movies.
  
 user:what kinds of movies has he been in?
 NLU:[{"request":"genre"}]
-DM:[{"print":"genre","results":["action","comedy","drama"]}]
+DM:{"print":"genre","results":["action","comedy","drama"]}
 NLG:He has been in action, comedy and drama movies.
  
 /////////////////////////////////////////////////////
 user:who directed the departed?
 NLU:[{"request":"director","title":"the departed"}]
-DM:[{"print":"director","results":["Martin Scorsese"]}]
+DM:{"print":"director","results":["Martin Scorsese"]}
 NLG:Martin Scorsese directed the departed.
  
 user:what else has he directed?
 NLU:[{"request":"title","director":"PREV_HE"}]
-DM:[{"print":"title","results":["Good Fellas","Taxi Driver"]}]
+DM:{"print":"title","results":["Good Fellas","Taxi Driver"]}
 NLG:He directed Good Fellas and Taxi Driver.
  
 user:has he won any academy awards?
 NLU:[{"request":"count","of":"Academy Award","person":"PREV_HE"}]
-DM:[{"list":2}]
+DM:{"list":2}
 NLG:He won 2 Academy Awards. Do you want to see them?
  
 /////////////////////////////////////////////////////////
 user:i like Batman
 NLU:[{"request":"OPINION","person":"Batman"}]
-DM:[{"question":"MORE_PREF"}]
+DM:{"question":"MORE_PREF"}
 NLG:What kind of movies about Batman do you like?
  
 user:what animated movies has he been in?
 NLU:[{"request":"title","genre":"animation","person":"PREV_HE"}]
-DM:[{"print":"title","results":["Batman Beyond","The Original Batman"]}]
+DM:{"print":"title","results":["Batman Beyond","The Original Batman"]}
 NLG:He was in"Batman Byeond" and "The Original Batman".
  
 user:who voiced him?
 NLU:[{"request":"voice actor","part":"PRE_HE"}]
-DM:[{"print":"voice actor","results":["Brian"]}]
+DM:{"print":"voice actor","results":["Brian"]}
 NLG:Brian voiced him.
 
 user: New search
 NLU:[{"command":"clear"}]
-DM:[{}]
+DM:{}]
 NLG:Okay, what would you like to look at?
 
 user:I want to see some super-hero movie
 NLU:[{"request":"title","keyword":"super-hero"}]
-DM:[{"list":"some large number","question":"MORE_PREF"}]
+DM:{"list":"some large number","question":"MORE_PREF"}
 NLG:There are (some large number) movies with super-heroes. Would you like to refine your
 search?
 
 user:Yes, I want to see movies by Marvel
 NLU:[{"request":"title","company":"Marvel"}]
-DM:[{"list":"some large number","question":"HOW_MANY"}]
+DM:{"list":"some large number","question":"HOW_MANY"}
 NLG:The list is still very long. How many do you want to see?
 
 user:50
 NLU:[{"response":50}]
-DM:[{"print":"title","results":["50 things"]}]
+DM:{"print":"title","results":["50 things"]}
 NLG:<Display list>
