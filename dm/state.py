@@ -15,12 +15,16 @@ class State:
                     # if: the value of the key is not a list yet, make it to
                     #     a list then append old value and new value
                     if type(all_states[key]).__name__ != 'list':
+                        if dict[key] in all_states[key]:
+                            continue
                         temp = all_states[key]
                         all_states[key] = []
                         all_states[key].append(temp)
                         all_states[key].append(dict[key])
                     # else: the value of the key is a list, append directly
                     else:
+                        if dict[key] in all_states[key]:
+                            continue
                         all_states[key].append(dict[key])
                 # else: add the key:value pair directly into the all_states dict
                 else:
@@ -30,7 +34,6 @@ class State:
     def add_request(self, dict):
         self.states.append(dict)
 
-    # need work more
     def add_result(self, dict):
         self.states.append(dict)
 
@@ -64,6 +67,11 @@ class State:
         # user entered it/he/she but state doesn't have their info.
         return 'error'
 
+    def delete_state(self, num_of_steps):
+        # not needed but it doesn't hurt to have it.
+        while num_of_steps > 0:
+            self.states.pop()
+            num_of_steps -= 1
 
 #################################### Tests ####################################
 if __name__ == '__main__':
@@ -107,6 +115,14 @@ if __name__ == '__main__':
     print state.resolve_pronoun('PRE_IT')
     print 'resolve PRE_HE ::::::::::::::::::::::::::'
     print state.resolve_pronoun('PRE_HE') + '\n'
+
+    print 'delete one step ::::::::::::'
+    state.delete_state(1)
+    print state.get_all()
+
+    print 'delete three step ::::::::::::'
+    state.delete_state(3)
+    print state.get_all()
 
     print 'before clear:::::::::::::::::::::::'
     print 'len(states) = ', len(state.states)
