@@ -8,6 +8,8 @@ sys.path.append(path.join(current_dir, ".."))
 import dbi
 
 #TODO sent each sentences to howie
+#TODO increase the priority of movie title in state
+#TODO change the content of constant strings
 class DialogManager:
     def __init__(self):
         self.pending_question = None
