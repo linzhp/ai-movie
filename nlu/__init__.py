@@ -144,5 +144,23 @@ class NLUnderstanding:
         all_pref={'request':dm.OPINION}
         all_pref.update(kargs)
         
-    
+    def _partition(self, chunked):
+        """
+        Partition a chunked sentence (tree) into several segments, 
+        with each segment only have either positive opinion
+        or negative opinion about one or more movie attributes,
+        but not a mix
+        Accepts: a chunked tree, example can be found at the
+        bottom of chunker.py
+        Returns: a list of lists, consists of leaves of chunked
+        tree
+        """
+        
+    def _decide_opinion(self, list):
+        """
+        Decide the user opinion in the current segment of sentence,
+        represented by a list of tuples.
+        Example input can be found by printing chunked.leaves(), with
+        chunked being the return value of Chunker.chunk
+        """
         
