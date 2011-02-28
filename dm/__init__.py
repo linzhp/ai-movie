@@ -7,7 +7,6 @@ current_dir = path.dirname(__file__)
 sys.path.append(path.join(current_dir, ".."))
 import dbi
 
-
 class DialogManager:
     def __init__(self):
         self.pending_question = None
