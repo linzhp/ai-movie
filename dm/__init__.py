@@ -9,7 +9,6 @@ import dbi
 
 #TODO sent each sentences to howie
 #TODO increase the priority of movie title in state
-#TODO change the content of constant strings
 class DialogManager:
     def __init__(self):
         self.pending_question = None
@@ -128,10 +127,10 @@ class DialogManager:
         return result_dict
         
 # Define constants        
-HOW_MANY = "how many do you want to see?"
-SEE_RESULT="Do you want to see result?"
-MORE_PREF="More preference please"
-EXIT="Exit the program"
-CLEAR="Clear the state"
-COUNT="I want the number of results"
-OPINION='opinion'
+HOW_MANY = "HOW_MANY"
+SEE_RESULT="SEE_RESULT?"
+MORE_PREF="MORE_PREF"
+EXIT="EXIT"
+CLEAR="CLEAR"
+COUNT="COUNT"
+OPINION='OPINION'
