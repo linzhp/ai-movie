@@ -1,16 +1,7 @@
 <aiml version="1.0">
-
 <category>
 <pattern>BOOTSTRAP</pattern>
 <template>
-	<random>
-		<li>Does that mean you agree?</li>
-		<li>What's your favorite color?</li>
-		<li>What's your favorite movie?</li>
-		<li>Is there anything you want to tell me?</li>
-		<li>Glad to hear it, <get name="name"/>.  I am running well.</li>
-	</random>
 </template>
 </category>
-
 </aiml>
