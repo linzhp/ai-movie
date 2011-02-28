@@ -7,6 +7,8 @@ def questionToUser(NLUOutput,DMOutput):
         print "How many would you like to see?"
     elif DMOutput[0]['question'] == 'MORE_PREF':
         print "Could you help me narrow it down a bit?"
+    else:
+        print"NLG Error: Unknown Question Type"
     pass
 
 def listOutput(NLUOutput,DMOutput):
@@ -24,6 +26,8 @@ def listOutput(NLUOutput,DMOutput):
         
     if DMOutput[0].has_key("question"):
         questionToUser(NLUOutput,DMOutput)
+    else:
+        print ""
     pass
 
 def printResults(NLUOutput,DMOutput):

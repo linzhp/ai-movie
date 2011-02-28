@@ -19,15 +19,16 @@ class Test(unittest.TestCase):
                     nlg_input = []
                     nlg_output = ""
                     desired_nlg_output = ""
+                    print line
                     pass
                 elif line[:colon].find('NLU')>=0:
                     nlu_input = eval(line[colon+1:])
-                    #print nlu_input
+                    print nlu_input
                 elif line[:colon].find('DM')>=0:
                     nlg_input = eval(line[colon+1:])
                     print nlg_input
                     nlg_output = nlg.process(nlu_input,nlg_input)
-                    print nlg_output
+                    #print nlg_output
                 elif line[:colon].find('NLG')>=0:
                     desired_nlg_output = line[colon+1:]
                     #print desired_nlg_output

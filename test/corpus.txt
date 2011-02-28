@@ -1,6 +1,6 @@
 user: Action movies about dreams.
 NLU:[{"request":"OPINION","genre":"action","keyword":"dream"}]
-DM:[{"list":7,"question":" HOW_MANY"}] 
+DM:[{"list":7,"question":"HOW_MANY"}] 
 NLG:I found 7 action movies about dreams, how many would you like to see?
 
 user:3
@@ -25,11 +25,11 @@ NLG:I'm glad you like it.  Is there anything else I can help you with?
  
 user:did Wes Anderson act in any movies?
 NLU:[{"request":"TRUE_FALSE","actor":"Wes Anderson"}]
-DM:[{"answer":"yes","list":7, "question":"SEE_RESULT?"}]
+DM:[{"answer":"yes","list":7,"question":"SEE_RESULT?"}]
 NLG:Yes, Wes Anderson acted in 7 movies.  Would you like to see the list?
  
 user:what was his highest grossing film
-NLU:[{"request":"title", "sort":"profit", "order":"desc","result_length":1}]
+NLU:[{"request":"title","sort":"profit","order":"desc","result_length":1}]
 DM:[{"print":"title","results":["A"]}]
 NLG:His highest grossing movie was A.
  
@@ -59,16 +59,16 @@ NLG:He has been in action, comedy and drama movies.
 /////////////////////////////////////////////////////
 user:who directed the departed?
 NLU:[{"request":"director","title":"the departed"}]
-DM:[{"print":"director","results":["NAME"]}]
-NLG:NAME directed the departed.
+DM:[{"print":"director","results":["Martin Scorsese"]}]
+NLG:Martin Scorsese directed the departed.
  
 user:what else has he directed?
 NLU:[{"request":"title","director":"PREV_HE"}]
-DM:[{"print":"title","results":["A","B"]}]
-NLG:He directed A and B.
+DM:[{"print":"title","results":["Good Fellas","Taxi Driver"]}]
+NLG:He directed Good Fellas and Taxi Driver.
  
 user:has he won any academy awards?
-NLU:[{"request":"count","of": "Academy Award", "person": "PREV_HE"}]
+NLU:[{"request":"count","of":"Academy Award","person":"PREV_HE"}]
 DM:[{"list":2}]
 NLG:He won 2 Academy Awards. Do you want to see them?
  
@@ -81,10 +81,10 @@ NLG:What kind of movies about Batman do you like?
 user:what animated movies has he been in?
 NLU:[{"request":"title","genre":"animation","person":"PREV_HE"}]
 DM:[{"print":"title","results":["Batman Beyond","The Original Batman"]}]
-NLG:He was in "Batman Byeond" and "The Original Batman".
+NLG:He was in"Batman Byeond" and "The Original Batman".
  
 user:who voiced him?
-NLU:[{"request":"voice actor", "part":"PRE_HE"}]
+NLU:[{"request":"voice actor","part":"PRE_HE"}]
 DM:[{"print":"voice actor","results":["Brian"]}]
 NLG:Brian voiced him.
 
@@ -95,16 +95,16 @@ NLG:Okay, what would you like to look at?
 
 user:I want to see some super-hero movie
 NLU:[{"request":"title","keyword":"super-hero"}]
-DM:[{"list":"some large number", "question":"MORE_PREF"}]
+DM:[{"list":"some large number","question":"MORE_PREF"}]
 NLG:There are (some large number) movies with super-heroes. Would you like to refine your
 search?
 
 user:Yes, I want to see movies by Marvel
 NLU:[{"request":"title","company":"Marvel"}]
-DM:[{"list":"some large number", "question":"HOW_MANY"}]
+DM:[{"list":"some large number","question":"HOW_MANY"}]
 NLG:The list is still very long. How many do you want to see?
 
 user:50
 NLU:[{"response":50}]
-DM:[{"print":"title","result":[""]}]
+DM:[{"print":"title","results":["50 things"]}]
 NLG:<Display list>

@@ -1,13 +1,11 @@
 #import nltk
+import nlg_utils as nlgu
 
 statePronounSubjects = {"PREV_HE":"he", "PREV_SHE":"she", "PREV_IT":"it"}
 statePronounObjects = {"PREV_HE":"him","PREV_SHE":"her", "PREV_IT":"it"}
 
 def getPrintSentence(itemType):
-    with open('../nlg/prs/'+itemType + '_sentences.txt') as fixture:
-        for line in fixture:
-            return line
-    pass
+    return nlgu.get_random_line('../nlg/prs/'+itemType + '_sentences.txt')
 
 def do(itemType, NLUOutput, resultList):
     printSentence = getPrintSentence(itemType)
@@ -16,7 +14,7 @@ def do(itemType, NLUOutput, resultList):
 
     pronouns = getNouns(NLUOutput, itemType)
         
-    print printSentence.format(pronouns, result)
+    print printSentence.format(pronouns, result),
 
 def printItems(itemType, resultList):
     if len(resultList)==1:
