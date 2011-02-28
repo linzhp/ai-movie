@@ -26,7 +26,16 @@ core.kernel=kernel
 
 reply = None
 
+sessionID="movie selector"
+
 def submit(input):
     global reply
-    reply = core.submit(input, "movie selector")
+    reply = core.submit(input, sessionID)
     return reply
+
+def getName():
+    return core.kernel.getPredicate('name', sessionID)
+
+if __name__=="__main__":
+    submit("Clive is my name")
+    print getName()

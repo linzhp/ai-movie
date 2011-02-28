@@ -4,7 +4,6 @@ import re
 import nltk
 from nltk.corpus import wordnet
 import dm
-
 #TODO return cast
 
 class NLUnderstanding:
@@ -34,6 +33,7 @@ class NLUnderstanding:
     
 
     def process(self, input_string):
+        dm.chatbot.submit(input_string)
         chunked = self.chk.chunk(input_string)
         
         result = []
