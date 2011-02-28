@@ -55,7 +55,7 @@ class Chunker:
 		chunk_grammar = r"""
 			B-QUESTION: {^<[W].*|VBD|VBN|VBP|VBZ>}
 							{^<MD><PRP>}
-			COMMAND: {^<RB>?<VB>}
+			COMMAND: {^(<RB>)*<VB.*>}
 			TITLE: {<:><[^:]*>*<:>}	
 			PERSON: {<NNP[S]?>+}
 			NP:   {<DT|PRP\$>?<JJ>*<NN|NNS>(<POS>?<JJ>*<NN|NNS>)?}
@@ -88,5 +88,8 @@ class Chunker:
 
 		return chunked
 
-chk = Chunker()
-print chk.chunk("Who directed \"The Big Lebowski\"?")
+if __name__ == '__main__':
+	chk = Chunker()
+	result = chk.chunk("want to see movies about dreams")
+	result.draw()
+	

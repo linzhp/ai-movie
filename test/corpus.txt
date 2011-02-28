@@ -88,11 +88,6 @@ NLU:[{"request":"voice actor","part":"PRE_HE"}]
 DM:{"print":"voice actor","results":["Brian"]}
 NLG:Brian voiced him.
 
-user: New search
-NLU:[{"command":"clear"}]
-DM:{}]
-NLG:Okay, what would you like to look at?
-
 user:I want to see some super-hero movie
 NLU:[{"request":"title","keyword":"super-hero"}]
 DM:{"list":"some large number","question":"MORE_PREF"}
@@ -108,3 +103,8 @@ user:50
 NLU:[{"response":50}]
 DM:{"print":"title","results":["50 things"]}
 NLG:<Display list>
+
+user: New search
+NLU:[{"command":"clear"}]
+DM:{}]
+NLG:Okay, what would you like to look at?

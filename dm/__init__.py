@@ -7,6 +7,8 @@ current_dir = path.dirname(__file__)
 sys.path.append(path.join(current_dir, ".."))
 import dbi
 
+#TODO sent each sentences to howie
+#TODO increase the priority of movie title in state
 class DialogManager:
     def __init__(self):
         self.pending_question = None
@@ -34,57 +36,50 @@ class DialogManager:
             self.state.add_request(internal_dict)
         internal_dict = self.state.get_all()
         request_type = internal_dict.pop("request")
-        #TODO empty dict
-        if request_type == "OPINION":
-            self.pending_question = "HOW_MANY"
+        if request_type == OPINION:
+            self.pending_question = HOW_MANY
             count=self.dbi.query('title',internal_dict, count=True)
             if count>10:
-                self.pending_question = "HOW_MANY"
+                self.pending_question = HOW_MANY
             else:
-                self.pending_question = "SEE_RESULT?"
+                self.pending_question = SEE_RESULT
             return {"list":count, "question":self.pending_question}
-        elif request_type == "COUNT":
+        elif request_type == COUNT:
             of = internal_dict.pop("of")
             count=self.dbi.query(of, internal_dict, count=True)
             result={}
             if count>10:
                 self.pending_question = "result_length"
-                result={"list":count, "question":"HOW_MANY"}
+                result={"list":count, "question":HOW_MANY}
             else:
-                self.pending_question = "SEE_RESULT?"
+                self.pending_question = SEE_RESULT
                 result={"list":count, "question":self.pending_question}
             return result
         else:
             results=self.dbi.query(request_type, internal_dict)
             if isinstance(results, int):
                 if len(internal_dict)<2:
-                    self.pending_question='MORE_PREF'
-                    return {"question":"MORE_PREF"}
+                    self.pending_question=MORE_PREF
+                    return {"question":MORE_PREF}
                 else:
                     self.pending_question = "result_length"
-                    return {'print':request_type,"list":results, "question":"HOW_MANY"}
+                    return {'print':request_type,"list":results, "question":HOW_MANY}
             else:
                 self.state.add_result(results)
                 return {'print':request_type,'results':results}
             
     
     def command(self, dict):
-        if dict["command"]=="CLEAR":
+        if dict["command"]==CLEAR:
             self.state.clear()
     
     def response(self, dict):
         internal_dict = dict.copy()
         response = internal_dict.pop("response")
-        if response=="no":
-            if self.pending_question=="SEE_RESULT?":
-                self.state.clear()
-                dict.pop("response")
-                dict['command']='CLEAR'
-                return {}
-            elif self.pending_question=="MORE_PREF":
-                internal_dict["request"]=self.state.last_request()
-                internal_dict['result_length']=10
-        elif response == "yes":
+        if response=="NO":
+            # FIXME check any problem here 
+            return {}
+        elif response == "YES":
             if self.pending_question:
                 internal_dict["request"]=self.state.last_request()
         elif self.pending_question:
@@ -131,3 +126,11 @@ class DialogManager:
         self.state.add_result(result_dict)
         return result_dict
         
+# Define constants        
+HOW_MANY = "HOW_MANY"
+SEE_RESULT="SEE_RESULT?"
+MORE_PREF="MORE_PREF"
+EXIT="EXIT"
+CLEAR="CLEAR"
+COUNT="COUNT"
+OPINION='OPINION'
