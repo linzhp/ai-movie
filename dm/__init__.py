@@ -7,6 +7,7 @@ current_dir = path.dirname(__file__)
 sys.path.append(path.join(current_dir, ".."))
 import dbi
 
+#TODO sent each sentences to howie
 class DialogManager:
     def __init__(self):
         self.pending_question = None

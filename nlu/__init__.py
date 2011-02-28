@@ -5,30 +5,33 @@ import nltk
 from nltk.corpus import wordnet
 import dm
 
-"""
-Natural Language Understanding class.
-Accepts: user input string
-Output: A list of dictionaries. Each dictionary contains one of the four
-    keys: request, command, response and off_topic, corresponding to four
-    categories of user input.
-    request: handle the user requests concerning movies. The value of request
-        can be "title", "year", "plot", "director", "star", "country", 
-        "filming_loc", "language", OPINION, COUNT. True or false questions
-        are handled are COUNT. This dictionary also contains conditions of 
-        the request.
-    command: handle the users requests to change the system state. Possible 
-        values are EXIT and CLEAR. This should not be confused with the
-        part-of-speech tagged as COMMAND
-    response: handle the users response to the question asked previously by
-        the system. Possible values are YES, NO, a number and other answers 
-        to specific questions
-    off_topic: handle off topic user utterances. The value is the full text 
-        of user utterance
-"""
+#TODO return cast
 
 class NLUnderstanding:
+    """
+    Natural Language Understanding class.
+    Accepts: user input string
+    Output: A list of dictionaries. Each dictionary contains one of the four
+        keys: request, command, response and off_topic, corresponding to four
+        categories of user input.
+        request: handle the user requests concerning movies. The value of request
+            can be "title", "year", "plot", "director", "star", "country", 
+            "filming_loc", "language", OPINION, COUNT. True or false questions
+            are handled are COUNT. This dictionary also contains conditions of 
+            the request.
+        command: handle the users requests to change the system state. Possible 
+            values are EXIT and CLEAR. This should not be confused with the
+            part-of-speech tagged as COMMAND
+        response: handle the users response to the question asked previously by
+            the system. Possible values are YES, NO, a number and other answers 
+            to specific questions
+        off_topic: handle off topic user utterances. The value is the full text 
+            of user utterance
+    """
     def __init__(self):
-        self.expect = None        
+        self.expect = None    
+        self.chk = chunker.Chunker(False)
+    
 
     def process(self, input_string):
         chunked = self.chk.chunk(input_string)
@@ -74,11 +77,12 @@ class NLUnderstanding:
                     
         if len(result==0):
             result.append(self._off_topic(input_string))
-    """
-    User is supposed to answer question
-    Precondition: self.expect is not None    
-    """
+            
     def _response(self, chuncked):
+        """
+        This method is called when user is supposed to answer a question
+        Precondition: self.expect is not None    
+        """
         if self.expect == "result_length":
             for node in chuncked:
                 if isinstance(node, tuple) and node[1]=='CD':
@@ -116,12 +120,12 @@ class NLUnderstanding:
     def _off_topic(self, input_string):
         return {'off_topic':input_string}
     
-    """  
-    Possible keywords are: KW_YEAR, KW_MOVIE, KW_MOVIES
-    KW_DIRECTOR, KW_STAR, KW_PLOT, KW_GENRE, KW_COUNTRY,
-    KW_LANGUAGE
-    """
     def _search_keywords(self, list):
+        """  
+        Possible keywords are: KW_YEAR, KW_MOVIE, KW_MOVIES
+        KW_DIRECTOR, KW_STAR, KW_PLOT, KW_GENRE, KW_COUNTRY,
+        KW_LANGUAGE
+        """
         keywords=[]
         for a in list:
             if a[1][0:2]=="KW":
@@ -139,4 +143,6 @@ class NLUnderstanding:
         negation = False
         all_pref={'request':dm.OPINION}
         all_pref.update(kargs)
+        
+    
         
