@@ -25,7 +25,7 @@ NLG:I'm glad you like it.  Is there anything else I can help you with?
  
 user:did Wes Anderson act in any movies?
 NLU:[{"request":"TRUE_FALSE","actor":"Wes Anderson"}]
-DM:{"answer":"yes","list":7,"question":"SEE_RESULT?"}
+DM:{"answer":"yes","list":7,"question":"HOW_MANY"}
 NLG:Yes, Wes Anderson acted in 7 movies.  Would you like to see the list?
  
 user:what was his highest grossing film
