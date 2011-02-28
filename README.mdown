@@ -1,3 +1,5 @@
+// Deleted Howie. Improved testing mechanism.
+
 The movie selector uses a MySQL database generated from IMDB plain text data. Follow the instructions in <http://imdbpy.sourceforge.net/docs/README.sqldb.txt> to load data from IMDB plain text into a MySQL database.
 
 Before running the movie selector, you need to configure it first:
