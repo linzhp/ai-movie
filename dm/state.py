@@ -6,20 +6,36 @@ class State:
         self.states[:] = []
 
     def get_all(self):
-        # Note: need clarification for this funtion, for example:
-        # sen1 is "I like action and Jet Lee." // slot1 in states
-        # sen2 is "I also like drama and Johnny Deep." // slot2 in states
-        # get_all can only return a dict however we need to return "action"
-        # + "drama"(2 genres) and "Jet Lee" + "Johnny Deep"(2 actors) since
-        # all of them are required.
-        dict = self.states[-1].copy()
-        return dict
+        lists = self.states[:]
+        all_states = {}
+        for dict in lists:
+            for key in dict:
+                # if: a key is in all_states already
+                if all_states.has_key(key):
+                    if dict[key] in all_states[key]:
+                        # if: eliminate duplicated values
+                        continue
+                    elif type(all_states[key]).__name__ != 'list':
+                        # elif: the value of the key is not a list yet, make it to
+                        #     a list then append old value and new value
+                        temp = all_states[key]
+                        all_states[key] = []
+                        all_states[key].append(temp)
+                        all_states[key].append(dict[key])
+                    else:
+                        # else: the value of the key is a list, append directly
+                        if dict[key] in all_states[key]:
+                            continue
+                        all_states[key].append(dict[key])
+                # else: add the key:value pair directly into the all_states dict
+                else:
+                    all_states[key] = dict[key]
+        return all_states
 
     def add_request(self, dict):
         self.states.append(dict)
 
     def add_result(self, dict):
-        # same clarification needed as get_all()
         self.states.append(dict)
 
     def last_request(self):
@@ -40,7 +56,7 @@ class State:
         lists.reverse()
         for dict in lists:
             if value == 'PRE_HE':
-                # Assuming actor/director is the only person we care about!
+                # Assuming actor/director are the only people we care about!
                 if dict.has_key('actor') and dict['actor'] != 'PRE_HE':
                     return dict['actor']
                 elif dict.has_key('director') and dict['director'] != 'PRE_HE':
@@ -52,51 +68,63 @@ class State:
         # user entered it/he/she but state doesn't have their info.
         return 'error'
 
+    def delete_state(self, num_of_steps):
+        # not needed but it doesn't hurt to have it.
+        while num_of_steps > 0:
+            self.states.pop()
+            num_of_steps -= 1
 
 #################################### Tests ####################################
-def print_dict(dict):
-    for key in dict:
-        print dict[key]
-        
 if __name__ == '__main__':
+    def print_dict(dict):
+        for key in dict:
+            print dict[key]
+
     state = State()
     state.add_request({'request':'director', 'title':'Titanic'})
     print '1st add => get_all:::::::'
     print state.get_all()
     print '1st add => last_request::::'
     print state.last_request() + '\n'
-    
+
     state.add_request({'request':'title', 'director':'James Cameron'})
     print '2nd add => get_all:::::::'
     print state.get_all()
     print '2nd add => last_request::::::'
     print state.last_request() + '\n'
-    
-    state.add_request({'request':'OPINION', 'genre':'action', 'keyword':'dream'})
+
+    state.add_request({'request':'OPINION', 'genre':'action', 
+'keyword':'dream'})
     print '3nd add => get_all:::::::'
     print state.get_all()
     print '3nd add => last_request::::::'
     print state.last_request() + '\n'
-    
+
     state.add_request({'request':'OPINION', 'character':'Batman'})
     print '4nd add => get_all:::::::'
     print state.get_all()
     print '4nd add => last_request::::::'
     print state.last_request() + '\n'
-    
+
     state.add_request({'request':'COUNT', 'of':'Academy Award', 'actor':'Kate Winslet'})
     print '5rd add => get_all:::::::'
     print state.get_all()
     print '5rd add => last_request::::::'
     print state.last_request() + '\n'
-    
-    
+
     print 'resolve PRE_IT ::::::::::::::::::::::::::'
     print state.resolve_pronoun('PRE_IT')
     print 'resolve PRE_HE ::::::::::::::::::::::::::'
     print state.resolve_pronoun('PRE_HE') + '\n'
-    
-    
+
+    print 'delete one step ::::::::::::'
+    state.delete_state(1)
+    print state.get_all()
+
+    print 'delete three step ::::::::::::'
+    state.delete_state(3)
+    print state.get_all()
+
     print 'before clear:::::::::::::::::::::::'
     print 'len(states) = ', len(state.states)
     for dict1 in state.states:
