@@ -33,9 +33,9 @@ def submit(input):
     reply = core.submit(input, sessionID)
     return reply
 
-def getName():
+def get_name():
     return core.kernel.getPredicate('name', sessionID)
 
 if __name__=="__main__":
     submit("Clive is my name")
-    print getName()
+    print get_name()

@@ -86,7 +86,7 @@ class DialogManager:
         return self.request(internal_dict)
     
     def off_topic(self, dict):
-        return chatbot.submit(dict["off_topic"])
+        return chatbot.reply
     
     def input(self, list):
         result_dict={}
