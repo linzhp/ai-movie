@@ -4,12 +4,13 @@ current_dir = path.dirname(__file__)
 sys.path.append(path.join(current_dir, ".."))
 import dbi
 import chatbot
+from state import State
 
 #TODO increase the priority of movie title in state
 class DialogManager:
     def __init__(self):
         self.pending_question = None
-        self.state = None #TODO initialize state here
+        self.state = State() #TODO initialize state here
         self.dbi = None #TODO initialize dbi here
 
     def request(self, dict):
@@ -86,7 +87,10 @@ class DialogManager:
         return self.request(internal_dict)
     
     def off_topic(self, dict):
-        return chatbot.reply
+        reply = chatbot.reply
+        if reply is None:
+            reply = chatbot.submit(dict['off_topic'])
+        return reply
     
     def input(self, list):
         result_dict={}

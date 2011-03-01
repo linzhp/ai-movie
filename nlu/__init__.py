@@ -4,8 +4,8 @@ import re
 import nltk
 from nltk.corpus import wordnet
 import dm
+import chunker
 #TODO return cast
-
 class NLUnderstanding:
     """
     Natural Language Understanding class.
@@ -140,6 +140,7 @@ class NLUnderstanding:
     
     def _parse_pref(self, chunked, **kargs):
         #TODO try to resolve pronoun locally
+        #TODO add 'like' keyword
         negation = False
         all_pref={'request':dm.OPINION}
         all_pref.update(kargs)
