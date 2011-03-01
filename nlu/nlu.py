@@ -527,8 +527,3 @@ class NLU:
 			similarity = .35
 
 		return similarity
-
-
-
-
-

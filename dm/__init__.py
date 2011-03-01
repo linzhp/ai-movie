@@ -1,18 +1,16 @@
 import sys
 from os import path 
-import howie.core    
-import howie.configFile
-from howie import aiml
 current_dir = path.dirname(__file__)
 sys.path.append(path.join(current_dir, ".."))
 import dbi
+import chatbot
+from state import State
 
-#TODO sent each sentences to howie
 #TODO increase the priority of movie title in state
 class DialogManager:
     def __init__(self):
         self.pending_question = None
-        self.state = None #TODO initialize state here
+        self.state = State()
         self.dbi = None #TODO initialize dbi here
 
     def request(self, dict):
@@ -89,28 +87,10 @@ class DialogManager:
         return self.request(internal_dict)
     
     def off_topic(self, dict):
-        if howie.core.kernel is None:
-            config = howie.configFile.load(path.join(current_dir, "../howie.ini"))
-            config['cla.localMode']="yes"
-            kernel = aiml.Kernel()
-            
-            # set up the kernel
-            kernel.verbose(False)
-            kernel.setPredicate("secure", "yes") # secure the global session
-            kernel.bootstrap(
-                             learnFiles=[path.join(current_dir, "../std-startup.xml"),path.join(howie.__path__[0], "../standard/std-*.aiml")], 
-                             commands="bootstrap")
-            kernel.setPredicate("secure", "no") # and unsecure it.
-            
-            # Initialize bot predicates
-            for k,v in config.items():
-                if k[:8] != "botinfo.":
-                    continue
-                kernel.setBotPredicate(k[8:], v)
-            
-            howie.core.kernel=kernel
-
-        return howie.core.submit(dict["off_topic"], "ai-movie-dialog-manager")
+        reply = chatbot.reply
+        if reply is None:
+            reply = chatbot.submit(dict['off_topic'])
+        return reply
     
     def input(self, list):
         result_dict={}

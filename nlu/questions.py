@@ -1,6 +1,5 @@
 import chunker
 
-
 def who(list):
     #print list
     #print type(list)
@@ -10,7 +9,6 @@ def who(list):
             #print type(x)
             for y in x:
                 if "VP" in str(x.node):            
-
                     if "directed" in str(y[0]).lower():
                         print 'director'
                     elif "made" in str(y[0]).lower():
@@ -22,7 +20,6 @@ def who(list):
 
 chk = chunker.Chunker()
 control = True
-
 
 while control:
     input = raw_input('Please enter a question: ')
@@ -58,6 +55,3 @@ while control:
 
                         elif "when" in str(y[0]).lower():
                             print 'when'
-
-
-
