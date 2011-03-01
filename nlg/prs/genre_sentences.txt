@@ -1,0 +1,3 @@
+{0[0]} acted in {1} movies.
+{0[0]} was a {1} movie.
+

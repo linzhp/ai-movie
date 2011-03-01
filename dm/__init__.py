@@ -10,7 +10,7 @@ from state import State
 class DialogManager:
     def __init__(self):
         self.pending_question = None
-        self.state = State() #TODO initialize state here
+        self.state = State()
         self.dbi = None #TODO initialize dbi here
 
     def request(self, dict):

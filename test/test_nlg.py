@@ -15,17 +15,26 @@ class Test(unittest.TestCase):
                 line = line.strip()
                 colon = line.find(':')
                 if line[:colon].find('user')>=0:
+                    nlg_input = []
+                    nlg_input = []
+                    nlg_output = ""
+                    desired_nlg_output = ""
+                    print line
                     pass
                 elif line[:colon].find('NLU')>=0:
                     nlu_input = eval(line[colon+1:])
-                    #print nlu_input
+                    print nlu_input
                 elif line[:colon].find('DM')>=0:
                     nlg_input = eval(line[colon+1:])
                     print nlg_input
                     nlg_output = nlg.process(nlu_input,nlg_input)
                     #print nlg_output
-                else: #if line[:colon].find('BOT')>=0:
-                    #print (line)
+                elif line[:colon].find('NLG')>=0:
+                    desired_nlg_output = line[colon+1:]
+                    #print desired_nlg_output
+                else: #if line[:colon].find('NLG')>=0:
+                    #colon = -1;
+                    #print (line[colon+1:])
                     pass
                     
 

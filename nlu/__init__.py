@@ -141,7 +141,7 @@ class NLUnderstanding:
     def _parse_pref(self, chunked, **kargs):
         #TODO try to resolve pronoun locally
         #TODO add 'like' keyword
-        negation = False
+        like = False
         all_pref={'request':dm.OPINION}
         all_pref.update(kargs)
         
@@ -163,5 +163,7 @@ class NLUnderstanding:
         represented by a list of tuples.
         Example input can be found by printing chunked.leaves(), with
         chunked being the return value of Chunker.chunk
+        return: True if it is positive, False if it is negative, None
+        if it is unknown
         """
         
