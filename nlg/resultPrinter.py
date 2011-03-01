@@ -72,5 +72,5 @@ def printItem(itemType, result):
     return result
 
 def getNouns(NLUOutput, itemType):
-    return ("he", "him")
+    return ("he", "him", "it")
     pass
