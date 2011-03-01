@@ -66,12 +66,12 @@ def process(NLUOutput, DMOutput):
         answerResponse(NLUOutput,DMOutput)
     elif DMOutput.has_key("print"):
         printResults(NLUOutput,DMOutput)
-    elif DMOutput.has_key("like"):
-        likeResponse(NLUOutput,DMOutput)
     elif DMOutput.has_key("list"):
         listOutput(NLUOutput,DMOutput)
     elif DMOutput.has_key("question"):
         questionToUser(NLUOutput,DMOutput)
+    elif NLUOutput[0].has_key("like"):
+        likeResponse(NLUOutput,DMOutput)
     else:
         print "Well then, what would you like to talk about?"
     print ""

@@ -7,7 +7,7 @@ pronounObjects = {"PREV_HE":"him","PREV_SHE":"her", "PREV_IT":"it"}
 subjFromObj = {
                "actor":[],
                "part":[],
-               "title":["director","actor","sort"],
+               "title":["director","actor","sort","genre","part"],
                "director":[],
                "genre":["title","actor","director"],
                "plot":[],
@@ -22,7 +22,8 @@ def getPrintSentence(itemType, subjectType):
     return rstring
 
 def getSubject(NLUOutput, itemType):
-    checklist = subjFromObj[itemType]
+    # if the program fails here add another entry to the dict 
+    checklist = subjFromObj[itemType] 
     rstring = ""
     for key in NLUOutput[0].keys():
         if key in checklist:
