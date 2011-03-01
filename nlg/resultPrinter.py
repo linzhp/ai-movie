@@ -1,14 +1,36 @@
 #import nltk
 import nlg_utils as nlgu
 
-statePronounSubjects = {"PREV_HE":"he", "PREV_SHE":"she", "PREV_IT":"it"}
-statePronounObjects = {"PREV_HE":"him","PREV_SHE":"her", "PREV_IT":"it"}
+pronounSubjects = {"PREV_HE":"he", "PREV_SHE":"she", "PREV_IT":"it"}
+pronounObjects = {"PREV_HE":"him","PREV_SHE":"her", "PREV_IT":"it"}
 
-def getPrintSentence(itemType):
-    return nlgu.get_random_line('../nlg/prs/'+itemType + '_sentences.txt')
+subjFromObj = {
+               "actor":[],
+               "part":[],
+               "title":["director","actor","sort"],
+               "director":[],
+               "genre":["title","actor","director"],
+               "plot":[],
+               "voice actor":[]
+               }
+
+def getPrintSentence(itemType, subjectType):
+    fileName = '../nlg/prs/'+subjectType+itemType + '_sentences.txt'
+    rstring = nlgu.get_random_line(fileName)
+    if rstring == "":
+        print "ERROR"
+    return rstring
+
+def getSubject(NLUOutput, itemType):
+    checklist = subjFromObj[itemType]
+    rstring = ""
+    for key in NLUOutput[0].keys():
+        if key in checklist:
+            rstring += key +'_'
+    return rstring
 
 def do(itemType, NLUOutput, resultList):
-    printSentence = getPrintSentence(itemType)
+    printSentence = getPrintSentence(itemType, getSubject(NLUOutput, itemType))
 
     result = printItems(itemType, resultList)
 
