@@ -1,0 +1,51 @@
+﻿user: Action movies about dreams.
+NLU:[{"request":"opinion","genre":"action","keyword":"dream"}]
+Maybe Inception?
+ 
+user:tell me about inception
+NLU: [{"request":"plot","title":"inception"}]
+ 
+user:that looks good
+NLU: [{"response":"yes"}]
+ 
+///////////////////////////////////////////
+ 
+user:did wes anderson act in any movies?
+NLU: [{"request":"true_false","actor":"wes anderson"}]
+ 
+user:what was his highest grossing film
+NLU:[{"command":"list", "sort":"profit", "order":"desc","result_length":1}]
+ 
+user:what other films came out that year?
+NLU:[{"request":"opinion","year":"prev_it"},{"command":"list"}]
+ 
+/////////////////////////////////////////////
+ 
+user: i like robin williams
+NLU:[{"request":"opinion","person":"robin williams"}]
+ 
+user:how many movies has he been in?
+NLU:[{"command":"length"}]
+ 
+user:what kinds of movies has he been in?
+NLU:[{"request":"genre"}]
+ 
+/////////////////////////////////////////////////////
+user:who directed the departed?
+NLU:[{"request":"director","title":"the departed"}]
+ 
+user:what else has he directed?
+NLU:[{"request":"title","director":"prev_he"}]
+ 
+user:has he won any academy awards?
+NLU:[{"request":"true_false","award": "Academy Award", "person": "prev_he"}]
+ 
+/////////////////////////////////////////////////////////
+user:i like batman
+NLU:[{"request":"opinion","person":"batman"}]
+ 
+user:what animated movies has he been in?
+NLU:[{"request":"title","genre":"animation","person":"prev_he"}]
+ 
+user:who voiced him?
+NLU:[{"request":"voice actor", "part":"prev_he"}]
