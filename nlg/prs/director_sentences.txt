@@ -1,2 +1,2 @@
-{1} directed {0[2]}
-{0[2]} was directed by {1}.
+{1} directed it.
+It was directed by {1}.
