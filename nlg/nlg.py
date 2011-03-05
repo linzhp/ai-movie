@@ -35,6 +35,9 @@ def printResults(NLUOutput,DMOutput):
     if not DMOutput.has_key('results'):
         print "NLG Error: invalid print request\n"
         return ""
+    if DMOutput['results']== None or len(DMOutput['results'])==0:
+        return "Sorry, no results were found.\n"
+    
     rstring = ""
     # DMOutput should be [print:ITEM_TYPE,results:[list,of,results,of,item,type]]
     itemType = DMOutput['print']
