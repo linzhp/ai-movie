@@ -12,6 +12,108 @@ db_name = config.get("database", "db_name")
 i =  imdb.IMDb('sql', uri='mysql://%s:%s@%s:3306/%s'%(user_name,password,host,db_name))
 conn = MySQLdb.connect (host = host, user = user_name, db = db_name, passwd = password)
 
+## select/cout object: all movie attributes
+# conditions: all movie attributes, “keyword”, “sort” (with the value of some movie attribute), “order” (“desc” or “asc”)
+# possible movie attributes are: "title", "year", "plot", "director", "actor", "genre", "country", "filming_loc" "award" and "language"
+def gen_query(wanted, known):
+    fin_query = ''
+    from_clause = build_from(wanted, known)
+    
+    if (wanted == 'title'):
+        fin_query += 'SELECT t.title '
+    else if (wanted == 'actor'):
+        fin_query += 'SELECT n.name '
+    else if (wanted == 'cast'):
+        fin_query += 'SELECT n.name, cn.name '
+    else if (wanted == 'director'):
+        fin_query = 'SELECT n.name '
+    else:
+        print 'DBI: '+wanted+' is unimpliment.'
+    fin_query += build_from(wanted, known) + build_where(wanted, known) + ' LIMIT 0,11'
+
+    conn.query(fin_query)
+    result = conn.store_result()
+    
+    # Process result here
+
+    return result
+
+# Get all films with a particular person.
+# SELECT * FROM title t LEFT JOIN cast_info c ON (c.movie_id = t.id) LEFT JOIN name n ON (n.id = c.person_id) WHERE name="Family, Given" AND kind_id <> 7 LIMIT 0,100;    
+
+def build_from(wanted, know):
+    from_list = 'FROM '
+    # Looking for movie title
+    if (wanted == 'title'):
+        if (know.has_key('actor') or know.has_key('role')):
+            from_list += 'title t ' # Covers the year with production_year
+            from_list += 'LEFT JOIN cast_info c ON (c.movie_id = t.id) LEFT JOIN name n ON (n.id = c.person_id) '
+            if (know.has_key('role')):
+                from_list += 'LEFT JOIN role_type rt ON (c.role_id = rt.id) '
+        if (know.has_key('director')):
+            	from_list += 'cast_info c LEFT JOIN title t ON (c.movie_id = t.id) LEFT JOIN name n ON (c.person_id = n.id) '
+	        from_list += 'LEFT JOIN role_type rt ON (c.role_id = rt.id) ' 
+    # Looking for actor
+    elif (wanted == 'actor'):
+        from_list += 'cast_info c LEFT JOIN name n ON (n.id = c.person_id) '
+        if (know.has_key('title') or know.has_key('year') or know.has_key('role')):
+            from_list += 'LEFT JOIN title t ON (c.movie_id = t.id) '
+        if (know.has_key('role') or know.has_key('director')):
+            from_list += 'LEFT JOIN role_type rt ON (c.role_id = rt.id) '
+    elif (wanted == 'plot'):
+	from_list += 'title t LEFT JOIN movie_info mi ON (t.id = mi.movie_id) '
+    else : # This is used for CAST query, but is a pretty good set for most queries that happen to fall through the cracks.
+	from_list += 'cast_info c LEFT JOIN title t ON (c.movie_id = t.id) LEFT JOIN name n ON (c.person_id = n.id) '
+	from_list += 'LEFT JOIN role_type rt ON (c.role_id = rt.id) '
+        from_list += 'LEFT JOIN char_name cn ON (c.person_role_id = cn.id) '
+	if (know.has_key('plot')):
+	    from_list += 'LEFT_JOIN movie_info mi ON (c.movie_id = mi.movie_id) '
+    # To add keyword, link cast_info, title, and movie_keyword by movie_id, and keyword.id=movie_keyword.keyword_id
+    return from_list
+
+# possible movie attributes are: "title", "year", "plot", "director", "actor", "genre", "country", "filming_loc" "award" and "language"
+def build_where(wanted, know):
+    if (wanted == 'title'):
+        where_list = 'WHERE t.kind_id <> 7 '
+    else:
+        where_list = 'WHERE 1=1 '
+    # Looking for movie title
+    for key in know.keys():
+	if (key == 'actor'): # A little more complex than this. This only works from simple cases. Need to take 'wanted' into account. This works for basic case.
+            act = know.get(key)
+	    if (isinstance(act,list)): 
+                for a in act:
+                    # Need to invert the name if it doesn't contain a , here
+                    where_list += 'AND n.name = "'+a+' " '
+            else:
+		# And here
+                where_list += 'AND n.name = "'+act+' " '
+	if (key == 'title'): 
+            ele = know.get(key)
+	    if (isinstance(act,list)): 
+                for k in ele:
+                    where_list += 'AND t.title = "'+k+' " '
+            else:
+                where_list += 'AND t.title = "'+ele+' " '
+	if (key == 'year'): 
+            ele = know.get(key)
+	    if (isinstance(act,list)): 
+                for k in ele:
+                    where_list += 'AND t.production_year = "'+k+' " '
+            else:
+                where_list += 'AND t.production_year = "'+ele+' " '
+	if (key == 'director'): 
+            ele = know.get(key)
+	    if (isinstance(act,list)): 
+                for k in ele:
+                    where_list += 'AND c.role_id = 8 '
+            else:
+                where_list += 'AND c.role_id = 8 ' 
+
+    return where_list
+
+
+#################### OLD FUNCTIONS FOLLOW #####################
 #Takes in movie title(string), returns movie ID.
 def get_id_movie(fn_input):
     results = i.search_movie(fn_input)
