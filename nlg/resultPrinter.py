@@ -45,7 +45,9 @@ def do(itemType, NLUOutput, resultList):
         
     printSentence = printSentence.format(pronouns, result)
     
-    print printSentence[:1].capitalize()+printSentence[1:],
+    printSentence = printSentence[:1].capitalize()+printSentence[1:]
+    return printSentence
+    
 
 def printItems(itemType, resultList):
     if len(resultList)==1:
