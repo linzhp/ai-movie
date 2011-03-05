@@ -15,7 +15,14 @@ conn = MySQLdb.connect (host = host, user = user_name, db = db_name, passwd = pa
 ## select/cout object: all movie attributes
 # conditions: all movie attributes, “keyword”, “sort” (with the value of some movie attribute), “order” (“desc” or “asc”)
 # possible movie attributes are: "title", "year", "plot", "director", "actor", "genre", "country", "filming_loc" "award" and "language"
-def gen_query(wanted, known):
+
+def resolve_name(name, title=None):
+    """
+    Lookup roles filled by name, in general, or in specific movie if provided.
+
+    """
+
+def gen_query(wanted, known): #TODO: Rename as query IFF no conflicts.
     fin_query = ''
     from_clause = build_from(wanted, known)
     
@@ -51,8 +58,8 @@ def build_from(wanted, know):
             if (know.has_key('role')):
                 from_list += 'LEFT JOIN role_type rt ON (c.role_id = rt.id) '
         if (know.has_key('director')):
-            	from_list += 'cast_info c LEFT JOIN title t ON (c.movie_id = t.id) LEFT JOIN name n ON (c.person_id = n.id) '
-	        from_list += 'LEFT JOIN role_type rt ON (c.role_id = rt.id) ' 
+                    from_list += 'cast_info c LEFT JOIN title t ON (c.movie_id = t.id) LEFT JOIN name n ON (c.person_id = n.id) '
+                from_list += 'LEFT JOIN role_type rt ON (c.role_id = rt.id) ' 
     # Looking for actor
     elif (wanted == 'actor'):
         from_list += 'cast_info c LEFT JOIN name n ON (n.id = c.person_id) '
@@ -61,13 +68,13 @@ def build_from(wanted, know):
         if (know.has_key('role') or know.has_key('director')):
             from_list += 'LEFT JOIN role_type rt ON (c.role_id = rt.id) '
     elif (wanted == 'plot'):
-	from_list += 'title t LEFT JOIN movie_info mi ON (t.id = mi.movie_id) '
+        from_list += 'title t LEFT JOIN movie_info mi ON (t.id = mi.movie_id) '
     else : # This is used for CAST query, but is a pretty good set for most queries that happen to fall through the cracks.
-	from_list += 'cast_info c LEFT JOIN title t ON (c.movie_id = t.id) LEFT JOIN name n ON (c.person_id = n.id) '
-	from_list += 'LEFT JOIN role_type rt ON (c.role_id = rt.id) '
+        from_list += 'cast_info c LEFT JOIN title t ON (c.movie_id = t.id) LEFT JOIN name n ON (c.person_id = n.id) '
+        from_list += 'LEFT JOIN role_type rt ON (c.role_id = rt.id) '
         from_list += 'LEFT JOIN char_name cn ON (c.person_role_id = cn.id) '
-	if (know.has_key('plot')):
-	    from_list += 'LEFT_JOIN movie_info mi ON (c.movie_id = mi.movie_id) '
+        if (know.has_key('plot')):
+            from_list += 'LEFT_JOIN movie_info mi ON (c.movie_id = mi.movie_id) '
     # To add keyword, link cast_info, title, and movie_keyword by movie_id, and keyword.id=movie_keyword.keyword_id
     return from_list
 
@@ -79,32 +86,32 @@ def build_where(wanted, know):
         where_list = 'WHERE 1=1 '
     # Looking for movie title
     for key in know.keys():
-	if (key == 'actor'): # A little more complex than this. This only works from simple cases. Need to take 'wanted' into account. This works for basic case.
+        if (key == 'actor'): # A little more complex than this. This only works from simple cases. Need to take 'wanted' into account. This works for basic case.
             act = know.get(key)
-	    if (isinstance(act,list)): 
+            if (isinstance(act,list)): 
                 for a in act:
                     # Need to invert the name if it doesn't contain a , here
                     where_list += 'AND n.name = "'+a+' " '
             else:
-		# And here
+                # And here
                 where_list += 'AND n.name = "'+act+' " '
-	if (key == 'title'): 
+        if (key == 'title'): 
             ele = know.get(key)
-	    if (isinstance(act,list)): 
+            if (isinstance(act,list)): 
                 for k in ele:
                     where_list += 'AND t.title = "'+k+' " '
             else:
                 where_list += 'AND t.title = "'+ele+' " '
-	if (key == 'year'): 
+        if (key == 'year'): 
             ele = know.get(key)
-	    if (isinstance(act,list)): 
+            if (isinstance(act,list)): 
                 for k in ele:
                     where_list += 'AND t.production_year = "'+k+' " '
             else:
                 where_list += 'AND t.production_year = "'+ele+' " '
-	if (key == 'director'): 
+        if (key == 'director'): 
             ele = know.get(key)
-	    if (isinstance(act,list)): 
+            if (isinstance(act,list)): 
                 for k in ele:
                     where_list += 'AND c.role_id = 8 '
             else:
