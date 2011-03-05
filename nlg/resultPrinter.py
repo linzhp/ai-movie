@@ -6,13 +6,14 @@ pronounSubjects = {"PREV_HE":"he", "PREV_SHE":"she", "PREV_IT":"it"}
 pronounObjects = {"PREV_HE":"him","PREV_SHE":"her", "PREV_IT":"it"}
 
 subjFromObj = {
-               "actor":[],
-               "part":[],
-               "title":["director","actor","sort","genre","part"],
+#               "actor":[],
+#               "part":[],
+               "voice actor":["part"],
                "director":["title"],
+#               "person":[],
+               "title":["director","actor","sort","genre","part"],
                "genre":["title","actor","director"],
-               "plot":["title"],
-               "voice actor":["part"]
+               "plot":["title"]
                }
 
 def getPrintSentence(itemType, subjectList):
@@ -26,8 +27,11 @@ def getPrintSentence(itemType, subjectList):
     return rstring
 
 def getSubjectList(NLUOutput, itemType):
-    # if the program fails here add another entry to the dict 
-    checklist = subjFromObj[itemType] 
+    if subjFromObj.has_key(itemType):
+        checklist = subjFromObj[itemType]
+    else:
+        return None
+
     rlist = []
     for key in NLUOutput[0].keys():
         if key in checklist:
@@ -36,14 +40,18 @@ def getSubjectList(NLUOutput, itemType):
 
 def do(itemType, NLUOutput, resultList):
     subject = getSubjectList(NLUOutput, itemType)
-
+    
+    if subject== None:
+        itemType = "default"
+        subject = []
+        
     printSentence = getPrintSentence(itemType, subject)
 
     result = printItems(itemType, resultList)
 
-    pronouns = getNouns(NLUOutput, itemType, subject)
+    nouns = getNouns(NLUOutput, itemType, subject)
         
-    printSentence = printSentence.format(pronouns, result)
+    printSentence = printSentence.format(nouns, result)
     
     printSentence = printSentence[:1].capitalize()+printSentence[1:]
     return printSentence
@@ -92,4 +100,3 @@ def getNouns(NLUOutput, itemType, subjectList):
         returnList.append(a)
     print subjectList, returnList
     return returnList
-    return ("he", "him", "it")
