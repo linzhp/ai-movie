@@ -1,0 +1,2 @@
+{1} directed {0[0][1]}
+{0[0][0]} was directed by {1}.

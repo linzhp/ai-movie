@@ -27,13 +27,14 @@ try:
         nlu.expect = dialogManager.pending_question
         # Generate response to user
         output=nlg.process(nlu_out,dm_out)
+        # Print and log response  
+        logging.info('Bot: '+output)
+        print('Bot: '+output)
         # Decide whether to continue
         for dict in nlu_out:
             if dict.get("command")=="EXIT":
                 exit()
-        # Print response and get user input  
-        logging.info('Bot: '+output)
-        print('Bot: '+output)
+        #Get user input
         input = raw_input(output+'\n')
 except EOFError:
     exit()

@@ -80,6 +80,7 @@ NLG:What kind of movies about Batman do you like?
  
 user:what animated movies has he been in?
 NLU:[{"request":"title","genre":"animation","person":"PREV_HE"}]
+NLU:[{"request":"title","genre":"animation","part":"PREV_HE"}]
 DM:{"print":"title","results":["Batman Beyond","The Original Batman"]}
 NLG:He was in"Batman Byeond" and "The Original Batman".
  

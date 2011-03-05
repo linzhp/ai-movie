@@ -28,7 +28,7 @@ class Test(unittest.TestCase):
                     nlg_input = eval(line[colon+1:])
                     print nlg_input
                     nlg_output = nlg.process(nlu_input,nlg_input)
-                    #print nlg_output
+                    print nlg_output
                 elif line[:colon].find('NLG')>=0:
                     desired_nlg_output = line[colon+1:]
                     #print desired_nlg_output
