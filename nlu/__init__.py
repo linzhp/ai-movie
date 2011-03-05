@@ -14,10 +14,10 @@ class NLUnderstanding:
         keys: request, command, response and off_topic, corresponding to four
         categories of user input.
         request: handle the user requests concerning movies. The value of request
-            can be "title", "year", "plot", "director", "star", "country", 
-            "filming_loc", "language", OPINION, COUNT. True or false questions
-            are handled are COUNT. This dictionary also contains conditions of 
-            the request.
+            can be "title", "year", "plot", "director", "actor", "genre", 
+            "country", "filming_loc", "language", "award", OPINION, COUNT. True or false
+            questions are handled are COUNT. This dictionary also contains 
+            conditions of the request.
         command: handle the users requests to change the system state. Possible 
             values are EXIT and CLEAR. This should not be confused with the
             part-of-speech tagged as COMMAND
@@ -135,6 +135,8 @@ class NLUnderstanding:
     def _keyword2request(self, keyword):
         if keyword=="KW_MOVIE" or keyword=="KW_MOVIES":
             return "title"
+        elif keyword == "KW_STAR":
+            return "actor"
         else:
             return keyword[3:].lower()
     
@@ -144,6 +146,7 @@ class NLUnderstanding:
         like = False
         all_pref={'request':dm.OPINION}
         all_pref.update(kargs)
+        
         
     def _partition(self, chunked):
         """

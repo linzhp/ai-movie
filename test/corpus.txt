@@ -68,7 +68,7 @@ DM:{"print":"title","results":["Good Fellas","Taxi Driver"]}
 NLG:He directed Good Fellas and Taxi Driver.
  
 user:has he won any academy awards?
-NLU:[{"request":"count","of":"Academy Award","person":"PREV_HE"}]
+NLU:[{"request":"count","of":"award","award":"Academy Award","person":"PREV_HE"}]
 DM:{"list":2}
 NLG:He won 2 Academy Awards. Do you want to see them?
  

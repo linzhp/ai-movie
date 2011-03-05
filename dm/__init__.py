@@ -18,6 +18,7 @@ class DialogManager:
         if dict.has_key("person"):
             name = dict.pop("person")
             role=self.dbi.resolve_person(name)
+            #TODO ask user if there are multiple roles
             dict[role]=name
         # NLG does not need to be aware of below operations
         # to dict, make a copy of dict to hide the operations
