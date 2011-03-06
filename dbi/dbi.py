@@ -13,7 +13,7 @@ i =  imdb.IMDb('sql', uri='mysql://%s:%s@%s:3306/%s'%(user_name,password,host,db
 conn = MySQLdb.connect (host = host, user = user_name, db = db_name, passwd = password)
 
 ## select/cout object: all movie attributes
-# conditions: all movie attributes, “keyword”, “sort” (with the value of some movie attribute), “order” (“desc” or “asc”)
+# conditions: all movie attributes, "keyword", "sort" (with the value of some movie attribute), "order" ("desc" or "asc")
 # possible movie attributes are: "title", "year", "plot", "director", "actor", "genre", "country", "filming_loc" "award" and "language"
 def gen_query(wanted, known):
     fin_query = ''
@@ -21,11 +21,11 @@ def gen_query(wanted, known):
     
     if (wanted == 'title'):
         fin_query += 'SELECT t.title '
-    else if (wanted == 'actor'):
+    elif (wanted == 'actor'):
         fin_query += 'SELECT n.name '
-    else if (wanted == 'cast'):
+    elif (wanted == 'cast'):
         fin_query += 'SELECT n.name, cn.name '
-    else if (wanted == 'director'):
+    elif (wanted == 'director'):
         fin_query = 'SELECT n.name '
     else:
         print 'DBI: '+wanted+' is unimpliment.'
@@ -112,9 +112,22 @@ def build_where(wanted, know):
 
     return where_list
 
+def commonality(title1, title2):
+    q = 'SELECT COUNT(keyword_id) - COUNT(DISTINCT keyword_id)'
+    q += 'FROM title t LEFT JOIN movie_keyword mk ON (t.id = mk.movie_id) '
+    q += 'WHERE title="'+title1+'" OR title="'+title2+'" LIMIT 0,1000'
+
+    conn.query(fin_query)
+    result = conn.store_result()
+    
+    # Process result here
+
+    return result
+   
 
 #################### OLD FUNCTIONS FOLLOW #####################
 #Takes in movie title(string), returns movie ID.
+
 def get_id_movie(fn_input):
     results = i.search_movie(fn_input)
     size = len(results)
@@ -186,7 +199,7 @@ def get_cast(movie_id):
         for person in result:
             temp = list()
             temp.append(person['name'])
-            temp.append(" as ")
+            temp.append(' as ')
             temp.append(unicode(person.currentRole))
             temp = "".join(temp)
             temp = str(temp)
@@ -315,7 +328,7 @@ def get_movies_acted(person_id):
         return movie
     return 'none'
 
-#Takes in person ID, returns their "other" works (List of Strings).
+#Takes in person ID, returns their 'other' works (List of Strings).
 def get_other_works(person_id):
     person = i.get_person(person_id)
     if 'other works' in person.keys():
