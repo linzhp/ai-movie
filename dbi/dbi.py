@@ -19,7 +19,11 @@ logfile = open('dbi.log', 'w')
 # TODO: award, gross
 def query(wanted, known):
     if (logfile):
-        logfile.write('Wanted: "'+wanted+'" Known: '+ known + '\n')
+        logfile.write("Wanted: \"")
+        logfile.write(str(wanted))
+        logfile.write("\" Known: ")
+        logfile.write(str(known)) 
+        logfile.write('\n')
     fin_query = ''
     from_clause = build_from(wanted, known)
     
@@ -42,8 +46,8 @@ def query(wanted, known):
         else: # Remove this block for final presentation
             print 'DBI: '+wanted+' is unimpliment.'
 
-    if (wanted.has_key('sort')):
-        sortby = wanted.get('sort')
+    if (known.has_key('sort')):
+        sortby = known.get('sort')
         if (sortby == 'title'):
             fin_query += 'ORDER BY t.title '
         elif (sortby == 'actor' or sortby == 'director' or sortby == 'name'):
@@ -88,13 +92,13 @@ def build_from(wanted, know):
                 from_list += 'LEFT JOIN movie_info mi ON (t.id = mi.movie_id) '
         if (know.has_key('role') or know.has_key('director')):
             from_list += 'LEFT JOIN role_type rt ON (c.role_id = rt.id) '
-    elif (wanted == 'genre'  or wanted == 'country' or wanted == 'filming_loc' or wanted == 'languages' or wanted == 'plot' or wanted = 'keyword'):
+    elif (wanted == 'genre'  or wanted == 'country' or wanted == 'filming_loc' or wanted == 'languages' or wanted == 'plot' or wanted == 'keyword'):
         from_list += 'title t LEFT JOIN movie_info mi ON (t.id = mi.movie_id) '
         if (know.has_key('name') or know.has_key('actor') or know.has_key('director')):
             from_list += 'LEFT JOIN cast_info c ON (c.movie_id = t.id) LEFT JOIN name n ON (n.id = c.person_id) '
-    elif (wanted == 'keyword')
-        from_list += 'title t LEFT JOIN movie_keyword mk ON (t.id = mk.movie_id) '
-        from_list += 'LEFT JOIN keyword k ON (mk.keyword_id = k.id) '
+        if (wanted == 'keyword'):
+            from_list += 'title t LEFT JOIN movie_keyword mk ON (t.id = mk.movie_id) '
+            from_list += 'LEFT JOIN keyword k ON (mk.keyword_id = k.id) '
     elif (wanted == 'cast'): # This is used for CAST query, but is a pretty good set for most queries that happen to fall through the cracks.
         from_list += 'title t LEFT JOIN cast_info c ON (c.movie_id = t.id) LEFT JOIN name n ON (c.person_id = n.id) '
         from_list += 'LEFT JOIN role_type rt ON (c.role_id = rt.id) '
@@ -151,14 +155,14 @@ def build_where(wanted, know):
         
         if (key == 'title'): 
             ele = know.get(key)
-            if (isinstance(act,list)): 
+            if (isinstance(ele,list)): 
                 for k in ele:
                     where_list += 'AND t.title = "'+k+' " '
             else:
                 where_list += 'AND t.title = "'+ele+' " '
         if (key == 'year'): 
             ele = know.get(key)
-            if (isinstance(act,list)): 
+            if (isinstance(ele,list)): 
                 for k in ele:
                     where_list += 'AND t.production_year = "'+k+' " '
             else:
@@ -166,7 +170,7 @@ def build_where(wanted, know):
 
         if (key == 'genre'  or key == 'plot' or key == 'country' or key == 'filming_loc' or key == 'languages'):
             ele = know.get(key)
-            if (isinstance(act,list)): 
+            if (isinstance(ele,list)): 
                 for k in ele:
                     where_list += 'AND mi.info = "'+k+' " '
             else:
