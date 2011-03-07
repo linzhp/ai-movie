@@ -11,38 +11,58 @@ db_name = config.get("database", "db_name")
 #i =  imdb.IMDb('sql', uri='mysql://maw_imdb:pugOrz2u@mysql.cse.ucsc.edu/maw_imdb')
 i =  imdb.IMDb('sql', uri='mysql://%s:%s@%s:3306/%s'%(user_name,password,host,db_name))
 conn = MySQLdb.connect (host = host, user = user_name, db = db_name, passwd = password)
+logfile = open('dbi.log', 'w')
 
 ## select/cout object: all movie attributes
 # conditions: all movie attributes, "keyword", "sort" (with the value of some movie attribute), "order" ("desc" or "asc")
 # possible movie attributes are: "title", "year", "plot", "director", "actor", "genre", "country", "filming_loc" "award" and "language"
 # TODO: award, gross
 def query(wanted, known):
+    if (logfile):
+        logfile.write('Wanted: "'+wanted+'" Known: '+ known + '\n')
     fin_query = ''
     from_clause = build_from(wanted, known)
     
     if (wanted == 'title'):
         fin_query = 'SELECT t.title '
-    elif (wanted == 'actor'or wanted == 'name'):
+    elif (wanted == 'actor' or wanted == 'name' or wanted == 'director'):
         fin_query = 'SELECT n.name '
     elif (wanted == 'cast'):
         fin_query = 'SELECT n.name, cn.name '
-    elif (wanted == 'director'):
-        fin_query = 'SELECT n.name '
     elif (wanted == 'genre'  or wanted == 'plot' or wanted == 'country' or wanted == 'filming_loc' or wanted == 'languages'):
         fin_query = 'SELECT mi.info '
     elif (wanted == 'year'):
         fin_query = 'SELECT t.production_year '
+    elif (wanted == 'keyword'):
+        fin_query = 'SELECT k.keyword '
     else:
-        print 'DBI: '+wanted+' is unimpliment.'
+        fin_query = 'SELECT * '
+        if (logfile):
+            logfile.write('DBI: '+wanted+' is unimpliment.\n')
+        else: # Remove this block for final presentation
+            print 'DBI: '+wanted+' is unimpliment.'
+
+    if (wanted.has_key('sort')):
+        sortby = wanted.get('sort')
+        if (sortby == 'title'):
+            fin_query += 'ORDER BY t.title '
+        elif (sortby == 'actor' or sortby == 'director' or sortby == 'name'):
+            fin_query += 'ORDER BY n.name '
+        elif (sortby == 'year'):
+            fin_query += 'ORDER BY t.production_year '
+        elif (sortby == 'keyword'):
+            fin_query += 'ORDER BY k.keyword '
     fin_query += build_from(wanted, known) + build_where(wanted, known) + ' LIMIT 0,11'
 
+    if (logfile):
+        logfile.write('Executing: '+fin_query+'\n')
+    else:
+        print 'Executing: '+fin_query+'\n'
     conn.query(fin_query)
     result = conn.store_result()
-    
+    res_list = result.fetch_row(result.num_rows())
     if (wanted != 'plot' and wanted != 'keyword'):
-	"""
-           # Process result here
-        """
+        res_list = [item[0] for item in res_list]
     return result
 
 # Get all films with a particular person.
@@ -68,23 +88,27 @@ def build_from(wanted, know):
                 from_list += 'LEFT JOIN movie_info mi ON (t.id = mi.movie_id) '
         if (know.has_key('role') or know.has_key('director')):
             from_list += 'LEFT JOIN role_type rt ON (c.role_id = rt.id) '
-
-    elif (wanted == 'plot'): # Must have WHERE clause mi.info_type_id = 98
-        from_list += 'title t LEFT JOIN movie_info mi ON (t.id = mi.movie_id) '
-    elif (key == 'genre'  or key == 'country' or key == 'filming_loc' or key == 'languages'):
+    elif (wanted == 'genre'  or wanted == 'country' or wanted == 'filming_loc' or wanted == 'languages' or wanted == 'plot' or wanted = 'keyword'):
         from_list += 'title t LEFT JOIN movie_info mi ON (t.id = mi.movie_id) '
         if (know.has_key('name') or know.has_key('actor') or know.has_key('director')):
             from_list += 'LEFT JOIN cast_info c ON (c.movie_id = t.id) LEFT JOIN name n ON (n.id = c.person_id) '
+    elif (wanted == 'keyword')
+        from_list += 'title t LEFT JOIN movie_keyword mk ON (t.id = mk.movie_id) '
+        from_list += 'LEFT JOIN keyword k ON (mk.keyword_id = k.id) '
     elif (wanted == 'cast'): # This is used for CAST query, but is a pretty good set for most queries that happen to fall through the cracks.
         from_list += 'title t LEFT JOIN cast_info c ON (c.movie_id = t.id) LEFT JOIN name n ON (c.person_id = n.id) '
         from_list += 'LEFT JOIN role_type rt ON (c.role_id = rt.id) '
         from_list += 'LEFT JOIN char_name cn ON (c.person_role_id = cn.id) '
         if (know.has_key('plot') or know.has_key('genre')):
             from_list += 'LEFT JOIN movie_info mi ON (c.movie_id = mi.movie_id) '
-    # To add keyword, link cast_info, title, and movie_keyword by movie_id, and keyword.id=movie_keyword.keyword_id
+    # To add keyword, link cast_info, title, and movie_keyword by movie_id, and keyword.id=movie_keyword.keyword_id     
     else:
-        print 'WARNING: DBi: Could not identify desired info: "'+ wanted +'"\n'
-        print 'Making a generic guess... results could be slow as a result.\n'
+        if (logfile):
+            logfile.write('WARNING: DBi: Could not identify desired info: "'+ wanted +'"\n')
+            logfile.write('Making a generic guess... results could be slow as a result.\n')
+        else:
+            print 'WARNING: DBi: Could not identify desired info: "'+ wanted +'"\n'
+            print 'Making a generic guess... results could be slow as a result.\n'
         from_list += 'title t LEFT JOIN cast_info c ON (c.movie_id = t.id) LEFT JOIN name n ON (c.person_id = n.id) '
         from_list += 'LEFT JOIN role_type rt ON (c.role_id = rt.id) '
         from_list += 'LEFT JOIN char_name cn ON (c.person_role_id = cn.id) '
