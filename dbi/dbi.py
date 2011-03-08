@@ -2,8 +2,10 @@ import nltk
 import MySQLdb
 import imdb
 import ConfigParser
+from os import path
+
 config = ConfigParser.RawConfigParser()
-config.read('../movie.cfg')
+config.read(path.dirname(__file__)+'/../movie.cfg')
 user_name = config.get("database", "user_name")
 password = config.get("database", "password")
 host = config.get("database", "host")
@@ -11,476 +13,233 @@ db_name = config.get("database", "db_name")
 #i =  imdb.IMDb('sql', uri='mysql://maw_imdb:pugOrz2u@mysql.cse.ucsc.edu/maw_imdb')
 i =  imdb.IMDb('sql', uri='mysql://%s:%s@%s:3306/%s'%(user_name,password,host,db_name))
 conn = MySQLdb.connect (host = host, user = user_name, db = db_name, passwd = password)
+#logfile = open('dbi.log', 'w')
+logfile = 0
 
-#Takes in movie title(string), returns movie ID.
-def get_id_movie(fn_input):
-    results = i.search_movie(fn_input)
-    size = len(results)
-    if (size <= 0):
-        return 'none'
-    movie_list = list()
-    for movie in results:
-        if movie['title'] == fn_input:
-            movie_list.append(movie)
-    size = len(movie_list)
-    if (size < 1):
-        temp = results[0]['title']
-        count = 0
-        movie_list = list()
-        for movie in results:
-            if movie['title'] == temp:
-                movie_list.append(movie)
-        size = len(movie_list)
-    if (size < 1):
-        return 'error'
-    elif (size == 1):
-        return movie_list[0].movieID
-    out = movie_list[0]
-    votes = 0
-    for movie in movie_list:
-        temp = movie
-        i.update(temp)
-        if 'votes' in temp.keys():
-            if temp['votes'] > votes:
-               votes = int(temp['votes'])
-               out = movie
-    return out.movieID
+## select/cout object: all movie attributes
+# conditions: all movie attributes, "keyword", "sort" (with the value of some movie attribute), "order" ("desc" or "asc")
+# possible movie attributes are: "title", "year", "plot", "director", "actor", "genre", "country", "filming_loc" "award" and "language"
+# TODO: award, gross
+def query(wanted, known, **kargs):
+    if (logfile):
+        logfile.write("Wanted: \"")
+        logfile.write(str(wanted))
+        logfile.write("\" Known: ")
+        logfile.write(str(known)) 
+        logfile.write('\n')
+    fin_query = ''
+    from_clause = build_from(wanted, known)
+    
+    if (wanted == 'title'):
+        fin_query = 'SELECT t.title '
+    elif (wanted == 'actor' or wanted == 'person' or wanted == 'director'):
+        fin_query = 'SELECT DISTINCT n.name '
+    elif (wanted == 'cast'):
+        fin_query = 'SELECT n.name, cn.name '
+    elif (wanted == 'genre'  or wanted == 'plot' or wanted == 'country' or wanted == 'filming_loc' or wanted == 'languages'):
+        fin_query = 'SELECT DISTINCT mi.info '
+    elif (wanted == 'year'):
+        fin_query = 'SELECT t.production_year '
+    elif (wanted == 'keyword'):
+        fin_query = 'SELECT k.keyword '
+    else:
+        fin_query = 'SELECT * '
+        if (logfile):
+            logfile.write('DBI: '+str(wanted)+' is unimpliment.\n')
+        else: # Remove this block for final presentation
+            print 'DBI: '+str(wanted)+' is unimpliment.'
 
-#Takes in person title(string), returns movie ID.
-def get_id_person(fn_input):
-    results = i.search_person(fn_input)
-    size = len(results)
-    if (size <= 0):
-        return 'none'
-    person_list = list()
-    for person in results:
-        if person['name'] == fn_input:
-            person_list.append(person)
-    size = len(person_list)
-    if (size < 1):
-        temp = results[0]['name']
-        count = 0
-        person_list = list()
-        for person in results:
-            if person['name'] == temp:
-                person_list.append(person)
-        size = len(person_list)
-    if (size < 1):
-        return 'none'
-    elif (size == 1):
-        return person_list[0].personID
-    out = person_list[0]
-    for person in person_list:
-        if '(I)' in person['long imdb name']:
-            out = person
-    return out.personID
+    fin_query += build_from(wanted, known) + build_where(wanted, known)
+    if (known.has_key('sort')):
+        sortby = known.get('sort')
+        if (sortby == 'title'):
+            fin_query += 'ORDER BY t.title '
+        elif (sortby == 'actor' or sortby == 'director' or sortby == 'person'):
+            fin_query += 'ORDER BY n.name '
+        elif (sortby == 'year'):
+            fin_query += 'ORDER BY t.production_year '
+        elif (sortby == 'keyword'):
+            fin_query += 'ORDER BY k.keyword '
+    fin_query += ' LIMIT 0,11'
 
-#Takes in movie ID, returns cast (List of Strings).
-def get_cast(movie_id):
-    movie = i.get_movie(movie_id)
-    if 'cast' in movie.keys():
-        result = movie['cast']
-        cast = list()
-        for person in result:
-            temp = list()
-            temp.append(person['name'])
-            temp.append(" as ")
-            temp.append(unicode(person.currentRole))
-            temp = "".join(temp)
-            temp = str(temp)
-            cast.append(temp)
-        return cast
-    return 'none'
+    if (logfile):
+        logfile.write('Executing: '+fin_query+'\n')
+        logfile.flush()
+    else:
+        print 'Executing: '+fin_query+'\n'
+    conn.query(fin_query)
+    result = conn.store_result()
+    res_list = result.fetch_row(result.num_rows())
+    if (wanted != 'cast' and wanted != 'keyword'):
+        res_list = [item[0] for item in res_list]
+    return res_list
 
-#Takes in movie ID, returns directors (List of Strings).
-def get_director(movie_id):
-    movie = i.get_movie(movie_id)
-    if 'director' in movie.keys():
-        result = movie['director']
-        director = list()
-        for person in result:
-            director.append(str(person['name']))
-        return director
-    return 'none'
+# Get all films with a particular person.
+# SELECT * FROM title t LEFT JOIN cast_info c ON (c.movie_id = t.id) LEFT JOIN name n ON (n.id = c.person_id) WHERE name="Family, Given" AND kind_id <> 7 LIMIT 0,100;    
 
-#Takes in movie ID, returns genres (List of Strings).
-def get_genre(movie_id):
-    movie = i.get_movie(movie_id)
-    if 'genres' in movie.keys():
-        result = movie['genres']
-        result = str(result)
-        return result
-    return 'none'
+def build_from(wanted, know):
+    from_list = 'FROM '
+    # Looking for movie title
+    if (wanted == 'title' or wanted == 'year'):
+        from_list += 'title t ' # Covers the year with production_year
+        if (know.has_key('actor') or know.has_key('person') or know.has_key('role') or know.has_key('director')):
+            from_list += 'LEFT JOIN cast_info c ON (c.movie_id = t.id) LEFT JOIN name n ON (n.id = c.person_id) '
+            if (know.has_key('role') or know.has_key('director')):
+                from_list += 'LEFT JOIN role_type rt ON (c.role_id = rt.id) '
+        if (know.has_key('genre')): # Must have WHERE clause mi.info_type_id = 3
+            from_list += 'LEFT JOIN movie_info mi ON (t.id = mi.movie_id) ' 
+        if (wanted == 'keyword' or know.has_key('keyword')):
+            from_list += 'LEFT JOIN movie_keyword mk ON (t.id = mk.movie_id) '
+            from_list += 'LEFT JOIN keyword k ON (mk.keyword_id = k.id) '
+    # Looking for actor
+    elif (wanted == 'actor' or wanted == 'person' or wanted=='director'):
+        from_list += 'name n LEFT JOIN cast_info c ON (n.id = c.person_id) '
+        if (know.has_key('title') or know.has_key('year') or know.has_key('role') or know.has_key('genre')):
+            from_list += 'LEFT JOIN title t ON (c.movie_id = t.id) '
+            if (know.has_key('genre')):
+                from_list += 'LEFT JOIN movie_info mi ON (t.id = mi.movie_id) '
+        if (know.has_key('role') or know.has_key('director')):
+            from_list += 'LEFT JOIN role_type rt ON (c.role_id = rt.id) '
+    elif (wanted == 'genre'  or wanted == 'country' or wanted == 'filming_loc' or wanted == 'languages' or wanted == 'plot' or wanted == 'keyword'):
+        from_list += 'title t LEFT JOIN movie_info mi ON (t.id = mi.movie_id) '
+        if (know.has_key('person') or know.has_key('actor') or know.has_key('director')):
+            from_list += 'LEFT JOIN cast_info c ON (c.movie_id = t.id) LEFT JOIN name n ON (n.id = c.person_id) '
+        if (wanted == 'keyword' or know.has_key('keyword')):
+            from_list += 'LEFT JOIN movie_keyword mk ON (t.id = mk.movie_id) '
+            from_list += 'LEFT JOIN keyword k ON (mk.keyword_id = k.id) '
+        if (know.has_key('genre')): # Must have WHERE clause mi.info_type_id = 3
+            from_list += 'LEFT JOIN movie_info mi ON (t.id = mi.movie_id) ' 
+    elif (wanted == 'cast'): # This is used for CAST query, but is a pretty good set for most queries that happen to fall through the cracks.
+        from_list += 'title t LEFT JOIN cast_info c ON (c.movie_id = t.id) LEFT JOIN name n ON (c.person_id = n.id) '
+        from_list += 'LEFT JOIN role_type rt ON (c.role_id = rt.id) '
+        from_list += 'LEFT JOIN char_name cn ON (c.person_role_id = cn.id) '
+        if (know.has_key('plot') or know.has_key('genre')):
+            from_list += 'LEFT JOIN movie_info mi ON (c.movie_id = mi.movie_id) '
+    # To add keyword, link cast_info, title, and movie_keyword by movie_id, and keyword.id=movie_keyword.keyword_id     
+    else:
+        if (logfile):
+            logfile.write('WARNING: DBi: Could not identify desired info: "'+ str(wanted) +'"\n')
+            logfile.write('Making a generic guess... results could be slow as a result.\n')
+        else:
+            print 'WARNING: DBi: Could not identify desired info: "'+ str(wanted) +'"\n'
+            print 'Making a generic guess... results could be slow as a result.\n'
+        from_list += 'title t LEFT JOIN cast_info c ON (c.movie_id = t.id) LEFT JOIN name n ON (c.person_id = n.id) '
+        from_list += 'LEFT JOIN role_type rt ON (c.role_id = rt.id) '
+        from_list += 'LEFT JOIN char_name cn ON (c.person_role_id = cn.id) '
+        from_list += 'LEFT JOIN movie_info mi ON (c.movie_id = mi.movie_id) '
+        from_list += 'LEFT JOIN info_type it ON (mi.info_type_id = it.id) '
+        from_list += 'LEFT JOIN movie_keyword mk ON (t.id = mk.movie_id) LEFT JOIN keyword k ON (mk.keyword_id = k.id)'
+    return from_list
 
-#Takes in movie ID, returns plot (String).
-def get_plot(movie_id):
-    movie = i.get_movie(movie_id)
-    if 'plot' in movie.keys():
-        result = movie['plot']
-        if len(result) >= 1:
-            return str(result[0])
-    return 'none'
+# possible movie attributes are: "title", "year", "plot", "director", "actor", "genre", "country", "filming_loc" "award" and "language"
+def build_where(wanted, know):
+    if (wanted == 'title'):
+        where_list = 'WHERE t.kind_id <> 7 '
+    elif (wanted == 'plot'):
+        where_list = 'WHERE mi.info_type_id = 98 '
+    elif (wanted == 'genre'):
+        where_list = 'WHERE mi.info_type_id = 3 '
+    elif (wanted == 'country'):
+        where_list = 'WHERE mi.info_type_id = 8 '
+    elif (wanted == 'filming_loc'):
+        where_list = 'WHERE mi.info_type_id = 18 '
+    elif (wanted == 'languages'):
+        where_list = 'WHERE mi.info_type_id = 4 '
+    elif (wanted == 'actor'):
+        where_list = 'WHERE c.role_id < 3 '
+    elif (wanted == 'director'):
+        where_list = 'WHERE c.role_id = 8 '
+    else:
+        where_list = 'WHERE 1=1 '
+    # Looking for movie title
+    for key in know.keys():
+        if (key == 'actor' or key == 'director' or key == 'person'): # Needs testing
+            act = know.get(key)
+            if (isinstance(act,list)): # TODO: Really a more complex case. Must Re-write SQL.
+                for a in act:
+                    # Need to invert the name if it doesn't contain a , here
+                    where_list += 'AND n.name = "'+munge_name(a)+'" '
+            else:
+                # And here
+                where_list += 'AND n.name = "'+munge_name(act)+'" '
+        if (key == 'title'): 
+            ele = know.get(key)
+            if (isinstance(ele,list)): 
+                first = 1
+                where_list += 'AND ( '
+                for k in ele:
+                    if (first):
+                        where_list += 't.title = "'+k+ '" '
+                        first = 0
+                    else:
+                        where_list += 'OR t.title = "'+k+ '" '
+                where_list += ' ) '
+            else:
+                where_list += 'AND t.title = "'+ele+'" '
+        if (key == 'year'): 
+            ele = know.get(key)
+            if (isinstance(ele,list)): 
+                for k in ele:
+                    where_list += 'AND t.production_year = "'+k+'" '
+            else:
+                where_list += 'AND t.production_year = "'+ele+'" '
 
-#Takes in movie ID, returns cast (List of Strings).
-def get_rating(movie_id):
-    movie = i.get_movie(movie_id)
-    if 'rating' in movie.keys():
-        result = movie['rating']
-        return str(result)
-    return 'none'
+        if (key == 'genre'  or key == 'plot' or key == 'country' or key == 'filming_loc' or key == 'languages'):
+            ele = know.get(key)
+            if (isinstance(ele,list)): 
+                for k in ele:
+                    where_list += 'AND mi.info = "'+k+'" '
+            else:
+                where_list += 'AND mi.info = "'+ele+'" '
+            
+        if (key == 'keyword'): 
+            ele = know.get(key)
+            first = 1
+            if (isinstance(key,list)): 
+                for k in ele:
+                    if (first):
+                        where_list += 'AND k.keyword = "'+k+'" '
+                        first = 0
+                    else:
+                        where_list += 'OR k.keyword = "'+k+'" '
+            else:
+                where_list += 'AND k.keyword = "'+ele+'" '
+        if (key == '!keyword'): # REALLY WEIRD CASE. May not play well with others.
+            ele = know.get(key)
+            first = 1
+            where_list += 'AND t.id NOT IN ( SELECT t.id FROM title t LEFT JOIN movie_keyword mk ON (t.id = mk.movie_id) LEFT JOIN keyword k ON (mk.keyword_id = k.id)  WHERE '
+            if (isinstance(act,list)): 
+                for k in ele:
+                    if (first):
+                        where_list += 'k.keyword = "'+k+'" '
+                        first = 0
+                    else:
+                        where_list += 'OR k.keyword = "'+k+'" '
+            else:
+                where_list += 'k.keyword = "'+ele+'" '
+            where_list += ') '
+    return where_list
 
-#Takes in movie ID, returns runtime (String).
-def get_runtimes(movie_id):
-    movie = i.get_movie(movie_id)
-    if 'runtimes' in movie.keys():
-        result = movie['runtimes']
-        return str(result[0])
-    return 'none'
+def commonality(title1, title2):
+    q = 'SELECT COUNT(keyword_id) - COUNT(DISTINCT keyword_id)'
+    q += 'FROM title t LEFT JOIN movie_keyword mk ON (t.id = mk.movie_id) '
+    q += 'WHERE title="'+title1+'" OR title="'+title2+'" LIMIT 0,1000'
 
-#Takes in movie ID, returns year (String).
-def get_year(movie_id):
-    movie = i.get_movie(movie_id)
-    if 'year' in movie.keys():
-        result = movie['year']
-        return str(result)
-    return 'none'
+    conn.query(fin_query)
+    result = conn.store_result()
+    
+    # Process result here
 
-#Takes in movie ID, returns movie's keywords (List of Strings).
-def get_keywords(movie_id):
-    movie = i.get_movie(movie_id)
-    if 'keywords' in movie.keys():
-        result = movie['keywords']
-        key = list()
-        for w in result:
-            key.append(w)
-        return key
-    return 'none'
+    return result
 
-#Takes in movie ID, returns production companies (List of Strings).
-def get_production(movie_id):
-    movie = i.get_movie(movie_id)
-    if 'production companies' in movie.keys():
-        result = movie['production companies']
-        company = list()
-        for item in result:
-            company.append(str(item['name']))
-        return company
-    return 'none'
+def munge_name(s):
+    a=s.rsplit(' ', 1)
+    a.reverse()
+    return ', '.join(a)
+   
+"""
+Get list of genres for a movie.
+SELECT mi.info FROM title t LEFT JOIN movie_info mi ON (mi.movie_id = t.id) WHERE t.kind_id = "1" AND mi.info_type_id = 3 AND t.title = "A Scanner Darkly" LIMIT 100
 
-#Takes in movie ID, returns title (String).
-def get_title(movie_id):
-    movie = i.get_movie(movie_id)
-    if 'long imdb title' in movie.keys():
-        result = movie['title']
-        return result
-    return 'none'
+"""
 
-#Takes in person ID, returns biography (String).
-def get_biography(person_id):
-    person = i.get_person(person_id)
-    if 'mini biography' in person.keys():
-        result = person['mini biography']
-        return str(result)
-    return 'none'
-
-#Takes in person ID, returns movies they directed (List of Strings).
-def get_movies_directed(person_id):
-    person = i.get_person(person_id)
-    if 'director' in person.keys():
-        result = person['director']
-        movie = list()
-        for item in result:
-            movie.append(str(item['title']))
-        return movie
-    return 'none'
-
-#Takes in person ID, returns name (String).
-def get_name(person_id):
-    person = i.get_person(person_id)
-    if 'name' in person.keys():
-        result = person['name']
-        return str(result)
-    return 'none'
-
-#Takes in person ID, returns movies they acted in (List of Strings).
-def get_movies_acted(person_id):
-    person = i.get_person(person_id)
-    if 'actor' in person.keys():
-        result = person['actor']
-        movie = list()
-        for item in result:
-            movie.append(item['title'])
-        return movie
-    return 'none'
-
-#Takes in person ID, returns their "other" works (List of Strings).
-def get_other_works(person_id):
-    person = i.get_person(person_id)
-    if 'other works' in person.keys():
-        result = person['other works']
-        other = list()
-        for w in result:
-            other.append(str(w))
-        return result
-    return 'none'
-
-#Takes in person ID, returns their birthdate (String).
-def get_birthdate(person_id):
-    person = i.get_person(person_id)
-    if 'birth date' in person.keys():
-        result = person['birth date']
-        return str(result)
-    return 'none'
-
-#Takes in person ID, returns movies they acted in (Set of Strings).
-def m_w_a(actorID):
-    cursor = conn.cursor()
-    foo = actorID
-    foo = str(foo)
-    sq = """SELECT t.title FROM title t, cast_info ci, name n WHERE ci.role_id = "1" AND t.kind_id = "1" AND t.id = ci.movie_id AND ci.person_id = n.id AND n.id = """ + foo + """ """
-    sql = sq
-    sq2 = """SELECT t.title FROM title t, cast_info ci, name n WHERE ci.role_id = "2" AND t.kind_id = "1" AND t.id = ci.movie_id AND ci.person_id = n.id AND n.id = """ + foo + """ """
-    sql2 = sq2
-    cursor.execute(sql)
-    results = cursor.fetchall()
-    list1 = list()
-    for w in results:
-        list1.append(str(w[0]))
-    cursor.execute(sql2)
-    results2 = cursor.fetchall()
-    list2 = list()
-    for w in results2:
-        list2.append(str(w[0]))
-    set1 = set(list1)
-    set2 = set(list2)
-    inter = set1 | set2
-    return inter
-
-#Takes in person ID, returns movies associated with them (Set of Strings).
-def m_w_p(personID):
-    cursor = conn.cursor()
-    foo = personID
-    foo = str(foo)
-    sq = """SELECT t.title FROM title t, cast_info ci, name n WHERE  t.kind_id = "1" AND t.id = ci.movie_id AND ci.person_id = n.id AND n.id = """ + foo + """ """
-    sql = sq
-    cursor.execute(sql)
-    results = cursor.fetchall()
-    list1 = list()
-    for w in results:
-        list1.append(str(w[0]))
-    return set(list1)
-
-#Takes in genre, returns movies with that genre (Set of Strings).
-#Make sure it is an actual genre on SQL
-def m_w_g(genre):
-    cursor = conn.cursor()
-    foo = list()
-    foo.append("\"")
-    foo.append(genre)
-    foo.append("\"")
-    foo = "".join(foo)
-    foo = str(foo)
-    sq = """SELECT t.title FROM title t, movie_info mi WHERE t.kind_id = "1" AND mi.movie_id = t.id AND mi.info_type_id = 3 AND mi.info = """ + foo + """ """
-    sql = sq
-    cursor.execute(sql)
-    results = cursor.fetchall()
-    list1 = list()
-    for w in results:
-        list1.append(str(w[0]))
-    return set(list1)
-
-#Takes in person ID, returns movies they directed (Set of Strings).
-def m_w_d(directorID):
-    cursor = conn.cursor()
-    foo = directorID
-    foo = str(foo)
-    sq = """SELECT t.title FROM title t, cast_info ci, name n WHERE ci.role_id = "8" AND t.kind_id = "1" AND t.id = ci.movie_id AND ci.person_id = n.id AND n.id = """ + foo + """ """
-    sql = sq
-    cursor.execute(sql)
-    results = cursor.fetchall()
-    list1 = list()
-    for w in results:
-        list1.append(str(w[0]))
-    return set(list1)
-
-#Takes in person ID, returns ids of movies with given actor  (Set of Strings).
-def m_w_a_id(actorID):
-    cursor = conn.cursor()
-    foo = actorID
-    foo = str(foo)
-    sq = """SELECT t.id FROM title t, cast_info ci, name n WHERE ci.role_id = "1" AND t.kind_id = "1" AND t.id = ci.movie_id AND ci.person_id = n.id AND n.id = """ + foo + """ """
-    sql = sq
-    sq2 = """SELECT t.id FROM title t, cast_info ci, name n WHERE ci.role_id = "2" AND t.kind_id = "1" AND t.id = ci.movie_id AND ci.person_id = n.id AND n.id = """ + foo + """ """
-    sql2 = sq2
-    cursor.execute(sql)
-    results = cursor.fetchall()
-    list1 = list()
-    for w in results:
-        list1.append(str(w[0]))
-    cursor.execute(sql2)
-    results2 = cursor.fetchall()
-    list2 = list()
-    for w in results2:
-        list2.append(str(w[0]))
-    set1 = set(list1)
-    set2 = set(list2)
-    inter = set1 | set2
-    return inter
-
-#Takes in movie ID, returns genres of movies (Set of Strings).
-def genre_of_movie(movieID):
-    cursor = conn.cursor()
-    foo = movieID
-    foo = str(foo)
-    sq = """SELECT mi.info FROM title t, movie_info mi WHERE t.kind_id = "1" AND mi.movie_id = t.id AND mi.info_type_id = 3 AND t.id = """ + foo + """ """
-    sql = sq
-    cursor.execute(sql)
-    results = cursor.fetchall()
-    list1 = list()
-    for w in results:
-        list1.append(str(w[0]))
-    return set(list1)
-
-#Takes in a keyword, returns movie ids associated with given keyword (Set of Strings).
-def m_w_k_id(keyword):
-    keyword = i.search_keyword(keyword)
-    cursor = conn.cursor()
-    cursor.execute("""
-    SELECT t.id 
-    FROM title t, movie_keyword mk, keyword k 
-    WHERE k.keyword = %s AND k.id = mk.keyword_id AND mk.movie_id = t.id AND t.kind_id = "1" """, (keyword[0],))
-    results = cursor.fetchall()
-    list1 = list()
-    for w in results:
-        list1.append(str(w[0]))
-    return set(list1)
-
-#Takes in person ID, returns movies ids associated with them (Set of Strings).
-def m_w_p_id(personID):
-    cursor = conn.cursor()
-    foo = personID
-    foo = str(foo)
-    sq = """SELECT t.id FROM title t, cast_info ci, name n WHERE  t.kind_id = "1" AND t.id = ci.movie_id AND ci.person_id = n.id AND n.id = """ + foo + """ """
-    sql = sq
-    cursor.execute(sql)
-    results = cursor.fetchall()
-    list1 = list()
-    for w in results:
-        list1.append(str(w[0]))
-    return set(list1)
-
-#Takes in genre, returns movie ids with that genre (Set of Strings).
-#Make sure it is an actual genre on SQL
-def m_w_g_id(genre):
-    cursor = conn.cursor()
-    foo = list()
-    foo.append("\"")
-    foo.append(genre)
-    foo.append("\"")
-    foo = "".join(foo)
-    foo = str(foo)
-    sq = """SELECT t.id FROM title t, movie_info mi WHERE t.kind_id = "1" AND mi.movie_id = t.id AND mi.info_type_id = 3 AND mi.info = """ + foo + """ """
-    sql = sq
-    cursor.execute(sql)
-    results = cursor.fetchall()
-    list1 = list()
-    for w in results:
-        list1.append(str(w[0]))
-    return set(list1)
-
-#Takes in person ID, returns movie ids they directed (Set of Strings).
-def m_w_d_id(directorID):
-    cursor = conn.cursor()
-    foo = directorID
-    foo = str(foo)
-    sq = """SELECT t.id FROM title t, cast_info ci, name n WHERE ci.role_id = "8" AND t.kind_id = "1" AND t.id = ci.movie_id AND ci.person_id = n.id AND n.id = """ + foo + """ """
-    sql = sq
-    cursor.execute(sql)
-    results = cursor.fetchall()
-    list1 = list()
-    for w in results:
-        list1.append(str(w[0]))
-    return set(list1)
-
-#Takes in a keyword, returns movies associated with given keyword (Set of Strings).
-def m_w_k(keyword):
-    keyword = i.search_keyword(keyword)
-    cursor = conn.cursor()
-    cursor.execute("""
-    SELECT t.title 
-    FROM title t, movie_keyword mk, keyword k 
-    WHERE k.keyword = %s AND k.id = mk.keyword_id AND mk.movie_id = t.id AND t.kind_id = "1" """, (keyword[0],))
-    results = cursor.fetchall()
-    list1 = list()
-    for w in results:
-        list1.append(str(w[0]))
-    return set(list1)
-
-def m_w_y_id(year):
-    cursor = conn.cursor()
-    foo = list()
-    foo.append("\"")
-    foo.append(str(year))
-    foo.append("\"")
-    foo = "".join(foo)
-    foo = str(foo)
-    sq = """SELECT t.id FROM title t WHERE t.production_year =  """ + foo + """ AND t.kind_id = "1" """
-    sql = sq
-    cursor.execute(sql)
-    results = cursor.fetchall()
-    list1 = list()
-    for w in results:
-        list1.append(str(w[0]))
-    return set(list1)
-
-#id2 = get_id_person("Bruce Willis")
-#id1 = get_id_person("SameuL L Jackson")
-#set1 = m_w_a(id2)
-#list2 = get_movies_acted(id2)
-#set2 = set(list2)
-#print set1
-#print set2
-#set3 = set1 & set2
-#print set3
-#set4 = m_w_a_id(id1)
-#print set4
-#set5 = m_w_k_id("snake")
-#print set5
-#set6 = m_w_g_id("Action")
-#print set6
-#set7 = set1 & set6
-#print set7
-
-"""list8 = list()
-
-list1 = list()
-genre1 = "Action"
-list1.append(genre1)
-a = set(list1)
-list2 = list()
-genre2 = "Comedy"
-list2.append(genre2)
-b = set(list2)
-print set1
-for w in set1:
-    temp = genre_of_movie(get_id_movie(w))
-    if temp & a:
-        if temp.isdisjoint(b):
-            list8.append(w)
-set8 = set(list8)
-print set8
-
-print set8
-
-print len(set8)"""
-
-#set1 = m_w_k_id("snake")
-#print set1
-#set2 = m_w_y_id("2006")
-#print set2
-#set3 = set1 & set4
-#print set3
-
-#name = get_id_person("David Mann")
-#print get_name(name)
-        

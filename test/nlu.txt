@@ -1,0 +1,28 @@
+user: Action movies about dreams.
+NLU:[{"request":"title","genre":"Action","keyword":"dreams"}]
+
+user:tell me about "Inception"
+NLU:[{"request":"plot","title":"Inception"}]
+
+that looks good
+NLU:[{"like":"title"}]
+
+
+did Wes Anderson act in any movies?
+NLU:[{"request":"title","actor":"Wes Anderson"}]
+
+user:what was his highest grossing film
+NLU:[{"request":"title","sort":"gross","order":"desc","result_length":1, "person":"PREV_HE"}]
+
+what other films came out that year?
+NLU:[{"request":"title","year":"prev_it"}]
+
+user: i like Robin Williams
+NLU:[{"request":"OPINION","person":"Robin Williams"}]
+
+how many movies has he been in?
+NLU:[{"request":"count","of":"title", "person": "PREV_HE"}]
+
+user:what kinds of movies has he been in?
+NLU:[{"request":"genre", "person":"PREV_HE"}]
+

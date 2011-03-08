@@ -1,5 +1,6 @@
 #import nltk
 import nlg_utils as nlgu
+from os import path
 
 pronounKeys = ["PREV_HE", "PREV_SHE", "PREV_IT"]
 pronounSubjects = {"PREV_HE":"he", "PREV_SHE":"she", "PREV_IT":"it"}
@@ -20,7 +21,7 @@ def getPrintSentence(itemType, subjectList):
     subjectString = "_".join(subjectList);
     if len(subjectList)>0:
         subjectString+='_'
-    fileName = '../nlg/prs/'+subjectString+itemType + '_sentences.txt'
+    fileName = path.dirname(__file__)+'/prs/'+subjectString+itemType + '_sentences.txt'
     rstring = nlgu.get_random_line(fileName)
     if rstring == "":
         print "ERROR"
@@ -72,22 +73,22 @@ def printSmallItemList(itemType, resultList):
     for result in resultList:
         n += 1 
         if n == len(resultList):
-            rstring += " and "+result
+            rstring += " and "+str(result)
         elif n == len(resultList)-1:
-            rstring += result
+            rstring += str(result)
         else:
-            rstring += result+", "
+            rstring += str(result)+", "
     return rstring
 
 def printBigItemList(itemType, resultList):
     rstring = ""
     for result in resultList:
-        rstring += result+"\n"
+        rstring += str(result)+"\n"
     return rstring 
     pass
 
 def printItem(itemType, result):
-    return result
+    return str(result)
 
 def getNouns(NLUOutput, itemType, subjectList):
     returnList = []

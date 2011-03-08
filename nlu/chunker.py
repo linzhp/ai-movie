@@ -58,9 +58,8 @@ class Chunker:
 			COMMAND: {^(<RB>)*<VB.*>}
 			TITLE: {<:><[^:]*>*<:>}	
 			PERSON: {<NNP[S]?>+}
-			NP:   {<DT|PRP\$>?<JJ>*<NN|NNS>(<POS>?<JJ>*<NN|NNS>)?}
+			NP:   {<DT|PRP\$>?<JJ>*<NN|NNS>(<POS>?<JJ>*<NN|NNS>)*}
 			PP: { <IN><NP> }
-			VP: { <MD>?<[V].*>+<IN|CC>? }
 		"""
 			#ACTOR_IN_MOVIE: {<PERSON><.*>*<IN><TITLE>}
 			#S: {<CC><.*>*}
@@ -90,6 +89,7 @@ class Chunker:
 
 if __name__ == '__main__':
 	chk = Chunker()
-	result = chk.chunk("want to see movies about dreams")
+	result = chk.chunk("what kinds of movies has he been in?")
+	result.leaves()
 	result.draw()
 	
