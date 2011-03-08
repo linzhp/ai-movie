@@ -34,7 +34,7 @@ def query(wanted, known):
     elif (wanted == 'cast'):
         fin_query = 'SELECT n.name, cn.name '
     elif (wanted == 'genre'  or wanted == 'plot' or wanted == 'country' or wanted == 'filming_loc' or wanted == 'languages'):
-        fin_query = 'SELECT mi.info '
+        fin_query = 'SELECT DISTINCT mi.info '
     elif (wanted == 'year'):
         fin_query = 'SELECT t.production_year '
     elif (wanted == 'keyword'):
@@ -46,6 +46,7 @@ def query(wanted, known):
         else: # Remove this block for final presentation
             print 'DBI: '+wanted+' is unimpliment.'
 
+    fin_query += build_from(wanted, known) + build_where(wanted, known)
     if (known.has_key('sort')):
         sortby = known.get('sort')
         if (sortby == 'title'):
@@ -56,18 +57,19 @@ def query(wanted, known):
             fin_query += 'ORDER BY t.production_year '
         elif (sortby == 'keyword'):
             fin_query += 'ORDER BY k.keyword '
-    fin_query += build_from(wanted, known) + build_where(wanted, known) + ' LIMIT 0,11'
+    fin_query += ' LIMIT 0,11'
 
     if (logfile):
         logfile.write('Executing: '+fin_query+'\n')
+        logfile.flush()
     else:
         print 'Executing: '+fin_query+'\n'
     conn.query(fin_query)
     result = conn.store_result()
     res_list = result.fetch_row(result.num_rows())
-    if (wanted != 'plot' and wanted != 'keyword'):
+    if (wanted != 'cast' and wanted != 'keyword'):
         res_list = [item[0] for item in res_list]
-    return result
+    return res_list
 
 # Get all films with a particular person.
 # SELECT * FROM title t LEFT JOIN cast_info c ON (c.movie_id = t.id) LEFT JOIN name n ON (n.id = c.person_id) WHERE name="Family, Given" AND kind_id <> 7 LIMIT 0,100;    
@@ -97,7 +99,7 @@ def build_from(wanted, know):
         if (know.has_key('name') or know.has_key('actor') or know.has_key('director')):
             from_list += 'LEFT JOIN cast_info c ON (c.movie_id = t.id) LEFT JOIN name n ON (n.id = c.person_id) '
         if (wanted == 'keyword'):
-            from_list += 'title t LEFT JOIN movie_keyword mk ON (t.id = mk.movie_id) '
+            from_list += 'LEFT JOIN movie_keyword mk ON (t.id = mk.movie_id) '
             from_list += 'LEFT JOIN keyword k ON (mk.keyword_id = k.id) '
     elif (wanted == 'cast'): # This is used for CAST query, but is a pretty good set for most queries that happen to fall through the cracks.
         from_list += 'title t LEFT JOIN cast_info c ON (c.movie_id = t.id) LEFT JOIN name n ON (c.person_id = n.id) '
@@ -145,19 +147,24 @@ def build_where(wanted, know):
     for key in know.keys():
         if (key == 'actor' or key == 'director' or key == 'name'): # Needs testing
             act = know.get(key)
-            if (isinstance(act,list)): 
+            if (isinstance(act,list)): # TODO: Really a more complex case. Must Re-write SQL.
                 for a in act:
                     # Need to invert the name if it doesn't contain a , here
                     where_list += 'AND n.name = "'+munge_name(a)+'" '
             else:
                 # And here
-                where_list += 'AND n.name = "'+munge_name(act)+' " '
-        
+                where_list += 'AND n.name = "'+munge_name(act)+'" '
         if (key == 'title'): 
             ele = know.get(key)
             if (isinstance(ele,list)): 
+                first = 1
+                where_list += 'AND ( '
                 for k in ele:
-                    where_list += 'AND t.title = "'+k+ '" '
+                    if (first):
+                        where_list += 't.title = "'+k+ '" '
+                    else:
+                        where_list += 'OR t.title = "'+k+ '" '
+                where_list += ' ) '
             else:
                 where_list += 'AND t.title = "'+ele+'" '
         if (key == 'year'): 
