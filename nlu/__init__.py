@@ -313,7 +313,28 @@ class NLUnderstanding:
         return: True if it is positive, False if it is negative, None
         if it is unknown
         """
-        return True
+        modifier = True
+        verb = None
+        #list should be a list of tuples
+        for n in list:
+            if n[1] == 'RB':
+                if n[0] == "n't":
+                    modifier = not modifier
+                if n[0] == "n't":
+                    modifier = not modifier
+                print n[0]
+            if n[1] == 'VP':
+                for item in n[0]:
+                    print item
+                    if item[0] == "like":
+                        verb = True
+        if modifier:
+            return verb
+        else:
+            if verb:
+                return not verb
+            else:
+                return verb
         
     def _extract_words(self, tree):
         leaves = tree.leaves();
