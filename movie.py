@@ -13,7 +13,7 @@ dialogManager = DialogManager()
 try:
     greeting="Hi, there"#nlg.greet()
     logging.info('Bot: '+greeting)
-    print('Bot: '+greeting)
+#    print('Bot: '+greeting)
     input = raw_input(greeting+'\n')
     while input is not None:
         # NLU processing
@@ -29,7 +29,7 @@ try:
         output=nlg.process(nlu_out,dm_out)
         # Print and log response  
         logging.info('Bot: '+str(output))
-        print('Bot: '+str(output))
+#        print('Bot: '+str(output))
         # Decide whether to continue
         for dict in nlu_out:
             if dict.get("command")=="EXIT":
