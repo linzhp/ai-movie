@@ -1,5 +1,5 @@
 user: Action movies about dreams.
-NLU:[{"request":"OPINION","genre":"action","keyword":"dream"}]
+NLU:[{"request":"title","genre":"Action","keyword":"dreams"}]
 DM:{"list":7,"question":"HOW_MANY"}
 NLG:I found 7 action movies about dreams, how many would you like to see?
 
@@ -11,8 +11,8 @@ Inception
 The Matrix
 Clouds 
 
-user:tell me about inception
-NLU:[{"request":"plot","title":"inception"}]
+user:tell me about "Inception"
+NLU:[{"request":"plot","title":"Inception"}]
 DM:{"print":"plot","results":["A movie about dreams..."]}
 NLG:A movie about dreams...
 

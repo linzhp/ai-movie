@@ -17,19 +17,22 @@ class Test(unittest.TestCase):
         Mock.__init__(nlu)
         
 
-    def _testNLU(self):
-        with open('nlg.txt') as fixture:
+    def testNLU(self):
+        with open('nlu.txt') as fixture:
             nlu_output=None
-            nlu = NLU()
+            nlu = NLUnderstanding()
             for line in fixture:
                 line = line.strip()
                 colon = line.find(':')
                 if line[:colon].find('user')>=0:
                     nlu_output = nlu.process(line[colon+1:])
+                    print "actual:" + str(nlu_output)
                 elif line[:colon].find('NLU')>=0 and nlu_output is not None:
                     expected_output = eval(line[colon+1:])
+                    print "expected: "+str(expected_output)
                     self.assertEqual(expected_output, nlu_output)
                     nlu_output = None
+                    nlu = NLUnderstanding()
                 
 if __name__ == "__main__":
     import sys

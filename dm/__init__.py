@@ -6,7 +6,7 @@ import dbi
 import chatbot
 from state import State
 
-#TODO increase the priority of movie title in state
+# TODO skip state when not opinion
 class DialogManager:
     def __init__(self):
         self.pending_question = None
@@ -14,12 +14,6 @@ class DialogManager:
         self.dbi = None #TODO initialize dbi here
 
     def request(self, dict):
-        # Resolve role of a person
-        if dict.has_key("person"):
-            name = dict.pop("person")
-            role=self.dbi.resolve_person(name)
-            #TODO ask user if there are multiple roles
-            dict[role]=name
         # NLG does not need to be aware of below operations
         # to dict, make a copy of dict to hide the operations
         internal_dict = dict.copy()
@@ -36,13 +30,17 @@ class DialogManager:
         internal_dict = self.state.get_all()
         request_type = internal_dict.pop("request")
         if request_type == OPINION:
-            self.pending_question = HOW_MANY
-            count=self.dbi.query('title',internal_dict, count=True)
-            if count>10:
-                self.pending_question = HOW_MANY
+            if internal_dict.has_key('title'):
+                # the user is saying something like "I like it"
+                return {}
             else:
-                self.pending_question = SEE_RESULT
-            return {"list":count, "question":self.pending_question}
+                self.pending_question = HOW_MANY
+                count=self.dbi.query('title',internal_dict, count=True)
+                if count>10:
+                    self.pending_question = HOW_MANY
+                else:
+                    self.pending_question = SEE_RESULT
+                return {"list":count, "question":self.pending_question}
         elif request_type == COUNT:
             of = internal_dict.pop("of")
             count=self.dbi.query(of, internal_dict, count=True)
