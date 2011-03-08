@@ -2,16 +2,17 @@ import sys
 from os import path 
 current_dir = path.dirname(__file__)
 sys.path.append(path.join(current_dir, ".."))
-import dbi
+from dbi import dbi
 import chatbot
 from state import State
 
 # TODO skip state when not opinion
+# TODO shouldn't concatenate request
 class DialogManager:
     def __init__(self):
         self.pending_question = None
         self.state = State()
-        self.dbi = None #TODO initialize dbi here
+        self.dbi = dbi #TODO initialize dbi here
 
     def request(self, dict):
         # NLG does not need to be aware of below operations
@@ -62,7 +63,6 @@ class DialogManager:
                     self.pending_question = "result_length"
                     return {'print':request_type,"list":results, "question":HOW_MANY}
             else:
-                self.state.add_result(results)
                 return {'print':request_type,'results':results}
             
     
@@ -89,7 +89,7 @@ class DialogManager:
         reply = chatbot.reply
         if reply is None:
             reply = chatbot.submit(dict['off_topic'])
-        return reply
+        return {'off_topic':reply}
     
     def input(self, list):
         result_dict={}

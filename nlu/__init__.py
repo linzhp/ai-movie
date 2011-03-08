@@ -75,7 +75,7 @@ class NLUnderstanding:
                 # Don't break here, there may be more preference
         else:
             preference=self._parse_pref(chunked)
-            if preference:
+            if preference and len(preference)>0:
                 result.append(preference)
                 
                     
@@ -188,8 +188,8 @@ class NLUnderstanding:
         if all_pref['request'] == dm.OPINION:
             if len(all_pref)==2 and all_pref.get('title')=='PREV_IT':
                 all_pref={'like':'title'}
-            if len(all_pref)==1:
-                all_pref={}
+        if len(all_pref)==1:
+            all_pref={}
         
         return all_pref
             
@@ -313,21 +313,24 @@ class NLUnderstanding:
         return: True if it is positive, False if it is negative, None
         if it is unknown
         """
+        print list
         modifier = True
         verb = None
         #list should be a list of tuples
         for n in list:
-            if n[1] == 'RB':
-                if n[0] == "n't":
-                    modifier = not modifier
-                if n[0] == "n't":
-                    modifier = not modifier
-                print n[0]
-            if n[1] == 'VP':
-                for item in n[0]:
-                    print item
-                    if item[0] == "like":
-                        verb = True
+            if isinstance(n, nltk.tree.Tree):
+                if n.pos()[0][1] == 'VP':
+                    for item in n[0]:
+                        print item
+                        if item[0] == "like":
+                            verb = True
+            else:
+                if n[1] == 'RB':
+                    if n[0] == "n't":
+                        modifier = not modifier
+                    if n[0] == "n't":
+                        modifier = not modifier
+                    print n[0]
         if modifier:
             return verb
         else:
