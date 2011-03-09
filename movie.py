@@ -10,6 +10,8 @@ logging.basicConfig(level=logging.DEBUG,
 nlu = NLUnderstanding()
 dialogManager = DialogManager()
 
+#TODO test MORE PREF
+
 try:
     greeting="Hi, there"#nlg.greet()
     logging.info('Bot: '+greeting)

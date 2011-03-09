@@ -1,21 +1,21 @@
 user: Action movies about dreams.
-NLU:[{"request":"title","genre":"Action","keyword":"dreams"}]
+NLU:[{"request":"OPINION","genre":"Action","keyword":"dreams"}]
 
 user:tell me about "Inception"
 NLU:[{"request":"plot","title":"Inception"}]
 
-that looks good
+It looks good //decide opinion returns None
 NLU:[{"like":"title"}]
 
 
-did Wes Anderson act in any movies?
+did Wes Anderson act in any movies? //"act" is tagged as NN 
 NLU:[{"request":"title","actor":"Wes Anderson"}]
 
 user:what was his highest grossing film
 NLU:[{"request":"title","sort":"gross","order":"desc","result_length":1, "person":"PREV_HE"}]
 
-what other films came out that year?
-NLU:[{"request":"title","year":"prev_it"}]
+user: what other films came out in 2004?
+NLU:[{"request":"title","year":2004}]
 
 user: i like Robin Williams
 NLU:[{"request":"OPINION","person":"Robin Williams"}]
@@ -23,6 +23,26 @@ NLU:[{"request":"OPINION","person":"Robin Williams"}]
 how many movies has he been in?
 NLU:[{"request":"count","of":"title", "person": "PREV_HE"}]
 
-user:what kinds of movies has he been in?
+what kinds of movies has he been in? // failed to mark kind
 NLU:[{"request":"genre", "person":"PREV_HE"}]
 
+user:who directed "the departed"?
+NLU:[{"request":"director","title":"the departed"}]
+
+user:what other movies has he directed?
+NLU:[{"request":"title","director":"PREV_HE"}]
+
+has he won any awards? 
+NLU:[{"request":"count","of":"award","person":"PREV_HE"}]
+
+user: Did Tom Hanks direct any comedy?
+NLU:[{"request":"title", "director": "Tom Hanks", "genre":"comedy"}]
+
+user:i like Batman
+NLU:[{"request":"OPINION","person":"Batman"}]
+
+what animated movies has he been in? // failed to tag animated as GNRE
+NLU:[{"request":"title","genre":"animation","person":"PREV_HE"}]
+
+user:I want to see some super hero movie
+NLU:[{"request":"title","keyword":"super hero"}]
