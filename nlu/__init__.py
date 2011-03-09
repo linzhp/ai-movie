@@ -7,6 +7,10 @@ import dm
 import chunker
 from dict import ListDict
 
+#TODO Who directed it?
+#TODO User: reset. I like Tom Hanks, but I don't like action movies
+#nlu_out: [{'genre': 'action', 'person': ['reset.', 'Tom Hanks'], 'request': 'OPINION'}]
+
 class NLUnderstanding:
     """
     Natural Language Understanding class.

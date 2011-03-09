@@ -90,8 +90,8 @@ class Chunker:
 
 if __name__ == '__main__':
 	chk = Chunker()
-	result = chk.chunk("""I want to see some comedy?""")
-	result.leaves()
+	result = chk.chunk("""Restart. I like Tom Hanks, but I don't like action movies""")
+	print result
 	result.draw()
 
 """
