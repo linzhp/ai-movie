@@ -59,6 +59,8 @@ class State:
                 # Assuming actor/director are the only people we care about!
                 if dict.has_key('actor') and dict['actor'] != 'PRE_HE':
                     return dict['actor']
+                elif dict.has_key('person') and dict['person'] != 'PRE_HE':
+                    return dict['person']
                 elif dict.has_key('director') and dict['director'] != 'PRE_HE':
                     return dict['director']
             elif value == 'PRE_IT':

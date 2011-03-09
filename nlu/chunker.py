@@ -16,7 +16,6 @@
 import nltk
 import pickle
 from os import path
-
 class Chunker:
 
 	def __init__(self, verbose=False):
@@ -90,6 +89,7 @@ class Chunker:
 
 if __name__ == '__main__':
 	chk = Chunker()
-	result = chk.chunk("want to see movies about dreams")
-	result.draw()
+	result = chk.chunk("I like movies that are animated but not by disney")
+	print result[:5]
+	print result[5:]
 	
