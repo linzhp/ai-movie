@@ -2,24 +2,17 @@ import sys
 from os import path 
 current_dir = path.dirname(__file__)
 sys.path.append(path.join(current_dir, ".."))
-import dbi
+from dbi import dbi
 import chatbot
 from state import State
 
-#TODO increase the priority of movie title in state
 class DialogManager:
     def __init__(self):
         self.pending_question = None
         self.state = State()
-        self.dbi = None #TODO initialize dbi here
+        self.dbi = dbi 
 
     def request(self, dict):
-        # Resolve role of a person
-        if dict.has_key("person"):
-            name = dict.pop("person")
-            role=self.dbi.resolve_person(name)
-            #TODO ask user if there are multiple roles
-            dict[role]=name
         # NLG does not need to be aware of below operations
         # to dict, make a copy of dict to hide the operations
         internal_dict = dict.copy()
@@ -27,24 +20,22 @@ class DialogManager:
         for key in internal_dict:
             if internal_dict[key] in ["PRE_HE", "PRE_IT"]:
                 internal_dict[key] = self.state.resolve_pronoun(internal_dict[key])
-        if internal_dict.has_key("result_length"):
-            state_dict=internal_dict.copy()
-            state_dict.pop("result_length")
-            self.state.add_request(state_dict)
-        else:
-            self.state.add_request(internal_dict)
-        internal_dict = self.state.get_all()
         request_type = internal_dict.pop("request")
         if request_type == OPINION:
-            self.pending_question = HOW_MANY
+            self.state.add_request(internal_dict)
+            internal_dict = self.state.get_all()
+
             count=self.dbi.query('title',internal_dict, count=True)
             if count>10:
-                self.pending_question = HOW_MANY
+                self.pending_question = "result_length"
             else:
                 self.pending_question = SEE_RESULT
             return {"list":count, "question":self.pending_question}
         elif request_type == COUNT:
             of = internal_dict.pop("of")
+            state_dict = {'request':of}
+            state_dict.update(internal_dict)
+            self.state.add_request(state_dict)
             count=self.dbi.query(of, internal_dict, count=True)
             result={}
             if count>10:
@@ -56,6 +47,9 @@ class DialogManager:
             return result
         else:
             results=self.dbi.query(request_type, internal_dict)
+            state_dict = {'request':request_type}
+            state_dict.update(internal_dict)
+            self.state.add_request(state_dict)
             if isinstance(results, int):
                 if len(internal_dict)<2:
                     self.pending_question=MORE_PREF
@@ -64,7 +58,7 @@ class DialogManager:
                     self.pending_question = "result_length"
                     return {'print':request_type,"list":results, "question":HOW_MANY}
             else:
-                self.state.add_result(results)
+                self.state.add_result({request_type:results})
                 return {'print':request_type,'results':results}
             
     
@@ -81,9 +75,11 @@ class DialogManager:
         elif response == "YES":
             if self.pending_question:
                 internal_dict["request"]=self.state.last_request()
+                internal_dict.update(self.state.get_all())
         elif self.pending_question:
             internal_dict[self.pending_question]=response
             internal_dict["request"]=self.state.last_request()
+            internal_dict.update(self.state.get_all())
         self.pending_question = None
         return self.request(internal_dict)
     
@@ -91,7 +87,7 @@ class DialogManager:
         reply = chatbot.reply
         if reply is None:
             reply = chatbot.submit(dict['off_topic'])
-        return reply
+        return {'off_topic':reply}
     
     def input(self, list):
         result_dict={}

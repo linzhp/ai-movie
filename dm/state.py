@@ -10,20 +10,22 @@ class State:
         all_states = {}
         for dict in lists:
             for key in dict:
-                # if: a key is in all_states already
-                if all_states.has_key(key):
+                if key == 'request':
+                    continue
+                # elif: a key is in all_states already
+                elif all_states.has_key(key):
+                    # if: eliminate duplicated values
                     if dict[key] in all_states[key]:
-                        # if: eliminate duplicated values
                         continue
+                    # elif: the value of the key is not a list yet, make it to
+                    #     a list then append old value and add new value
                     elif type(all_states[key]).__name__ != 'list':
-                        # elif: the value of the key is not a list yet, make it to
-                        #     a list then append old value and new value
                         temp = all_states[key]
                         all_states[key] = []
                         all_states[key].append(temp)
                         all_states[key].append(dict[key])
+                    # else: the value of the key is a list, append directly
                     else:
-                        # else: the value of the key is a list, append directly
                         if dict[key] in all_states[key]:
                             continue
                         all_states[key].append(dict[key])
@@ -42,12 +44,10 @@ class State:
         # I'm assuming every sentence has a 'request'!
         # Let me know if there are examples that don't.
         dict = self.states[-1]
-        if dict['request'] == 'OPINION':
-            if dict.has_key('title'):
-                return dict['title']
-        elif dict['request'] == 'COUNT':
-            if dict.has_key('of'):
-                return dict['of']
+        if dict['request'] == 'OPINION' and dict.has_key('title'):
+            return dict['title']
+        elif dict['request'] == 'COUNT' and dict.has_key('of'):
+            return dict['of']
         return dict['request']
 
     def resolve_pronoun(self, value):

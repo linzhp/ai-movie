@@ -1,35 +1,35 @@
 import logging
 from nlg import nlg
-from nlu.nlu import NLU
+from nlu import NLUnderstanding
 from dm import DialogManager
 
 logging.basicConfig(level=logging.DEBUG,
                     filename='session.log',
                     format='%(message)s',
                     filemode='w')
-nlu = NLU()
+nlu = NLUnderstanding()
 dialogManager = DialogManager()
 
 try:
-    greeting=nlg.greet()
+    greeting="Hi, there"#nlg.greet()
     logging.info('Bot: '+greeting)
-    print('Bot: '+greeting)
+#    print('Bot: '+greeting)
     input = raw_input(greeting+'\n')
     while input is not None:
         # NLU processing
         logging.info('User: '+input)
         nlu_out = nlu.process(input)
-        logging.debug('nlu_out: '+nlu_out)
+        logging.debug('nlu_out: '+str(nlu_out))
         # Dialog manager processing
         dm_out=dialogManager.input(nlu_out)
-        logging.debug('dm_out: '+dm_out)
+        logging.debug('dm_out: '+str(dm_out))
         # Dialog manager gives feed back to NLU
         nlu.expect = dialogManager.pending_question
         # Generate response to user
         output=nlg.process(nlu_out,dm_out)
         # Print and log response  
-        logging.info('Bot: '+output)
-        print('Bot: '+output)
+        logging.info('Bot: '+str(output))
+#        print('Bot: '+str(output))
         # Decide whether to continue
         for dict in nlu_out:
             if dict.get("command")=="EXIT":
