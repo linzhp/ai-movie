@@ -15,6 +15,7 @@
 
 import nltk
 import pickle
+from os import path
 
 class Chunker:
 
@@ -30,7 +31,7 @@ class Chunker:
 			print "   Loading POS tagged training sentences."
 
 		# Load the tagged training sentences.
-		f = open( './training_sentences', 'r' )
+		f = open( path.dirname(__file__)+'/training_sentences', 'r' )
 		train_sents = pickle.load(f)
 
 	
@@ -52,14 +53,14 @@ class Chunker:
 
 		# Define a chunking grammar.
 		chunk_grammar = r"""
-			B-QUESTION: {^<[W].*|VBD|VBN|VBP|VBZ>}
-							{^<MD><PRP>}
-			COMMAND: {^<RB>?<VB>}
+			B-QUESTION: {<[W].*><DT|RB.*|JJ>*<MD|VB.*|KW_.*>}
+						{<WRB>}
+			COMMAND: {^(<MD><PRP>)?(<RB>)*<VB.*>}
+						{^<PRP><VBP><TO>}
 			TITLE: {<:><[^:]*>*<:>}	
 			PERSON: {<NNP[S]?>+}
-			NP:   {<DT|PRP\$>?<JJ>*<NN|NNS>(<POS>?<JJ>*<NN|NNS>)?}
+			NP:   {<DT|PRP\$>?<JJ>*<NN|NNS>(<POS>?<JJ>*<NN|NNS>)*}
 			PP: { <IN><NP> }
-			VP: { <MD>?<[V].*>+<IN|CC>? }
 		"""
 			#ACTOR_IN_MOVIE: {<PERSON><.*>*<IN><TITLE>}
 			#S: {<CC><.*>*}
@@ -79,9 +80,23 @@ class Chunker:
 
 		tokd = nltk.word_tokenize(sentence)
 		tagged = self.tagger.tag(tokd)
+		print tagged
 		chunked = self.cp.parse(tagged)
 
 		#print "\n\nChunked - tree\n"
 		#print chunked
 
 		return chunked
+
+if __name__ == '__main__':
+	chk = Chunker()
+	result = chk.chunk("""I want to see some comedy?""")
+	result.leaves()
+	result.draw()
+
+"""
+Do you know what the most popular movie was in 2004?
+Where can I watch avatar? Would you like to show theaters around you?
+In what year was "Jumanji" released?
+Do you know when "Titanic" came out?
+"""
