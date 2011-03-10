@@ -25,14 +25,19 @@ class ListDict(dict):
         for key in other_dict:
             self.add(key, other_dict[key])
             
-def negativate(self):
-    """
-    For amending dictionaries only
-    """ 
-    new_dict = ListDict()    
-    for key in self:
-        new_dict['!'+key]=self[key]
-    return new_dict
+dictionary={'a':1, 'one':1, 'two':2, 'three':3, 'four':4,'five':5,\
+            'six':6, 'seven':7, 'eight':8,'nine':9, 'ten':10,\
+            'eleven':11,'twelve':12, 'thirteen':13, 'fourteen':14,\
+            'fifteen':15, 'sixteen':16, 'seventeen':17, 'eighteen':18,\
+            'nineteen':19, 'twenty':20}
+
+def english2int(word):
+    number=None
+    try:
+        number = int(word)
+    except ValueError:
+        number = dictionary.get(word)
+    return number
             
 if __name__ == "__main__":
     d = ListDict(title='ha')

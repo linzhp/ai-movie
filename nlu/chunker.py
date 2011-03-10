@@ -59,7 +59,7 @@ class Chunker:
 						{^<PRP><VBP><TO>}
 			TITLE: {<:><[^:]*>*<:>}	
 			PERSON: {<NNP[S]?>+}
-			NP:   {<DT|PRP\$>?<JJ>*<NN|NNS>(<POS>?<JJ>*<NN|NNS>)*}
+			NP:   {<PRP\$>?<JJ>*<NN|NNS>(<POS>?<JJ>*<NN|NNS>)*}
 			PP: { <IN><NP> }
 		"""
 			#ACTOR_IN_MOVIE: {<PERSON><.*>*<IN><TITLE>}
@@ -90,8 +90,8 @@ class Chunker:
 
 if __name__ == '__main__':
 	chk = Chunker()
-	result = chk.chunk("""I want to see some comedy?""")
-	result.leaves()
+	result = chk.chunk("""I want to see some super hero movie?""")
+	print result
 	result.draw()
 
 """
@@ -99,4 +99,7 @@ Do you know what the most popular movie was in 2004?
 Where can I watch avatar? Would you like to show theaters around you?
 In what year was "Jumanji" released?
 Do you know when "Titanic" came out?
+Restart. I like Tom Hanks, but I don't like action movies. I want twenty two
+has he won any awards?
+Could you tell me about "Titanic"?
 """
