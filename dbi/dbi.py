@@ -20,7 +20,7 @@ logfile = 0
 # conditions: all movie attributes, "keyword", "sort" (with the value of some movie attribute), "order" ("desc" or "asc")
 # possible movie attributes are: "title", "year", "plot", "director", "actor", "genre", "country", "filming_loc" "award" and "language"
 # TODO: award, gross
-def query(wanted, known, **kargs):
+def query(wanted, known, count=False):
     if (logfile):
         logfile.write("Wanted: \"")
         logfile.write(str(wanted))
@@ -29,25 +29,30 @@ def query(wanted, known, **kargs):
         logfile.write('\n')
     fin_query = ''
     from_clause = build_from(wanted, known)
-    
+    fin_query = 'SELECT DISTINCT '
+
+    if (count and not isinstance(count,list)):
+        fin_query += 'COUNT( '
     if (wanted == 'title'):
-        fin_query = 'SELECT t.title '
+        fin_query += 't.title '
     elif (wanted == 'actor' or wanted == 'person' or wanted == 'director'):
-        fin_query = 'SELECT DISTINCT n.name '
+        fin_query += 'n.name '
     elif (wanted == 'cast'):
-        fin_query = 'SELECT n.name, cn.name '
+        fin_query += 'n.name, cn.name '
     elif (wanted == 'genre'  or wanted == 'plot' or wanted == 'country' or wanted == 'filming_loc' or wanted == 'languages'):
-        fin_query = 'SELECT DISTINCT mi.info '
+        fin_query += 'mi.info '
     elif (wanted == 'year'):
-        fin_query = 'SELECT t.production_year '
+        fin_query += 't.production_year '
     elif (wanted == 'keyword'):
-        fin_query = 'SELECT k.keyword '
+        fin_query += 'k.keyword '
     else:
-        fin_query = 'SELECT * '
+        fin_query += 't.title, n.name, t.production_year '
         if (logfile):
             logfile.write('DBI: '+str(wanted)+' is unimpliment.\n')
         else: # Remove this block for final presentation
             print 'DBI: '+str(wanted)+' is unimpliment.'
+    if (count and not isinstance(count,list)):
+        fin_query += ') '
 
     fin_query += build_from(wanted, known) + build_where(wanted, known)
     if (known.has_key('sort')):
@@ -60,7 +65,12 @@ def query(wanted, known, **kargs):
             fin_query += 'ORDER BY t.production_year '
         elif (sortby == 'keyword'):
             fin_query += 'ORDER BY k.keyword '
-    fin_query += ' LIMIT 0,11'
+    if (count and isinstance(count,list)):
+        count.sort()
+        count.reverse()
+        fin_query += ' LIMIT ' + str(count.pop()) + ',' + str(count.pop())
+    else:
+        fin_query += ' LIMIT 0,11'
 
     if (logfile):
         logfile.write('Executing: '+fin_query+'\n')
@@ -72,6 +82,8 @@ def query(wanted, known, **kargs):
     res_list = result.fetch_row(result.num_rows())
     if (wanted != 'cast' and wanted != 'keyword'):
         res_list = [item[0] for item in res_list]
+    if (len(res_list)>10 and not count and not isinstance(count,list)):
+        return query(wanted, known, 1) 
     return res_list
 
 # Get all films with a particular person.
