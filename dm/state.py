@@ -41,14 +41,17 @@ class State:
         self.states.append(dict)
 
     def last_request(self):
-        # I'm assuming every sentence has a 'request'!
-        # Let me know if there are examples that don't.
-        dict = self.states[-1]
-        if dict['request'] == 'OPINION' and dict.has_key('title'):
-            return dict['title']
-        elif dict['request'] == 'COUNT' and dict.has_key('of'):
-            return dict['of']
-        return dict['request']
+        lists = self.states[:]
+        lists.reverse()
+        for dict in lists:
+            if dict.has_key('request'):
+                if dict['request'] == 'OPINION' and dict.has_key('title'):
+                    return dict['title']
+                elif dict['request'] == 'COUNT' and dict.has_key('of'):
+                    return dict['of']
+                return dict['request']
+            else:
+                continue
 
     def resolve_pronoun(self, value):
         # Find the last PRE_HE/PRE_IT.
@@ -95,8 +98,7 @@ if __name__ == '__main__':
     print '2nd add => last_request::::::'
     print state.last_request() + '\n'
 
-    state.add_request({'request':'OPINION', 'genre':'action', 
-'keyword':'dream'})
+    state.add_request({'request':'OPINION', 'genre':'action', 'keyword':'dream'})
     print '3nd add => get_all:::::::'
     print state.get_all()
     print '3nd add => last_request::::::'
