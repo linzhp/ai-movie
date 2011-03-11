@@ -46,7 +46,10 @@ class DialogManager:
                 result={"list":count, "question":self.pending_question}
             return result
         else:
-            results=self.dbi.query(request_type, internal_dict)
+            count = internal_dict.get['result_length']
+            if count:
+                count = [0,count]
+            results=self.dbi.query(request_type, internal_dict, count=count)
             state_dict = {'request':request_type}
             state_dict.update(internal_dict)
             self.state.add_request(state_dict)
