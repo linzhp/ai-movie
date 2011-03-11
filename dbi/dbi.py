@@ -256,20 +256,37 @@ SELECT mi.info FROM title t LEFT JOIN movie_info mi ON (mi.movie_id = t.id) WHER
 """
 
 def check_person(name):
-    name = menge_name(name)
+    debug_spellcheck = True 
+    name_list = name.rsplit(' ', 1)
+    family_name=name_list.pop()[:6]
+    given_name =name_list.pop()[:4]
+    name = munge_name(name)
     q = 'SELECT DISTINCT n.name FROM name n WHERE n.name = "' + str(name) + '" LIMIT 0,10'
     conn.query(q)
     result = conn.store_result()
     res_list = result.fetch_row(result.num_rows())
     res_list = [item[0] for item in res_list]
-    name_chunk = name
-    while (len(res_list)==0):
-        name_chunk = name_chunk[:-2] # Does this work???
-        q = 'SELECT DISTINCT n.name FROM name n WHERE n.name LIKE "' + str(name) + '%" LIMIT 0,10'
+    while (len(res_list)==0 and len(family_name) > 3):
+        q = 'SELECT DISTINCT n.name FROM name n WHERE n.name LIKE "'
+        q += family_name + '%, ' + given_name + '%" LIMIT 0,10'
         conn.query(q)
         result = conn.store_result()
         res_list = result.fetch_row(result.num_rows())
         res_list = [item[0] for item in res_list]
+
+        if (debug_spellcheck):
+            print 'Name: ' + family_name + ', ' + given_name + '\n'
+            print 'Query: ' + q + '\n'
+            print 'Results: ' + str(len(res_list)) + '\n'
+
+        family_name = family_name[:-2]
+        if (len(given_name) > 2):
+            given_name = given_name[:-2]
+        elif (len(given_name) == 2):
+            given_name = given_name[:-1]
+
+
+
     #Put word distance comparison here.
     return res_list
 
