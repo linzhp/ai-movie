@@ -49,3 +49,6 @@ NLU:[{"request":"title","keyword":"super hero"}]
 
 Who played Marty in "Back to the Future"?
 NLU:[{"request":"actor","character":"Marty", 'title': 'Back to the Future'}]
+
+user: How about a romantic movie with Nicole Kidman?
+NLU:[{"request":"title", "genre":"romantic","person":"Nicole Kidman"}]

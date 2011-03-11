@@ -57,18 +57,12 @@ class NLUnderstanding:
                     if request:
                         result.append(request)
                     find_category = True
+                    break
                 elif x.node == "COMMAND":
-                    next=chunked[index+1]
-                    if isinstance(next, nltk.Tree):
-                        next=next.leaves()[0]
-                    all_leaves=chunked.leaves()
-                    next_index = all_leaves.index(next)
-                    keywords=self._search_keywords(all_leaves[next_index:])
-                    if len(keywords)>0:
-                        request=self._parse_pref(chunked[index:], request=self._keyword2request(keywords[0]))
-                        if request:
-                            result.append(request)
-                        find_category = True
+                    request = self._parse_command(chunked, index)
+                    if request:
+                        result.append(request)
+                    find_category = True
             elif x[1]=="BYE":
                 return [{"command":dm.EXIT}]
             elif x[1]=="RESTART":
@@ -101,6 +95,19 @@ class NLUnderstanding:
                     chuncked.remove(node)
                     return {'response':node[1]}
         return None
+    
+    def _parse_command(self, chunked, command_index):
+        request = None
+        next=chunked[command_index+1]
+        if isinstance(next, nltk.Tree):
+            next=next.leaves()[0]
+        all_leaves=chunked.leaves()
+        next_index = all_leaves.index(next)
+        keywords=self._search_keywords(all_leaves[next_index:])
+        if len(keywords)>0:
+            request=self._parse_pref(chunked[command_index:], request=self._keyword2request(keywords[0]))
+        return request
+
 
     def _parse_question(self, chunked, question_index):
         question_tree = chunked[question_index]
@@ -119,11 +126,15 @@ class NLUnderstanding:
             # FIXME Any other where question not about filming location? 
             return self._parse_pref(subtree, request="filming_loc")
         elif qtype=="how":
-            # Handle "how many" and "how much"
+            # Handle "how about", "how many" and "how much"
             keywords = self._search_keywords(question_tree)
-            if len(keywords)>0:
-                return self._parse_pref(subtree, request=dm.COUNT, of=self._keyword2request(keywords[0]))
-            elif len(question_tree)>1 and question_tree[1][0]=='much':
+            for kw in keywords:
+                if kw == 'KW_PLOT':
+                    # How about ...
+                    return self._parse_command(chunked, question_index)
+                else:
+                    return self._parse_pref(subtree, request=dm.COUNT, of=self._keyword2request(keywords[0]))
+            if len(question_tree)>1 and question_tree[1][0]=='much':
                 return self._parse_pref(subtree, request='gross')
         elif qtype=="what" or qtype=="which":
             # handle cases like which year, what genre, etc

@@ -72,6 +72,6 @@ class Test(unittest.TestCase):
 
 if __name__ == "__main__":
     import sys
-    sys.path.append("../dm")
+    sys.path.append("../")
     import dm
     unittest.main()
