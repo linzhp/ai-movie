@@ -6,13 +6,11 @@ from dbi import dbi
 import chatbot
 from state import State
 
-# TODO skip state when not opinion
-# TODO shouldn't concatenate request
 class DialogManager:
     def __init__(self):
         self.pending_question = None
         self.state = State()
-        self.dbi = dbi #TODO initialize dbi here
+        self.dbi = dbi 
 
     def request(self, dict):
         # NLG does not need to be aware of below operations
@@ -20,30 +18,29 @@ class DialogManager:
         internal_dict = dict.copy()
         # Resolve pronouns
         for key in internal_dict:
-            if internal_dict[key] in ["PRE_HE", "PRE_IT"]:
-                internal_dict[key] = self.state.resolve_pronoun(internal_dict[key])
-        if internal_dict.has_key("result_length"):
-            state_dict=internal_dict.copy()
-            state_dict.pop("result_length")
-            self.state.add_request(state_dict)
-        else:
-            self.state.add_request(internal_dict)
-        internal_dict = self.state.get_all()
+            if internal_dict[key] in ["PREV_HE", "PREV_IT"]:
+                resolved_pronoun= self.state.resolve_pronoun(internal_dict[key])
+                if resolved_pronoun == 'error':
+                    return {'off_topic': chatbot.reply}
+                else:
+                    internal_dict[key] = resolved_pronoun
         request_type = internal_dict.pop("request")
         if request_type == OPINION:
-            if internal_dict.has_key('title'):
-                # the user is saying something like "I like it"
-                return {}
+            self.state.add_request(internal_dict)
+            internal_dict = self.state.get_all()
+
+            count=self.dbi.query('title',internal_dict, count=True)
+            if count>10:
+                self.pending_question = "result_length"
+                return {"list":count, "question":HOW_MANY}
             else:
-                self.pending_question = HOW_MANY
-                count=self.dbi.query('title',internal_dict, count=True)
-                if count>10:
-                    self.pending_question = HOW_MANY
-                else:
-                    self.pending_question = SEE_RESULT
+                self.pending_question = SEE_RESULT
                 return {"list":count, "question":self.pending_question}
         elif request_type == COUNT:
             of = internal_dict.pop("of")
+            state_dict = {'request':of}
+            state_dict.update(internal_dict)
+            self.state.add_request(state_dict)
             count=self.dbi.query(of, internal_dict, count=True)
             result={}
             if count>10:
@@ -54,7 +51,14 @@ class DialogManager:
                 result={"list":count, "question":self.pending_question}
             return result
         else:
-            results=self.dbi.query(request_type, internal_dict)
+            count = internal_dict.get('result_length')
+            if count:
+                internal_dict.pop('result_length')
+                count = [0,count]
+            results=self.dbi.query(request_type, internal_dict, count=count)
+            state_dict = {'request':request_type}
+            state_dict.update(internal_dict)
+            self.state.add_request(state_dict)
             if isinstance(results, int):
                 if len(internal_dict)<2:
                     self.pending_question=MORE_PREF
@@ -63,6 +67,7 @@ class DialogManager:
                     self.pending_question = "result_length"
                     return {'print':request_type,"list":results, "question":HOW_MANY}
             else:
+                self.state.add_result({request_type:results})
                 return {'print':request_type,'results':results}
             
     
@@ -79,9 +84,11 @@ class DialogManager:
         elif response == "YES":
             if self.pending_question:
                 internal_dict["request"]=self.state.last_request()
+                internal_dict.update(self.state.get_all())
         elif self.pending_question:
             internal_dict[self.pending_question]=response
             internal_dict["request"]=self.state.last_request()
+            internal_dict.update(self.state.get_all())
         self.pending_question = None
         return self.request(internal_dict)
     
