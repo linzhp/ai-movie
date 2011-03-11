@@ -46,3 +46,6 @@ NLU:[{"request":"title","genre":"animation","person":"PREV_HE"}]
 
 user:I want to see some super hero movie
 NLU:[{"request":"title","keyword":"super hero"}]
+
+Who played Marty in "Back to the Future"?
+NLU:[{"request":"actor","character":"Marty", 'title': 'Back to the Future'}]

@@ -90,7 +90,7 @@ class Chunker:
 
 if __name__ == '__main__':
 	chk = Chunker()
-	result = chk.chunk("""I want to see some super hero movie?""")
+	result = chk.chunk("""Who starred Marty in "Back to the Future"?""")
 	print result
 	result.draw()
 
@@ -102,4 +102,5 @@ Do you know when "Titanic" came out?
 Restart. I like Tom Hanks, but I don't like action movies. I want twenty two
 has he won any awards?
 Could you tell me about "Titanic"?
+I want to see some super hero movie?
 """

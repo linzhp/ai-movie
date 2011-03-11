@@ -12,7 +12,7 @@ class ListDict(dict):
         if self.has_key(key):
             cur_val = self[key]
             if isinstance(cur_val, list):
-                cur_val.appent(value)
+                cur_val.append(value)
             else:
                 self[key]=[cur_val, value]
         else:
