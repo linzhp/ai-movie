@@ -1,4 +1,3 @@
-
 import unittest
 from mock import Mock
 
@@ -70,8 +69,10 @@ class Test(unittest.TestCase):
         self.dm.state.mockCheckCall(2, 'add_request',{'request':'title','actor':'Keira Knightley', 'result_length': 2})
         self.assertEqual({'print':'title','results':["Pirates of the Caribbean", "Pride and Prejudice"]},result)
 
+
+
 if __name__ == "__main__":
     import sys
-    sys.path.append("../dm")
+    sys.path.append("../")
     import dm
     unittest.main()
