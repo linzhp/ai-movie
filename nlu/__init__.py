@@ -35,6 +35,7 @@ class NLUnderstanding:
         self.chk = chunker.Chunker(False)
         self.stemmer = nltk.stem.PorterStemmer()
         self.keywords = []
+        self.sure_role = False
     
 
     def process(self, input_string):
@@ -108,6 +109,7 @@ class NLUnderstanding:
         if qtype=="who":
             keywords = self._search_keywords(question_tree)
             if len(keywords)>0:
+                self.sure_role = True
                 return self._parse_pref(subtree, request=self._keyword2request(keywords[0]))
             else:
                 return self._parse_pref(subtree, request="person")
@@ -221,31 +223,55 @@ class NLUnderstanding:
             person.remove('PREV_HE')
             
     def _resolve_person(self, pref):
-        keyword_taken = False
-        if pref.has_key('person'):
-            if 'KW_DIRECTOR' in self.keywords:
+        """
+        Try to resolve person's role locally from the current
+        user utterance.
+        If the role related keywords (KW_DIRECTOR, KW_STAR) is found,
+        there are two cases:
+        1. if pref['request']=='person', set it to the role and continue
+           searching other keywords
+        2. if the keyword appears in the B-QUESTION, i.e. self.sure_role==True
+           then continue to search for other keywords
+        3. if the keyword does not appear in the B-QUESTION, and the 
+           pref['request'] is that same with current keyword, get current role
+           and set pref['request'] to next keyword
+        """
+        #TODO if request is actor, then the other person in the question is 
+        #character.
+        # Who played Marty in "Back to the Future"?                
+        role = None
+        for keyword in self.keywords:
+            if keyword=='KW_DIRECTOR' or keyword == 'KW_STAR':
+                cur_role = self._keyword2request(keyword)
+                if pref['request']=='person':
+                    pref['request']=cur_role
+                    continue
+                elif pref['request']==cur_role:
+                    if not self.sure_role:
+                        role=cur_role
+                        pref['request']=None
+                        continue
+                else:
+                    role=cur_role
+                    break
+            if pref['request'] is None:
+                pref['request'] = self._keyword2request(keyword)
+                break
+
+        if pref['request'] is None:
+            pref['request'] = 'title'
+            
+        if not role and pref['request']=='actor':
+            role = 'character'
+        if role:
+            if pref.has_key('person'):
                 name=pref.pop('person')
-                pref['director']=name
-                keyword_taken = True
-            elif 'KW_STAR' in self.keywords:
-                name=pref.pop('person')
-                pref['actor']=name
-                keyword_taken = True
-        elif pref.has_key('!person'):
-            if 'KW_DIRECTOR' in self.keywords:
+                pref[role]=name
+            elif pref.has_key('!person'):
                 name=pref.pop('!person')
-                pref['!director']=name
-                keyword_taken = True
-            elif 'KW_STAR' in self.keywords:
-                name=pref.pop('!person')
-                pref['!actor']=name
-                keyword_taken = True
-        if keyword_taken == True and \
-            pref['request']=='director' or pref['request']=='actor':
-            if len(self.keywords)>1:
-                pref['request']=self._keyword2request(self.keywords[1])
-            else:
-                pref['request']='title'
+                pref["!"+role]=name
+            
+                
                 
      
     def _process_subsentence(self, list):

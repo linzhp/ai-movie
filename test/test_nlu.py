@@ -4,17 +4,13 @@ Created on Feb 9, 2011
 @author: linzhp
 '''
 import unittest
-from mock import Mock
+#from mock import Mock
 
 
 class Test(unittest.TestCase):
     
     def setUp(self):
-        # Let NLUnderstanding inherit from Mock so that we can test
-        # it before implementing all methods
-        NLUnderstanding.__bases__+=(Mock,)
         self.nlu = NLUnderstanding()
-        Mock.__init__(self.nlu)
         
 
     def testNLU(self):
