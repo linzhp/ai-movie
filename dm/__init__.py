@@ -28,9 +28,10 @@ class DialogManager:
             count=self.dbi.query('title',internal_dict, count=True)
             if count>10:
                 self.pending_question = "result_length"
+                return {"list":count, "question":HOW_MANY}
             else:
                 self.pending_question = SEE_RESULT
-            return {"list":count, "question":self.pending_question}
+                return {"list":count, "question":self.pending_question}
         elif request_type == COUNT:
             of = internal_dict.pop("of")
             state_dict = {'request':of}
@@ -46,8 +47,9 @@ class DialogManager:
                 result={"list":count, "question":self.pending_question}
             return result
         else:
-            count = internal_dict.get['result_length']
+            count = internal_dict.get('result_length')
             if count:
+                internal_dict.pop('result_length')
                 count = [0,count]
             results=self.dbi.query(request_type, internal_dict, count=count)
             state_dict = {'request':request_type}
