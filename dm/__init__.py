@@ -18,8 +18,12 @@ class DialogManager:
         internal_dict = dict.copy()
         # Resolve pronouns
         for key in internal_dict:
-            if internal_dict[key] in ["PRE_HE", "PRE_IT"]:
-                internal_dict[key] = self.state.resolve_pronoun(internal_dict[key])
+            if internal_dict[key] in ["PREV_HE", "PREV_IT"]:
+                resolved_pronoun= self.state.resolve_pronoun(internal_dict[key])
+                if resolved_pronoun == 'error':
+                    return {'off_topic': chatbot.reply}
+                else:
+                    internal_dict[key] = resolved_pronoun
         request_type = internal_dict.pop("request")
         if request_type == OPINION:
             self.state.add_request(internal_dict)

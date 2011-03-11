@@ -318,7 +318,8 @@ class NLUnderstanding:
           or item[0]=="his" or item[0]=="her":
             self.cur_pref.add('person','PREV_HE')
         elif (item[0] == "it" or item[0]=="this" \
-          or item[0]=="they" or item[0]=="them"): #TODO "that"
+          or item[0]=="they" or item[0]=="them" \
+          or item[0]=="ones"): #TODO "that"
             self.cur_pref.add('title','PREV_IT')
         elif item[1] == 'GNRE':
             self.cur_pref.add('genre',item[0])
