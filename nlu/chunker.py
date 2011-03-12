@@ -55,9 +55,9 @@ class Chunker:
 		chunk_grammar = r"""
 			B-QUESTION: {<WP|WRB><DT|RB.*|JJ>*<MD|VB.*|KW_.*>}
 						{<WRB>}
-			COMMAND: {^(<MD><PRP>)?(<RB>)*<VB.*>}
-						{^<PRP><VBP><TO>}
-						{<RB><VBP>}
+			COMMAND: {^(<MD><PRP>)?(<RB>)*<VB|VBP>}
+						{^<PRP><VB|VBP><TO>}
+						{<RB><VBP|VB>}
 			TITLE: {<:><[^:]*>*<:>}	
 			PERSON: {<NNP[S]?>+}
 			NP:   {<PRP\$>?<JJ>*<NN|NNS>(<POS>?<JJ>*<NN|NNS>)*}
@@ -90,8 +90,10 @@ class Chunker:
 		return chunked
 
 if __name__ == '__main__':
-	chk = Chunker()
-	result = chk.chunk("""I don't like Tom Cruise but I think "Magnolia" is good. Please show me some movies like that.""")
+#	with open(path.join(path.dirname(__file__), "chunkerpickler"),'r') as pickled_file:
+#		chk = pickle.load(pickled_file)
+	chk = Chunker(False)
+	result = chk.chunk("""Is "Beauty and the Beast" animated?""")
 	print result
 	result.draw()
 
@@ -108,4 +110,5 @@ Who starred Marty in "Back to the Future"?
 How about a romantic movie with Nicole Kidman?
 List the highly rated movies that BensTiller was in.
 Can you suggest me some good action movies?
+I don't like Tom Cruise but I think "Magnolia" is good. Please show me some movies like that.
 """

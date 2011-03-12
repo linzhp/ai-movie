@@ -58,6 +58,8 @@ class DialogManager:
             if count:
                 internal_dict.pop('result_length')
                 count = [0,count]
+            elif request_type=="plot" or request_type=="year":
+                count = [0, 1]
             results=self.dbi.query(request_type, internal_dict, count=count)
             state_dict = {'request':request_type}
             state_dict.update(internal_dict)

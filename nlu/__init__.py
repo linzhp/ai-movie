@@ -2,6 +2,7 @@ from os import path
 import sys
 import re
 import nltk
+import pickle
 from nltk.corpus import wordnet
 import dm
 import chunker
@@ -32,6 +33,9 @@ class NLUnderstanding:
     """
     def __init__(self):
         self.expect = None    
+#        with open(path.join(path.dirname(__file__), "chunkerpickler"),'r') as pickled_file:
+#            __import__("nlu.chunker")
+#            self.chk = pickle.load(pickled_file)
         self.chk = chunker.Chunker(False)
         self.stemmer = nltk.stem.PorterStemmer()
         self.keywords = []
@@ -41,7 +45,7 @@ class NLUnderstanding:
     def process(self, input_string):
         dm.chatbot.submit(input_string)
         chunked = self.chk.chunk(input_string)
-        
+        print chunked
         result = []
             
         if self.expect:
@@ -220,11 +224,18 @@ class NLUnderstanding:
         titles=pref.get('title')
         if isinstance(titles, list) and 'PREV_IT' in titles:
             titles.remove('PREV_IT')
+            if len(titles) == 0:
+                pref.pop('title')
+            
+        if titles is not None and pref['request']=='title':
+            pref.pop('title')
 
         titles=pref.get('!title')
         if isinstance(titles, list) and 'PREV_IT' in titles:
             titles.remove('PREV_IT')
-            
+            if len(titles) == 0:
+                pref.pop('title')
+                
         person = pref.get('person')
         if isinstance(person, list) and 'PREV_HE' in person:
             person.remove('PREV_HE')
@@ -354,7 +365,8 @@ class NLUnderstanding:
             self.cur_pref['result_length']=1
             # Default to rating
             self.cur_pref['sort']='rating'
-            if item[0] == 'highest' or item[0] == 'most':
+            if item[0] == 'highest' or item[0] == 'most' \
+                or item[0] == 'best':
                 self.cur_pref['order'] = 'desc'
             else:
                 self.cur_pref['order'] = 'asc'
