@@ -5,7 +5,8 @@ import nltk
 from nltk.corpus import wordnet
 import dm
 import chunker
-from dict import ListDict
+from utils import *
+
 
 class NLUnderstanding:
     """
@@ -34,6 +35,7 @@ class NLUnderstanding:
         self.chk = chunker.Chunker(False)
         self.stemmer = nltk.stem.PorterStemmer()
         self.keywords = []
+        self.sure_role = False
     
 
     def process(self, input_string):
@@ -55,18 +57,12 @@ class NLUnderstanding:
                     if request:
                         result.append(request)
                     find_category = True
+                    break
                 elif x.node == "COMMAND":
-                    next=chunked[index+1]
-                    if isinstance(next, nltk.Tree):
-                        next=next.leaves()[0]
-                    all_leaves=chunked.leaves()
-                    next_index = all_leaves.index(next)
-                    keywords=self._search_keywords(all_leaves[next_index:])
-                    if len(keywords)>0:
-                        request=self._parse_pref(chunked[index:], request=self._keyword2request(keywords[0]))
-                        if request:
-                            result.append(request)
-                        find_category = True
+                    request = self._parse_command(chunked, index)
+                    if request:
+                        result.append(request)
+                    find_category = True
             elif x[1]=="BYE":
                 return [{"command":dm.EXIT}]
             elif x[1]=="RESTART":
@@ -99,28 +95,52 @@ class NLUnderstanding:
                     chuncked.remove(node)
                     return {'response':node[1]}
         return None
+    
+    def _parse_command(self, chunked, command_index):
+        request = None
+        next=chunked[command_index+1]
+        if isinstance(next, nltk.Tree):
+            next=next.leaves()[0]
+        all_leaves=chunked.leaves()
+        next_index = all_leaves.index(next)
+        keywords=self._search_keywords(all_leaves[next_index:])
+        if len(keywords)>0:
+            request=self._parse_pref(chunked[command_index:], request=self._keyword2request(keywords[0]))
+        return request
+
 
     def _parse_question(self, chunked, question_index):
         question_tree = chunked[question_index]
         qtype = question_tree[0][0].lower()
-        keywords = self._search_keywords(question_tree.leaves())
+        subtree = chunked[question_index:]
         if qtype=="who":
-            return self._parse_pref(chunked[question_index:], request="person")
+            keywords = self._search_keywords(question_tree)
+            if len(keywords)>0:
+                self.sure_role = True
+                return self._parse_pref(subtree, request=self._keyword2request(keywords[0]))
+            else:
+                return self._parse_pref(subtree, request="person")
         elif qtype=="when":
-            return self._parse_pref(chunked[question_index:], request="year")
+            return self._parse_pref(subtree, request="year")
         elif qtype=="where":
             # FIXME Any other where question not about filming location? 
-            return self._parse_pref(chunked[question_index:], request="filming_loc")
+            return self._parse_pref(subtree, request="filming_loc")
         elif qtype=="how":
-            # Handle "how many" and "how much"
-            if len(keywords)>0:
-                return self._parse_pref(chunked[question_index:], request=dm.COUNT, of=self._keyword2request(keywords[0]))
-            elif len(question_tree)>1 and question_tree[1][0]=='much':
-                return self._parse_pref(chunked[question_index:], request='gross')
+            # Handle "how about", "how many" and "how much"
+            keywords = self._search_keywords(question_tree)
+            for kw in keywords:
+                if kw == 'KW_PLOT':
+                    # How about ...
+                    return self._parse_command(chunked, question_index)
+                else:
+                    return self._parse_pref(subtree, request=dm.COUNT, of=self._keyword2request(keywords[0]))
+            if len(question_tree)>1 and question_tree[1][0]=='much':
+                return self._parse_pref(subtree, request='gross')
         elif qtype=="what" or qtype=="which":
             # handle cases like which year, what genre, etc
+            keywords = self._search_keywords(subtree)
             if len(keywords)>0:
-                return self._parse_pref(chunked[question_index:], request=self._keyword2request(keywords[0]))
+                return self._parse_pref(subtree, request=self._keyword2request(keywords[0]))
         # Haven't returned, return as preference
         return self._parse_pref(chunked[question_index:])
     
@@ -135,7 +155,9 @@ class NLUnderstanding:
         """
         keywords=[]
         for a in list:
-            if a[1][0:2]=="KW":
+            if isinstance(a, nltk.Tree):
+                keywords.extend(self._search_keywords(a))
+            elif a[1][0:2]=="KW":
                 keywords.append(a[1])
         return keywords
     
@@ -156,7 +178,6 @@ class NLUnderstanding:
         pref_list=[]
         
         for sentence in subsentences:
-            #TODO break in second type            
             cur_pref = self._process_subsentence(sentence)
             positive = self._decide_opinion(sentence)
             
@@ -178,7 +199,7 @@ class NLUnderstanding:
             all_pref.concat(pref)
         
         self._resolve_pronouns(all_pref)
-        self._resolve_people(all_pref)
+        self._resolve_person(all_pref)
         self._clean_unary_values(all_pref, ['result_length','sort','order','request'])
 
         if all_pref['request'] == dm.OPINION:
@@ -204,112 +225,148 @@ class NLUnderstanding:
         if isinstance(titles, list) and 'PREV_IT' in titles:
             titles.remove('PREV_IT')
             
-        people = pref.get('people')
-        if isinstance(people, list) and 'PREV_HE' in people:
-            people.remove('PREV_HE')
+        person = pref.get('person')
+        if isinstance(person, list) and 'PREV_HE' in person:
+            person.remove('PREV_HE')
 
-        people = pref.get('!people')
-        if isinstance(people, list) and 'PREV_HE' in people:
-            people.remove('PREV_HE')
+        person = pref.get('!person')
+        if isinstance(person, list) and 'PREV_HE' in person:
+            person.remove('PREV_HE')
             
-    def _resolve_people(self, pref):
-        if pref.has_key('people'):
-            if 'KW_DIRECTOR' in self.keywords and pref['request'] != 'director':
-                name=pref.pop('people')
-                pref['director']=name
-            elif 'KW_STAR' in self.keywords and pref['request']!='actor':
-                name=pref.pop('people')
-                pref['actor']=name
-        elif pref.has_key('!people'):
-            if 'KW_DIRECTOR' in self.keywords and pref['request'] != 'director':
-                name=pref.pop('!people')
-                pref['!director']=name
-            elif 'KW_STAR' in self.keywords and pref['request']!='actor':
-                name=pref.pop('!people')
-                pref['!actor']=name
+    def _resolve_person(self, pref):
+        """
+        Try to resolve person's role locally from the current
+        user utterance.
+        If the role related keywords (KW_DIRECTOR, KW_STAR) is found,
+        there are two cases:
+        1. if pref['request']=='person', set it to the role and continue
+           searching other keywords
+        2. if the keyword appears in the B-QUESTION, i.e. self.sure_role==True
+           then continue to search for other keywords
+        3. if the keyword does not appear in the B-QUESTION, and the 
+           pref['request'] is that same with current keyword, get current role
+           and set pref['request'] to next keyword
+        """
+        #TODO if request is actor, then the other person in the question is 
+        #character.
+        # Who played Marty in "Back to the Future"?                
+        role = None
+        for keyword in self.keywords:
+            if keyword=='KW_DIRECTOR' or keyword == 'KW_STAR':
+                cur_role = self._keyword2request(keyword)
+                if pref['request']=='person':
+                    pref['request']=cur_role
+                    continue
+                elif pref['request']==cur_role:
+                    if not self.sure_role:
+                        role=cur_role
+                        pref['request']=None
+                        continue
+                else:
+                    role=cur_role
+                    break
+            if pref['request'] is None:
+                pref['request'] = self._keyword2request(keyword)
+                break
+
+        if pref['request'] is None:
+            pref['request'] = 'title'
+            
+        if not role and pref['request']=='actor':
+            role = 'character'
+        if role:
+            if pref.has_key('person'):
+                name=pref.pop('person')
+                pref[role]=name
+            elif pref.has_key('!person'):
+                name=pref.pop('!person')
+                pref["!"+role]=name
+            
+                
                 
      
     def _process_subsentence(self, list):
-        cur_pref=ListDict()
+        self.cur_pref=ListDict()
         first_type = True
         for item in list:
             if isinstance(item, nltk.Tree):
                 phrase = self._extract_words(item)
                 if item.node == 'TITLE':
-                    cur_pref.add('title', phrase)
+                    self.cur_pref.add('title', phrase)
                 elif item.node == 'PERSON':
-                    cur_pref.add('person',phrase)
+                    self.cur_pref.add('person',phrase)
                 elif item.node == 'NP':
-                    cur_pref.add('keyword',phrase)
+                    self.cur_pref.add('keyword',phrase)
                 elif item.node == 'B-QUESTION':
                     if first_type:
                         first_type=False
                     else:
                         break
                     for i in item:
-                        cur_pref.concat(self._process_word(i))
+                        self._process_word(i)
                 elif item.node == 'COMMAND':
                     if first_type:
                         first_type=False
                     else:
                         break
             else:
-                cur_pref.concat(self._process_word(item))
-        return cur_pref
+                self._process_word(item)
+        return self.cur_pref
     
     def _process_word(self, item):
-        cur_pref = ListDict()
         if item[0] == "he" or item[0]=="she" \
           or item[0]=="his" or item[0]=="her":
-            cur_pref.add('person','PREV_HE')
+            self.cur_pref.add('person','PREV_HE')
         elif (item[0] == "it" or item[0]=="this" \
-          or item[0]=="they" or item[0]=="them"): #TODO "that"
-            cur_pref.add('title','PREV_IT')
+          or item[0]=="they" or item[0]=="them" \
+          or item[0]=="ones"): #TODO "that"
+            self.cur_pref.add('title','PREV_IT')
         elif item[1] == 'GNRE':
-            cur_pref.add('genre',item[0])
-        elif item[1] == 'CD':#TODO "a", "one"
-            if len(item[0])==4:
-                cur_pref.add('year', int(item[0]))
-            else:
-                cur_pref['result_length']=int(item[0])
+            self.cur_pref.add('genre',item[0])
+        elif item[1] == 'CD':
+            number = english2int(item[0])
+            if number:
+                if len(item[0])==4:
+                    self.cur_pref.add('year', number)
+                else:
+                    self.cur_pref['result_length']=number
         elif item[1] == 'COUNTRY':
-            cur_pref.add('country', item[0])
+            self.cur_pref.add('country', item[0])
         elif item[1] == 'LANGUAGE':
-            cur_pref.add('language', item[0])
+            self.cur_pref.add('language', item[0])
         elif item[0] == 'first':
-            cur_pref['sort']='year'
-            cur_pref['order'] = 'asc'
-            cur_pref['result_length']=1
+            self.cur_pref['sort']='year'
+            self.cur_pref['order'] = 'asc'
+            self.cur_pref['result_length']=1
         elif item[0] == 'last' or item[0] == 'latest':
-            cur_pref['sort']='year'
-            cur_pref['order'] = 'desc' 
-            cur_pref['result_length']=1
+            self.cur_pref['sort']='year'
+            self.cur_pref['order'] = 'desc' 
+            self.cur_pref['result_length']=1
         elif item[0] == 'worst':
-            cur_pref['sort']='rating'
-            cur_pref['order'] = 'asc'
-            cur_pref['result_length']=1                                              
+            self.cur_pref['sort']='rating'
+            self.cur_pref['order'] = 'asc'
+            self.cur_pref['result_length']=1                                              
         elif item[0] == 'best':
-            cur_pref['sort']='rating'
-            cur_pref['order'] = 'desc'
-            cur_pref['result_length']=1                                              
+            self.cur_pref['sort']='rating'
+            self.cur_pref['order'] = 'desc'
+            self.cur_pref['result_length']=1                                              
         elif item[1] == 'JJS':
-            cur_pref['result_length']=1
+            self.cur_pref['result_length']=1
             # Default to rating
-            cur_pref['sort']='rating'
+            self.cur_pref['sort']='rating'
             if item[0] == 'highest' or item[0] == 'most':
-                cur_pref['order'] = 'desc'
+                self.cur_pref['order'] = 'desc'
             else:
-                cur_pref['order'] = 'asc'
+                self.cur_pref['order'] = 'asc'
         elif item[1][0:3] == 'KW_':
             self.keywords.append(item[1])
         else:
             word=self.stemmer.stem(item[0])
-            if cur_pref.has_key('order') and cur_pref.has_key('result_length'):
+            if self.cur_pref.has_key('order') and self.cur_pref.has_key('result_length'):
                 if word == 'gross' or word=='earn':
-                    cur_pref['sort']='gross'
+                    self.cur_pref['sort']='gross'
                 elif word == 'recent':
-                    cur_pref['sort']='year'
-        return cur_pref
+                    self.cur_pref['sort']='year'
         
         
     def _partition(self, chunked):

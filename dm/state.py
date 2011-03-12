@@ -10,20 +10,22 @@ class State:
         all_states = {}
         for dict in lists:
             for key in dict:
-                # if: a key is in all_states already
-                if all_states.has_key(key):
+                if key == 'request':
+                    continue
+                # elif: a key is in all_states already
+                elif all_states.has_key(key):
+                    # if: eliminate duplicated values
                     if dict[key] in all_states[key]:
-                        # if: eliminate duplicated values
                         continue
+                    # elif: the value of the key is not a list yet, make it to
+                    #     a list then append old value and add new value
                     elif type(all_states[key]).__name__ != 'list':
-                        # elif: the value of the key is not a list yet, make it to
-                        #     a list then append old value and new value
                         temp = all_states[key]
                         all_states[key] = []
                         all_states[key].append(temp)
                         all_states[key].append(dict[key])
+                    # else: the value of the key is a list, append directly
                     else:
-                        # else: the value of the key is a list, append directly
                         if dict[key] in all_states[key]:
                             continue
                         all_states[key].append(dict[key])
@@ -39,16 +41,17 @@ class State:
         self.states.append(dict)
 
     def last_request(self):
-        # I'm assuming every sentence has a 'request'!
-        # Let me know if there are examples that don't.
-        dict = self.states[-1]
-        if dict['request'] == 'OPINION':
-            if dict.has_key('title'):
-                return dict['title']
-        elif dict['request'] == 'COUNT':
-            if dict.has_key('of'):
-                return dict['of']
-        return dict['request']
+        lists = self.states[:]
+        lists.reverse()
+        for dict in lists:
+            if dict.has_key('request'):
+                if dict['request'] == 'OPINION' and dict.has_key('title'):
+                    return dict['title']
+                elif dict['request'] == 'COUNT' and dict.has_key('of'):
+                    return dict['of']
+                return dict['request']
+            else:
+                continue
 
     def resolve_pronoun(self, value):
         # Find the last PRE_HE/PRE_IT.
@@ -59,6 +62,8 @@ class State:
                 # Assuming actor/director are the only people we care about!
                 if dict.has_key('actor') and dict['actor'] != 'PRE_HE':
                     return dict['actor']
+                elif dict.has_key('person') and dict['person'] != 'PRE_HE':
+                    return dict['person']
                 elif dict.has_key('director') and dict['director'] != 'PRE_HE':
                     return dict['director']
             elif value == 'PRE_IT':
@@ -93,8 +98,7 @@ if __name__ == '__main__':
     print '2nd add => last_request::::::'
     print state.last_request() + '\n'
 
-    state.add_request({'request':'OPINION', 'genre':'action', 
-'keyword':'dream'})
+    state.add_request({'request':'OPINION', 'genre':'action', 'keyword':'dream'})
     print '3nd add => get_all:::::::'
     print state.get_all()
     print '3nd add => last_request::::::'

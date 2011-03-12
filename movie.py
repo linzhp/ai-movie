@@ -6,9 +6,11 @@ from dm import DialogManager
 logging.basicConfig(level=logging.DEBUG,
                     filename='session.log',
                     format='%(message)s',
-                    filemode='w')
+                    filemode='a')
 nlu = NLUnderstanding()
 dialogManager = DialogManager()
+
+#TODO test MORE PREF
 
 try:
     greeting="Hi, there"#nlg.greet()

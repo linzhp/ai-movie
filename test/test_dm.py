@@ -1,4 +1,3 @@
-
 import unittest
 from mock import Mock
 
@@ -17,14 +16,14 @@ class Test(unittest.TestCase):
     def test_request_director(self):
         self.dm.dbi.mockAddReturnValues(query=['James Cameron'])
         result=self.dm.request({'request':'director','title':'Titanic'})
-        self.dm.dbi.mockCheckCall(0, 'query','director',{'title':'Titanic'})
+        self.dm.dbi.mockCheckCall(0, 'query','director',{'title':'Titanic'}, count=None)
         self.assertEqual({'print':'director','results':['James Cameron']},result)
         
     def test_request_movies(self):
         condition={'director':'James Cameron'}
         self.dm.dbi.mockAddReturnValues(query=30)
         result=self.dm.request({'request':'title','director':'James Cameron'})
-        self.dm.dbi.mockCheckCall(0, 'query','title',condition)
+        self.dm.dbi.mockCheckCall(0, 'query','title',condition, count=None)
         self.assertEqual({'question':dm.MORE_PREF}, result)
         self.assertEqual(dm.MORE_PREF, self.dm.pending_question)
         
@@ -56,7 +55,7 @@ class Test(unittest.TestCase):
         self.dm.dbi.mockAddReturnValues(query=["Titanic", "The Reader"])
         self.dm.state.mockAddReturnValues(get_all={'actor':'Kate Winslet'},last_request='title')
         result = self.dm.response({'response':'YES'})
-        self.dm.dbi.mockCheckCall(0, 'query', 'title', {'actor':'Kate Winslet'})
+        self.dm.dbi.mockCheckCall(0, 'query', 'title', {'actor':'Kate Winslet'}, count=None)
         self.dm.state.mockCheckCall(2, 'add_request',{'request':'title','actor':'Kate Winslet'})
         self.assertEqual({'print':'title','results':["Titanic", "The Reader"]},result)
         
@@ -66,12 +65,14 @@ class Test(unittest.TestCase):
         self.dm.state.mockAddReturnValues(get_all={'request':'title','actor':'Keira Knightley'},last_request='title')
         self.dm.pending_question='result_length'
         result = self.dm.response({'response':2})
-        self.dm.dbi.mockCheckCall(0, 'query', 'title', {'actor':'Keira Knightley', 'result_length': 2})
-        self.dm.state.mockCheckCall(2, 'add_request',{'request':'title','actor':'Keira Knightley', 'result_length': 2})
+        self.dm.dbi.mockCheckCall(0, 'query', 'title', {'actor':'Keira Knightley'}, count=[0,2])
+        self.dm.state.mockCheckCall(2, 'add_request',{'request':'title','actor':'Keira Knightley'})
         self.assertEqual({'print':'title','results':["Pirates of the Caribbean", "Pride and Prejudice"]},result)
+
+
 
 if __name__ == "__main__":
     import sys
-    sys.path.append("../dm")
+    sys.path.append("../")
     import dm
     unittest.main()

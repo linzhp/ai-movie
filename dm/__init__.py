@@ -18,8 +18,12 @@ class DialogManager:
         internal_dict = dict.copy()
         # Resolve pronouns
         for key in internal_dict:
-            if internal_dict[key] in ["PRE_HE", "PRE_IT"]:
-                internal_dict[key] = self.state.resolve_pronoun(internal_dict[key])
+            if internal_dict[key] in ["PREV_HE", "PREV_IT"]:
+                resolved_pronoun= self.state.resolve_pronoun(internal_dict[key])
+                if resolved_pronoun == 'error':
+                    return {'off_topic': chatbot.reply}
+                else:
+                    internal_dict[key] = resolved_pronoun
         request_type = internal_dict.pop("request")
         if request_type == OPINION:
             self.state.add_request(internal_dict)
@@ -28,9 +32,10 @@ class DialogManager:
             count=self.dbi.query('title',internal_dict, count=True)
             if count>10:
                 self.pending_question = "result_length"
+                return {"list":count, "question":HOW_MANY}
             else:
                 self.pending_question = SEE_RESULT
-            return {"list":count, "question":self.pending_question}
+                return {"list":count, "question":self.pending_question}
         elif request_type == COUNT:
             of = internal_dict.pop("of")
             state_dict = {'request':of}
@@ -46,7 +51,11 @@ class DialogManager:
                 result={"list":count, "question":self.pending_question}
             return result
         else:
-            results=self.dbi.query(request_type, internal_dict)
+            count = internal_dict.get('result_length')
+            if count:
+                internal_dict.pop('result_length')
+                count = [0,count]
+            results=self.dbi.query(request_type, internal_dict, count=count)
             state_dict = {'request':request_type}
             state_dict.update(internal_dict)
             self.state.add_request(state_dict)
