@@ -32,7 +32,7 @@ class NLUnderstanding:
             of user utterance
     """
     def __init__(self):
-        self.expect = None    
+        self.expect = None
 #        with open(path.join(path.dirname(__file__), "chunkerpickler"),'r') as pickled_file:
 #            __import__("nlu.chunker")
 #            self.chk = pickle.load(pickled_file)
@@ -45,13 +45,12 @@ class NLUnderstanding:
     def process(self, input_string):
         dm.chatbot.submit(input_string)
         chunked = self.chk.chunk(input_string)
-        print chunked
         result = []
-            
+
         if self.expect:
             response = self._response(chunked)
             if response:
-                result.append(response) 
+                result.append(response)
         find_category = False
         for x in chunked:
             if isinstance(x, nltk.Tree):
@@ -392,8 +391,17 @@ class NLUnderstanding:
         Returns: a list of lists, consists of children of chunked
         tree
         """
-        return [chunked]
-        
+        temp1 = []
+        temp2 = []
+        counter = 0
+        for tuples in chunked:
+            if tuples[0] == 'but' or tuples[0] == 'however':
+                temp1 = chunked[0:counter]
+                temp2 = chunked[counter:]
+                break
+            counter = counter + 1
+        return [temp1, temp2]
+
     def _decide_opinion(self, list):
         """
         Decide the user opinion in the current segment of sentence,
@@ -442,10 +450,14 @@ def negativate(self):
     """
     For amending dictionaries only
     """ 
-    new_dict = ListDict()    
+    new_dict = ListDict()
     for key in self:
         new_dict['!'+key]=self[key]
     return new_dict
 
 positiveList = ["like","love"]
 negativeList = ["hate","dislike"]
+if __name__ == "__main__":
+    nlu = NLUnderstanding()
+    chuncked = nlu.process("I like Tom Hanks but don't like action movies!")
+    nlu._partition(chuncked)
