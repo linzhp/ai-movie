@@ -406,29 +406,30 @@ class NLUnderstanding:
         print list
         modifier = True
         verb = None
+        
+        for node in list:
+            if isinstance(node, tuple):
+                if node[1]=='RB':
+                    if node[0] == "n't" or node[0] == "not":
+                        modifier = not modifier
+                        print modifier
+                if node[1]=='IN':
+                    if node[0] == "without":
+                        modifier = not modifier
+                        print modifier
+                if node[1][0]=='V':
+                    if node[1] in positiveList:
+                        verb = True
+                    if node[0] in negativeList:
+                        verb = False
+#                   
+#
         #list should be a list of tuples
-        for n in list:
-            if isinstance(n, nltk.tree.Tree):
-                if n.pos()[0][1][0] == 'V':
-                    for item in n[0]:
-                        print item
-                        if item[0] == "like":
-                            verb = True
-            else:
-                if n[1] == 'RB':
-                    if n[0] == "n't":
-                        modifier = not modifier
-                    if n[0] == "n't":
-                        modifier = not modifier
-                    print n[0]
-        if modifier:
+        if verb == None or modifier == True:
             return verb
         else:
-            if verb:
-                return not verb
-            else:
-                return verb
-        
+            return not verb
+
     def _extract_words(self, tree):
         leaves = tree.leaves();
         words = [item[0] for item in leaves]
@@ -445,3 +446,6 @@ def negativate(self):
     for key in self:
         new_dict['!'+key]=self[key]
     return new_dict
+
+positiveList = ["like","love"]
+negativeList = ["hate","dislike"]
