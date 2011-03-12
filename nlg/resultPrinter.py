@@ -97,7 +97,7 @@ def getNouns(NLUOutput, itemType, subjectList):
         if NLUOutput[0][subject] in pronounKeys:
             a = [pronounSubjects[NLUOutput[0][subject]],pronounObjects[NLUOutput[0][subject]]]
         elif subject == "sort":
-            order = NLUOutput.get_key("order")
+            order = NLUOutput[0].get("order")
             sortType = NLUOutput[0][subject]
             b = ""
             if order == "desc":
