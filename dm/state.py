@@ -15,7 +15,7 @@ class State:
                 # elif: a key is in all_states already
                 elif all_states.has_key(key):
                     # if: eliminate duplicated values
-                    if dict[key] in all_states[key]:
+                    if type(all_states[key]).__name__ == 'list' and dict[key] in all_states[key]:
                         continue
                     # elif: the value of the key is not a list yet, make it to
                     #     a list then append old value and add new value
