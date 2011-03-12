@@ -17,13 +17,16 @@ class DialogManager:
         # to dict, make a copy of dict to hide the operations
         internal_dict = dict.copy()
         # Resolve pronouns
+        not_resolved = []
         for key in internal_dict:
             if internal_dict[key] in ["PREV_HE", "PREV_IT"]:
                 resolved_pronoun= self.state.resolve_pronoun(internal_dict[key])
                 if resolved_pronoun == 'error':
-                    return {'off_topic': chatbot.reply}
+                    not_resolved.append(key)
                 else:
                     internal_dict[key] = resolved_pronoun
+        for key in not_resolved:
+            internal_dict.pop(key)
         request_type = internal_dict.pop("request")
         if request_type == OPINION:
             self.state.add_request(internal_dict)

@@ -11,7 +11,7 @@ nlu = NLUnderstanding()
 dialogManager = DialogManager()
 
 #TODO test MORE PREF
-
+#TODO I don't like Tom Cruise but I think "Magnolia" is good. Please show me some movies like that.
 try:
     greeting="Hi, there"#nlg.greet()
     logging.info('Bot: '+greeting)
