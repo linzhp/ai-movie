@@ -19,7 +19,7 @@ from os import path
 
 class Chunker:
 
-	def __init__(self, verbose=False):
+    def __init__(self, verbose=False):
 
 		if verbose:
 			print "#Initializing chunker:"
@@ -74,20 +74,17 @@ class Chunker:
 
 		if verbose:
 			print "Chunker Initialized.#"
-		
-
-	# Takes a string and returns a chunk tree.
-	def chunk(self, sentence):
-
-		tokd = nltk.word_tokenize(sentence)
-		tagged = self.tagger.tag(tokd)
-		print tagged
-		chunked = self.cp.parse(tagged)
-
-		#print "\n\nChunked - tree\n"
-		#print chunked
-
-		return chunked
+    
+    def chunk(self, sentence):
+        tokd = nltk.word_tokenize(sentence)
+        tagged = self.tagger.tag(tokd)
+        if ('like', 'IN') in tagged:
+           i = tagged.index(('like', 'IN'))
+           tagged.insert(i,('like','KW_SIMILAR'))
+           tagged.remove(('like', 'IN'))
+        print tagged
+        chunked = self.cp.parse(tagged)
+        return chunked
 
 if __name__ == '__main__':
 	chk = Chunker()
