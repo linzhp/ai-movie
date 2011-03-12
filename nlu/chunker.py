@@ -89,10 +89,10 @@ class Chunker:
 		return chunked
 
 if __name__ == '__main__':
-	chk = Chunker()
-	result = chk.chunk("""Who starred Marty in "Back to the Future"?""")
-	print result
-	result.draw()
+    chk = Chunker()
+    result = chk.chunk("I like Tom Hanks but don't like action movies.")
+    print result
+    result.draw()
 
 """
 Do you know what the most popular movie was in 2004?
