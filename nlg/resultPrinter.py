@@ -97,17 +97,17 @@ def getNouns(NLUOutput, itemType, subjectList):
         if NLUOutput[0][subject] in pronounKeys:
             a = [pronounSubjects[NLUOutput[0][subject]],pronounObjects[NLUOutput[0][subject]]]
         elif subject == "sort":
-            order = NLUOutput.get_key("order")
+            order = NLUOutput[0].get("order")
             sortType = NLUOutput[0][subject]
             b = ""
-            if order == "desc":
+            if order == "asc":
                 if sortType == "gross":
                     b = "least profitable"
                 if sortType == "rating":
                     b = "least popular"
                 if sortType == "year":
                     b = "oldest"
-            else: #if order == "asc":
+            else: #if order == "desc":
                 if sortType == "gross":
                     b = "most profitable"
                 if sortType == "rating":
