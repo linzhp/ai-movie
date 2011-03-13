@@ -53,7 +53,7 @@ class Chunker:
 
 		# Define a chunking grammar.
 		chunk_grammar = r"""
-			B-QUESTION: {<WP|WRB><DT|RB.*|JJ>*<MD|VB.*|KW_.*>}
+			B-QUESTION: {<WDT|WP|WRB><DT|RB.*|JJ>*<MD|VB.*|KW_.*>}
 						{<WRB>}
 			COMMAND: {^(<MD><PRP>)?(<RB>)*<VB|VBP>}
 						{^<PRP><VB|VBP><TO>}
@@ -93,7 +93,7 @@ if __name__ == '__main__':
 #	with open(path.join(path.dirname(__file__), "chunkerpickler"),'r') as pickled_file:
 #		chk = pickle.load(pickled_file)
 	chk = Chunker(False)
-	result = chk.chunk("""Is "Beauty and the Beast" animated?""")
+	result = chk.chunk("""Which movie by Tom Hanks earns the most?""")
 	print result
 	result.draw()
 
@@ -111,4 +111,6 @@ How about a romantic movie with Nicole Kidman?
 List the highly rated movies that BensTiller was in.
 Can you suggest me some good action movies?
 I don't like Tom Cruise but I think "Magnolia" is good. Please show me some movies like that.
+Is "Beauty and the Beast" animated?
+How many movies has Walt Disney directed?
 """

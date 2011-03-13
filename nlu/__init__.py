@@ -321,6 +321,9 @@ class NLUnderstanding:
                         break
             else:
                 self._process_word(item)
+                
+        if not self.cur_pref.has_key('order') and self.cur_pref.has_key('sort'):
+            self.cur_pref.pop('sort')
         return self.cur_pref
     
     def _process_word(self, item):
@@ -356,14 +359,11 @@ class NLUnderstanding:
             self.cur_pref['sort']='rating'
             self.cur_pref['order'] = 'asc'
             self.cur_pref['result_length']=1                                              
-        elif item[0] == 'best':
-            self.cur_pref['sort']='rating'
-            self.cur_pref['order'] = 'desc'
-            self.cur_pref['result_length']=1                                              
-        elif item[1] == 'JJS':
+        elif item[1] == 'JJS' or item[1]=='RBS':
             self.cur_pref['result_length']=1
             # Default to rating
-            self.cur_pref['sort']='rating'
+            if not self.cur_pref.has_key('sort'):
+                self.cur_pref['sort']='rating'
             if item[0] == 'highest' or item[0] == 'most' \
                 or item[0] == 'best':
                 self.cur_pref['order'] = 'desc'
@@ -373,11 +373,10 @@ class NLUnderstanding:
             self.keywords.append(item[1])
         else:
             word=self.stemmer.stem(item[0])
-            if self.cur_pref.has_key('order') and self.cur_pref.has_key('result_length'):
-                if word == 'gross' or word=='earn':
-                    self.cur_pref['sort']='gross'
-                elif word == 'recent':
-                    self.cur_pref['sort']='year'
+            if word == 'gross' or word=='earn':
+                self.cur_pref['sort']='gross'
+            elif word == 'recent':
+                self.cur_pref['sort']='year'
         
         
     def _partition(self, chunked):
@@ -400,7 +399,8 @@ class NLUnderstanding:
                 temp2 = chunked[counter:]
                 break
             counter = counter + 1
-        return [temp1, temp2]
+#        return [temp1, temp2]
+        return [chunked]
 
     def _decide_opinion(self, list):
         """

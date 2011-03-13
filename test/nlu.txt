@@ -1,3 +1,9 @@
+user: Which movie by Tom Hanks earns the most?
+NLU: [{"request":"title","sort":"gross","order":"desc","result_length":1,"person":"Tom Hanks"}]
+
+user: How many movies has Walt Disney directed?
+NLU:[{"request":"COUNT","director":"Walt Disney", "of":"title"}]
+
 user: Action movies about dreams.
 NLU:[{"request":"OPINION","genre":"Action","keyword":"dreams"}]
 
@@ -36,7 +42,7 @@ has he won any awards?
 NLU:[{"request":"count","of":"award","person":"PREV_HE"}]
 
 user: Did Tom Hanks direct any comedy?
-NLU:[{"request":"title", "director": "Tom Hanks", "genre":"comedy"}]
+NLU:[{"request":"OPINION", "director": "Tom Hanks", "genre":"comedy"}]
 
 user:i like Batman
 NLU:[{"request":"OPINION","person":"Batman"}]
