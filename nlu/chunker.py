@@ -19,61 +19,63 @@ from os import path
 
 class Chunker:
 
-    def __init__(self, verbose=False):
+    def __init__(self, verbose=False, test = False):
 
-		if verbose:
-			print "#Initializing chunker:"
+        if verbose:
+        	print "#Initializing chunker:"
 
-		# Define regular expressions for punctuation tags
-		tagged_punc = [ (r'\"', ':'), (r'\?', 'QM') ]
+        # Define regular expressions for punctuation tags
+        tagged_punc = [ (r'\"', ':'), (r'\?', 'QM') ]
+        if verbose:
+            print "   Loading POS tagged training sentences."
 
-		if verbose:
-			print "   Loading POS tagged training sentences."
-
-		# Load the tagged training sentences.
-		f = open( path.join(path.dirname(__file__),'training_sentences.bin'), 'r' )
-		train_sents = pickle.load(f)
+# Load the tagged training sentences.
+        if not test:
+            f = open( path.join(path.dirname(__file__),'training_sentences.bin'), 'r' )
+            train_sents = pickle.load(f)
+        elif test:
+            train_sents = open('./shortsents','r')
 
 	
 		# Define the tagger.
 
-		if verbose:
-			print "   Loading maxent_treebank_pos_tagger."
+        if verbose:
+            print "   Loading maxent_treebank_pos_tagger."
 
-		_POS_TAGGER = 'taggers/maxent_treebank_pos_tagger/english.pickle'
-		t1 = nltk.data.load(_POS_TAGGER)
-		if verbose:
-			print "   Training custom Unigram Tagger."		
-		t2 = nltk.UnigramTagger( train_sents, backoff=t1 )
-
-		if verbose:
-			print "   Instantiating tagger object."
-
-		self.tagger = nltk.RegexpTagger( tagged_punc, backoff=t2 )
-
-		# Define a chunking grammar.
-		chunk_grammar = r"""
-			B-QUESTION: {<WDT|WP|WRB><DT|RB.*|JJ>*<MD|VB.*|KW_.*>}
-						{<WRB>}
-			COMMAND: {^(<MD><PRP>)?(<RB>)*<VB|VBP>}
-						{^<PRP><VB|VBP><TO>}
-						{<RB><VBP|VB>}
-			TITLE: {<:><[^:]*>*<:>}	
-			PERSON: {<NNP[S]?>+}
-			NP:   {<PRP\$>?<JJ>*<NN|NNS>(<POS>?<JJ>*<NN|NNS>)*}
-			PP: { <IN><NP> }
-		"""
-			#ACTOR_IN_MOVIE: {<PERSON><.*>*<IN><TITLE>}
-			#S: {<CC><.*>*}
-		   	#B-QUESTION: {^<[W].*|VBD|VBN|VBP|VBZ>}
-		if verbose:
-			print "   Instantiating RegexpParser object."
-		
-		# Define a regular expression chunker
-		self.cp = nltk.RegexpParser(chunk_grammar)
-
-		if verbose:
-			print "Chunker Initialized.#"
+        _POS_TAGGER = 'taggers/maxent_treebank_pos_tagger/english.pickle'
+        t1 = nltk.data.load(_POS_TAGGER)
+        if verbose:
+        	print "   Training custom Unigram Tagger."		
+        t2 = nltk.UnigramTagger( train_sents, backoff=t1 )
+        
+        if verbose:
+        	print "   Instantiating tagger object."
+        
+        self.tagger = nltk.RegexpTagger( tagged_punc, backoff=t2 )
+        
+        # Define a chunking grammar.
+        chunk_grammar = r"""
+        	B-QUESTION: {<WDT|WP|WRB><DT|RB.*|JJ>*<MD|VB.*|KW_.*>}
+        				{<WRB>}
+        	COMMAND: {^(<MD><PRP>)?(<RB>)*<VB|VBP>}
+        				{^<PRP><VB|VBP><TO>}
+        				{<RB><VBP|VB>}
+        	TITLE: {<:><[^:]*>*<:>}	
+        	PERSON: {<NNP[S]?>+}
+        	NP:   {<PRP\$>?<JJ>*<NN|NNS>(<POS>?<JJ>*<NN|NNS>)*}
+        	PP: { <IN><NP> }
+        """
+        	#ACTOR_IN_MOVIE: {<PERSON><.*>*<IN><TITLE>}
+        	#S: {<CC><.*>*}
+           	#B-QUESTION: {^<[W].*|VBD|VBN|VBP|VBZ>}
+        if verbose:
+        	print "   Instantiating RegexpParser object."
+        
+        # Define a regular expression chunker
+        self.cp = nltk.RegexpParser(chunk_grammar)
+        
+        if verbose:
+        	print "Chunker Initialized.#"
     
     def chunk(self, sentence):
         tokd = nltk.word_tokenize(sentence)
