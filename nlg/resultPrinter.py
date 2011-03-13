@@ -100,14 +100,14 @@ def getNouns(NLUOutput, itemType, subjectList):
             order = NLUOutput[0].get("order")
             sortType = NLUOutput[0][subject]
             b = ""
-            if order == "desc":
+            if order == "asc":
                 if sortType == "gross":
                     b = "least profitable"
                 if sortType == "rating":
                     b = "least popular"
                 if sortType == "year":
                     b = "oldest"
-            else: #if order == "asc":
+            else: #if order == "desc":
                 if sortType == "gross":
                     b = "most profitable"
                 if sortType == "rating":

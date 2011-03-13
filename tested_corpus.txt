@@ -1,0 +1,318 @@
+//**************************************************************************
+// #First Benchmark Test Results#
+//Totals NLU:59 Response:<20 Crashes: >32
+//309 Prompts
+//40 Sorry, thats too vague
+//43 The query you asked returned false.
+//17 You asked about *keyword* and we found one instance: (5 returning none)
+//****************************************************************************
+
+My name is Sam.
+I'd like to watch a funny movie.
+I only like comedies with Adam Sandler in them.
+I want to search for action movies instead now.
+Action movies about dreams
+Tell me about Inception.
+That looks good.
+Are there any movies like Inception?
+Can you sort this by release date?
+I like serious movies. Can you find more serious movies for me?
+Are there any movies that have both action and comedy?
+Can you recommend me a movie?
+I don't like that movie.
+I like The Road.
+I also like I am Legend.
+Sure.
+I will see you later chatbot.
+I like dramas set in hospitals.
+yes
+I'd like to see more please.
+I like movies by Wes Anderson.
+What was Wes Anderson's first movie?
+No thanks, but I would like to know when his next movie is coming out?
+what was his highest grossing film?
+what other films came out that year?
+Did Wes Anderson act in any movies?
+Was Owen Wilson in any movies by Wes Anderson?
+Yes
+Did Owen Wilson write any movies with Wes Anderson?
+What other movies has Owen Wilson been in?
+I like Terry Gilliam.
+I am interested in movies directed by Terry Gilliam.
+yes
+I really liked "12 monkeys"
+I like Robin Williams.
+How many movies has he been in?
+What kinds of movies has he been in?
+What are those movies?
+Has he played in any sad movies?
+What are they?
+What was his first movie?
+What bad movies has he been in?
+Who was the first actor to play the part of Robinhood?
+Do I really have to watch it
+Who produced Star Wars?
+I like George Lucas's movies.
+What are the highest rated animated films?
+How long is Toy Story?
+Who did the voices in Toy Story?
+In what movies has Wallace Shawn voice acted in?
+Who did the voice for Andy?
+What genre is "the lord of the rings: the fellowship of the ring"
+how long is the movie?
+where was "the lord of the rings: the return of the king" filmed?
+I'm in the mood for a chick-flick.
+Can you sort the list in alphabetical order
+Are there any movies made by Walt Disney Pictures that are rated PG-13?
+I don't know what "prince of persia" is about
+Can I read a user review?
+My fmy favorite actor is Jim Carrey.
+No, that's ok
+I like vampires and werewolves.
+what do the critics think of "Van Helsing"?
+Never mind, then.
+Are there any movies that have horror but not action?
+I want to see musical with John Travolta.
+Which is more recent?
+what is your favorite movie, chatbot?
+Can I just see some recently released movies?
+Can you show me just the action comedies?
+Yes just comedies then.
+New search.
+I want to see some super hero movies.
+Yes I want to see movies by Marvel.
+non-animated
+Just show me the list
+Can you suggest some good war movies?
+I remember a really good one with Tom hanks.
+Yes. How long is it?
+I would like to see some family movie.
+Animated but not by Disney
+How many movies are in the "Shrek" series now?
+How is it?
+Thanks Movee!
+Hey, who directed "The Departed"?
+What else has he directed?
+Has he won any Academy Awards?
+I want to look at animated films.
+What is Pixar's newest movie?
+Who voices Woody?
+What is the plot of Toy Story 3?
+what is the plot of "Toy Story 3"?
+I really liked "Toy Story 3", can you get me others like it?
+I want to talk about actors now.
+I think Emma Watson is hot.
+Yes Please.
+What?! the new "Harry Potter" Movies is out?!
+Okay thanks. I want to look at Horror flicks now.
+Uh, I heard about this one where a man and family go to watch overthis hotel and the man goes totally insane. Know anything about it?
+No
+Yes!, who is the star in "The Shinning"?
+I want the whole cast now, sorry?
+Sweet, going to go watch it, cheers!
+bye
+Was Catherine Zeta Jones in "Entrapment"?
+Who was in "Entrapment"?
+What is the plot of "Entrapment"?
+I liked "Entrapment" and "Ocean's 11".
+Give me a recommendation.
+Got a recommendation?
+"Ocean's 12" sucked.
+Kevin Smith's films are usually good.
+Chick flicks are boring.
+Who is Aaron Sorkin?
+Is Bruce Willis in any non-action movies?
+which is better, "Die Hard" or "Die Hard 2"?
+what are the 10 best animated films?
+Who is similar to Jackie Chan?
+How many movies has he been in?
+where is he from?
+What has John Williams been up to?
+When did the original "True Grit" come out?
+I am looking for something fun, like the "Incredibles".
+What are the most famous movies Korngold composed?
+bye
+what are the "Mad Max" movies?
+What is a really sad movie?
+What movies are coming out this weekend?
+I'm looking for a silly movie.
+Can you list all the Pixar movies?
+How long is "The day the earth stood still"?
+What is the highest rated movie by the guy who made "Ran"?
+What is your favorite movie?
+I really like "Batman".
+What animated movies has he been in?
+Who voiced him in those movies?
+Where does Batman live?
+Do you like him?
+How many movies has James Cameron directed?
+WHo composed the score for "The lord of the rings"?
+Who was the first James Bond?
+I'm interested in documentaries, what can you recommend me?
+I want to watch the newest action movie available on DVD.
+Is Inception out on DVD yet?
+Is "Inception" out on DVD?
+Where can I watch "Pirates of the Caribbean"?
+Where can I watch the trailer for "Sanctum"?
+I want to watch a movie from the 80's.
+Where was "Superbad" filmed?
+Show me a list of funny movies with a PG-13 rating and below.
+What is the first movie George Lucas directed?
+Is Lady Gaga in any movies?
+My friend told me to watch "The Hangover", what can you tell me about it?
+What is the first Starwars movie?
+What is the first "Star Wars" movies?
+Who did the voice of Woody in "toy Story"?
+Is "The terminator" available in German?
+Did "Titanic" win any awards?
+Where are most U.S. films made?
+I liked Nicholas Cage in "National Treasure".
+I want to see more similar movies.
+Find a movie i would like.
+What happened in this movie?
+What happened in "National Treasure"?
+I hate Disney films but want an animated film to watch.
+I liked Nicholas Cage in "National Treasure".
+I think Jim Carrey is a great actor.
+I want an action film to watch.
+Recommend me a comedy film.
+What movies was Arnold Schwarennegger in?
+What movies was Arnold Schwarzenegger in?
+Daniel Craig is a great actor.
+I like horror films.
+What is "The wedding crashers" about?
+Whats a good movie to watch?
+What's a good movie to watch?
+I like movies by Alfred Hitchcock.
+I was the first "Lord of the Rings" and liked it.
+I saw the first "Lord of the Rings" and liked it.
+Tell me more about the next "Lord of the Rings" movie.
+Was Sandra Bullock starred in any movies that is not a romantic comedy?
+I've already seen this movie and did not like it.
+recommend me another movie.
+My favorite actress is Natalie Portman.
+What movies won academy awards in 2010.
+Who was the male lead of "Gladiator"?
+Where was "Lord of the Rings" filmed?
+"Return of the Jedi" is my favorite movie.
+What are some movies starring Seth Rogen?
+Which one of these is the best?
+I love "Star Wars".
+I hate "Star Trek".
+quit
+exit
+Wassup, my name is bob.
+Can you tell me a good movie with Keanu Reeves and Patrick Swazye?
+How about a romantic movie with Nicole Kidman?
+I like action comedies.
+No, I’ve already seen that one.  Are there any similar ones?
+Who played Marty in “Back to the Future”?
+What about Doc?
+Show me a list of movies directed by Clint Eastwood.  Are there any he didn’t act in?
+Show me all the movies by the Wachowski Brothers.
+I’d like to see a comedy with Bill Murray that is shorter than 90 minutes.
+Who was in Ghostbusters?
+Please help me settle an argument. When was ‘The Matrix’ released?
+How long is ‘Ghostbusters’?
+Whats the name of the movie with John Travolta and disco?
+Whats the most recent Disney movie?
+I want to find a sappy romance movie like 16 Candles.  Could you suggest one?
+What movie was Leonardo DiCaprio a con artisit in?
+Did he do any other movies with planes?
+What were John Stamos’ most recent movies?  Show me the last 5.
+Who was in ‘Hot Fuzz’ and ‘Shaun of the Dead’?
+I don’t like Tom Cruise but I think “Magnolia” is good. Please show me some movies like that.
+Show me the highest rated movie has Tom Hanks in it.
+Do you know how old is Jessica Alba? I like her and the movie Sin City.
+Show me some movies like Sin City
+Are there movies similar to Trainspotting?
+I like Magnolia. Please show me something similar.
+Which movie made by Pixar received the worst rating?
+I will skip this one. Show me the next one on your list.
+Show me the top 10 movies have best ratings and rated mature.
+Ben Hur is cool. Who is the director of that movie?
+Show the movies he/she made.
+I like to read a review of Inception.
+I said I don’t like Tom Cruise. Why you recommend me Valkyrie?
+Can you remember anything?
+You are useless. Who made you?
+What’s your birthday?
+Do you wanna go out with me?
+I don’t understand what the director of 2001 a Space Odyssey is trying to tell. Show me its plot.
+It seems Valkyrie is not bad after readying several reviews. Where can I find the movie?
+I like the Joker in Dark Knight. Tell me more about the actor.
+I love Star Wars.
+I hate Star Trek.
+What are some movies I would like?
+What is Pirates of the Caribbean: The Curse of the Black Pearl about?
+What movies were directed or written by Christopher Nolan?
+I like movies from the 1950’s.
+Recommend me a movie from that time.
+How many movies is Harrison Ford in?
+Which of those is the most recent?
+What is The Godfather about?
+Was Sam Worthington in Avatar?
+Who starred in Independence Day?
+Will Smith is my favorite actor.
+What’s a movie I would like?
+I only watch super hero movies.
+What’s a good movie that’s not like those?
+I like to watch a movie talks about guy life.
+Time traveling is interesting. Do you have anything to recommend?
+Like I said earlier, don’t show me anything has Harrison Ford.
+I like action adventure movies.
+I know Indiana Jones is an action adventure series but Harrison Ford is too political.
+Sean Connery is political too but I am ok with him. What are you going to do with me?
+Monica Bellucci is so hot. I wanna watch her movies.
+I’ve watched Malena already. btw it’s a really good one.
+The part two of A Chinese Odyssey is my favorite comedy and romance movie. Please find the bluray disc on Amazon for me.
+English Patient is such a sad movie.
+Who acted in There Will Be Blood?
+Show me the rewards American Beauty received. 
+Is Taken rated mature?
+Did Luc Besson make any movie in 1994?
+What the rating for Ran?
+Is Seven Samurai available in English?
+Show me some highly rated French movies.  /// NLU: wrong
+Show me some movies longer than 3 hours.
+Please recommend some Second World War movies.
+Thank you. You were really helpful.
+How much did “Terminator 2: Judgment” Day gross?
+Who is Phoebe?
+Could you tell me the cast in “Narnia 3”?
+What do you think about Kate Winslate?
+I wonder Eustace Scrubb appeared in which movie. 
+When did “a room with a view” produce?
+Who is the director of Notting Hill 
+What do you think about “Match Point”?
+Is it a good movie?
+How many awards did The Reader win?
+What’s the historical background in this movie?  /// NLU: crash
+Among Rachel, Monica and Phoebe in Friends, which one do you like the most?
+Why?  /// NLU: crash
+Which is the best movie in the history?
+Do you like American movie or British movie?
+Which movie did Wen Jiang and Li Gong act as main characters?
+I would appreciate it if you could tell me the cast in the Slumdog Millionaire.
+Which one do you like best?
+Who won the most awards in this movie?
+Who is the main character in "A Beautiful Mind"?
+show me all movies with Vin Diesel
+has Nicholas Cage directed any movies?
+i like Clint Eastwood's movies.
+What are some movies made by Quentin Tarantino but without Uma Thurman? 
+How many movies are in the list right now?
+What are the movies in the list?
+Is Samuel Jackson in any movies with John Travolta?
+Is Samuel Jackson in any non action movies?
+What are the main actors in "Pulp Fiction"?
+Is "Beauty and the Beast" animated?
+What was Clint Eastwood's first movie?
+How many movies has Walt Disney directed? 
+Has Walt Disney ever acted in any movies? If so, how many?
+When was Shia Lebaouef born?
+When was "Pulp Fiction" released?
+Let's start over.
+Ignore that last question.
+Whats a fun fact about "Pulp Fiction"?
+What is the name of John Travolta's character in "Pulp Fiction"?
