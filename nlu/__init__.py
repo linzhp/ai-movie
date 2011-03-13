@@ -1,4 +1,5 @@
 from os import path 
+import logging
 import sys
 import re
 import nltk
@@ -8,6 +9,7 @@ import dm
 import chunker
 from utils import *
 
+#TODO: It looks good
 
 class NLUnderstanding:
     """
@@ -33,10 +35,10 @@ class NLUnderstanding:
     """
     def __init__(self):
         self.expect = None
-#        with open(path.join(path.dirname(__file__), "chunkerpickler"),'r') as pickled_file:
-#            __import__("nlu.chunker")
-#            self.chk = pickle.load(pickled_file)
-        self.chk = chunker.Chunker(False)
+        with open(path.join(path.dirname(__file__), "chunkerpickler.bin"),'rb') as pickled_file:
+            __import__("nlu.chunker")
+            self.chk = pickle.load(pickled_file)
+#        self.chk = chunker.Chunker(False)
         self.stemmer = nltk.stem.PorterStemmer()
         self.keywords = []
         self.sure_role = False
@@ -45,6 +47,7 @@ class NLUnderstanding:
     def process(self, input_string):
         dm.chatbot.submit(input_string)
         chunked = self.chk.chunk(input_string)
+        logging.debug("Chunked Tree:"+str(chunked))
         result = []
 
         if self.expect:
@@ -52,29 +55,30 @@ class NLUnderstanding:
             if response:
                 result.append(response)
         find_category = False
+        category = None
+        index = 0
         for x in chunked:
             if isinstance(x, nltk.Tree):
-                index = chunked.index(x)
                 if x.node == "B-QUESTION":
-                    request = self._parse_question(chunked,index)
-                    if request:
-                        result.append(request)
-                    find_category = True
-                    break
-                elif x.node == "COMMAND":
-                    request = self._parse_command(chunked, index)
-                    if request:
-                        result.append(request)
-                    find_category = True
+                    category = x.node
+                    index = chunked.index(x)
+                elif x.node == "COMMAND" and category != "B-QUESTION":
+                    category = x.node                    
+                    index = chunked.index(x)
             elif x[1]=="BYE":
                 return [{"command":dm.EXIT}]
             elif x[1]=="RESTART":
                 result.append({"command":dm.CLEAR})
-
-        if not find_category:
-            preference=self._parse_pref(chunked)
-            if preference and len(preference)>0:
-                result.append(preference)
+                
+        if category == "B-QUESTION":
+            request = self._parse_question(chunked, index)
+        elif category == "COMMAND":
+            request = self._parse_command(chunked, index)
+        else:
+            request=self._parse_pref(chunked)
+        
+        if request and len(request)>0:
+                result.append(request)
                 
                     
         if len(result)==0:
@@ -108,7 +112,7 @@ class NLUnderstanding:
         next_index = all_leaves.index(next)
         keywords=self._search_keywords(all_leaves[next_index:])
         if len(keywords)>0:
-            request=self._parse_pref(chunked[command_index:], request=self._keyword2request(keywords[0]))
+            request=self._parse_pref(chunked, request=self._keyword2request(keywords[0]))
         return request
 
 
@@ -201,6 +205,8 @@ class NLUnderstanding:
         for pref in pref_list:
             all_pref.concat(pref)
         
+        if 'KW_SIMILAR' in self.keywords:
+            all_pref['request']='SIMILAR'
         self._resolve_pronouns(all_pref)
         self._resolve_person(all_pref)
         self._clean_unary_values(all_pref, ['result_length','sort','order','request'])

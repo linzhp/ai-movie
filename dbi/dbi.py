@@ -21,8 +21,6 @@ logfile = 0
 # possible movie attributes are: "title", "year", "plot", "director", "actor", "genre", "country", "filming_loc" "award" and "language"
 # TODO: award, gross
 def query(wanted, known, count=False):
-    print "wanted: "+wanted
-    print "known: "+str(known)
     if (logfile):
         logfile.write("Wanted: \"")
         logfile.write(str(wanted))

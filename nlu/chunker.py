@@ -31,7 +31,7 @@ class Chunker:
 			print "   Loading POS tagged training sentences."
 
 		# Load the tagged training sentences.
-		f = open( path.join(path.dirname(__file__),'training_sentences'), 'r' )
+		f = open( path.join(path.dirname(__file__),'training_sentences.bin'), 'r' )
 		train_sents = pickle.load(f)
 
 	
@@ -87,14 +87,17 @@ class Chunker:
         return chunked
 
 if __name__ == '__main__':
-#	with open(path.join(path.dirname(__file__), "chunkerpickler"),'r') as pickled_file:
-#		chk = pickle.load(pickled_file)
-	chk = Chunker(False)
-	result = chk.chunk("""Which movie by Tom Hanks earns the most?""")
+	with open(path.join(path.dirname(__file__), "chunkerpickler.bin"),'rb') as pickled_file:
+		chk = pickle.load(pickled_file)
+#	chk = Chunker(False)
+	result = chk.chunk("""Are there other movies that are similar to "Inception"?""")
 	print result
 	result.draw()
 
 """
+I like movies like "God Father" or "The load of the rings".
+I don't like Tom Cruise but I think "Magnolia" is good. Please show me some movies like that.
+Which movie by Tom Hanks earns the most?
 Do you know what the most popular movie was in 2004?
 Where can I watch avatar? Would you like to show theaters around you?
 In what year was "Jumanji" released?
