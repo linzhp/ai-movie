@@ -11,7 +11,7 @@ user: How many movies has Walt Disney directed?
 NLU:[{"request":"COUNT","director":"Walt Disney", "of":"title"}]
 
 user: Action movies about dreams.
-NLU:[{"request":"OPINION","genre":"Action","keyword":"dreams"}]
+NLU:[{"request":"OPINION","genre":"action","keyword":"dreams"}]
 
 user:tell me about "Inception"
 NLU:[{"request":"plot","title":"Inception"}]

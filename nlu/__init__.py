@@ -343,7 +343,7 @@ class NLUnderstanding:
           or cur_word=="they" or cur_word=="them" \
           or cur_word=="ones"): #TODO "that"
             self.cur_pref.add('title','PREV_IT')
-        elif cur_word == 'GNRE':
+        elif item[1] == 'GNRE':
             self.cur_pref.add('genre',cur_word)
         elif item[1] == 'CD':
             number = english2int(cur_word)
