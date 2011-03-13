@@ -37,7 +37,7 @@ class NLUnderstanding:
         with open(path.join(path.dirname(__file__), "chunkerpickler.bin"),'rb') as pickled_file:
             __import__("nlu.chunker")
             self.chk = pickle.load(pickled_file)
-#        self.chk = chunker.Chunker(False)
+        self.chk = chunker.Chunker(False, True)
         self.stemmer = nltk.stem.PorterStemmer()
         self.keywords = []
         self.sure_role = False

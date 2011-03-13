@@ -118,9 +118,5 @@ Can you suggest me some good action movies?
 I don't like Tom Cruise but I think "Magnolia" is good. Please show me some movies like that.
 Is "Beauty and the Beast" animated?
 How many movies has Walt Disney directed?
-<<<<<<< HEAD
 Are there other movies that are similar to "Inception"?
 """
-=======
-"""
->>>>>>> 1887875e8768deda42ea892c4763ca2617a1a106
