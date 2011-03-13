@@ -431,7 +431,7 @@ class NLUnderstanding:
                         modifier = not modifier
                         print modifier
                 if node[1][0]=='V':
-                    if node[1] in positiveList:
+                    if node[0] in positiveList:
                         verb = True
                     if node[0] in negativeList:
                         verb = False

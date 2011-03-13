@@ -1,4 +1,4 @@
-user: I don't like Tom Cruise but I think "Magnolia" is good. Please show me some movies like that.
+I don't like Tom Cruise but I think "Magnolia" is good. Please show me some movies like that.//period and good is not noun
 NLU: [{"request":"SIMILAR","!person":"Tom Cruise","title":"Magnolia"}]
 
 user: Which movie by Tom Hanks earns the most?
