@@ -1,3 +1,6 @@
+user: What's a fun fact about "Pulp Fiction"?
+NLU: [{'request': 'plot', 'title': 'Pulp Fiction'}]
+
 I don't like Tom Cruise but I think "Magnolia" is good. Please show me some movies like that.//period and good is not noun
 NLU: [{"request":"SIMILAR","!person":"Tom Cruise","title":"Magnolia"}]
 
@@ -13,7 +16,7 @@ NLU:[{"request":"OPINION","genre":"Action","keyword":"dreams"}]
 user:tell me about "Inception"
 NLU:[{"request":"plot","title":"Inception"}]
 
-It looks good //decide opinion returns None
+user: It looks good
 NLU:[{"like":"title"}]
 
 

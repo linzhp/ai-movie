@@ -90,11 +90,12 @@ if __name__ == '__main__':
 	with open(path.join(path.dirname(__file__), "chunkerpickler.bin"),'rb') as pickled_file:
 		chk = pickle.load(pickled_file)
 #	chk = Chunker(False)
-	result = chk.chunk("""Are there other movies that are similar to "Inception"?""")
+	result = chk.chunk("""What is the name of John Travolta's character in "Pulp Fiction"?""")
 	print result
 	result.draw()
 
 """
+What are some movies made by Quentin Tarantino but without Uma Thurman?
 I like movies like "God Father" or "The load of the rings".
 I don't like Tom Cruise but I think "Magnolia" is good. Please show me some movies like that.
 Which movie by Tom Hanks earns the most?
@@ -113,4 +114,5 @@ Can you suggest me some good action movies?
 I don't like Tom Cruise but I think "Magnolia" is good. Please show me some movies like that.
 Is "Beauty and the Beast" animated?
 How many movies has Walt Disney directed?
+Are there other movies that are similar to "Inception"?
 """

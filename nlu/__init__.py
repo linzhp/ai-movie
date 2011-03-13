@@ -9,7 +9,6 @@ import dm
 import chunker
 from utils import *
 
-#TODO: It looks good
 
 class NLUnderstanding:
     """
@@ -210,11 +209,14 @@ class NLUnderstanding:
         self._resolve_pronouns(all_pref)
         self._resolve_person(all_pref)
         self._clean_unary_values(all_pref, ['result_length','sort','order','request'])
+        
+        if all_pref.has_key('title') and all_pref.has_key('keyword'):
+            all_pref.pop('keyword')
 
         if all_pref['request'] == dm.OPINION:
             if len(all_pref)==2 and all_pref.get('title')=='PREV_IT':
                 all_pref={'like':'title'}
-        if len(all_pref)==1:
+        if len(all_pref)==1 and all_pref.get('request') == dm.OPINION:
             all_pref={}
         
         return all_pref
@@ -333,35 +335,36 @@ class NLUnderstanding:
         return self.cur_pref
     
     def _process_word(self, item):
-        if item[0] == "he" or item[0]=="she" \
-          or item[0]=="his" or item[0]=="her":
+        cur_word = item[0].lower()
+        if cur_word == "he" or cur_word=="she" \
+          or cur_word=="his" or cur_word=="her":
             self.cur_pref.add('person','PREV_HE')
-        elif (item[0] == "it" or item[0]=="this" \
-          or item[0]=="they" or item[0]=="them" \
-          or item[0]=="ones"): #TODO "that"
+        elif (cur_word == "it" or cur_word=="this" \
+          or cur_word=="they" or cur_word=="them" \
+          or cur_word=="ones"): #TODO "that"
             self.cur_pref.add('title','PREV_IT')
-        elif item[1] == 'GNRE':
-            self.cur_pref.add('genre',item[0])
+        elif cur_word == 'GNRE':
+            self.cur_pref.add('genre',cur_word)
         elif item[1] == 'CD':
-            number = english2int(item[0])
+            number = english2int(cur_word)
             if number:
-                if len(item[0])==4:
+                if len(cur_word)==4:
                     self.cur_pref.add('year', number)
                 else:
                     self.cur_pref['result_length']=number
         elif item[1] == 'COUNTRY':
-            self.cur_pref.add('country', item[0])
+            self.cur_pref.add('country', cur_word)
         elif item[1] == 'LANGUAGE':
-            self.cur_pref.add('language', item[0])
-        elif item[0] == 'first':
+            self.cur_pref.add('language', cur_word)
+        elif cur_word == 'first':
             self.cur_pref['sort']='year'
             self.cur_pref['order'] = 'asc'
             self.cur_pref['result_length']=1
-        elif item[0] == 'last' or item[0] == 'latest':
+        elif cur_word == 'last' or cur_word == 'latest':
             self.cur_pref['sort']='year'
             self.cur_pref['order'] = 'desc' 
             self.cur_pref['result_length']=1
-        elif item[0] == 'worst':
+        elif cur_word == 'worst':
             self.cur_pref['sort']='rating'
             self.cur_pref['order'] = 'asc'
             self.cur_pref['result_length']=1                                              
@@ -370,15 +373,15 @@ class NLUnderstanding:
             # Default to rating
             if not self.cur_pref.has_key('sort'):
                 self.cur_pref['sort']='rating'
-            if item[0] == 'highest' or item[0] == 'most' \
-                or item[0] == 'best':
+            if cur_word == 'highest' or cur_word == 'most' \
+                or cur_word == 'best':
                 self.cur_pref['order'] = 'desc'
             else:
                 self.cur_pref['order'] = 'asc'
         elif item[1][0:3] == 'KW_':
             self.keywords.append(item[1])
         else:
-            word=self.stemmer.stem(item[0])
+            word=self.stemmer.stem(cur_word)
             if word == 'gross' or word=='earn':
                 self.cur_pref['sort']='gross'
             elif word == 'recent':

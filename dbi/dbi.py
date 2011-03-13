@@ -1,6 +1,7 @@
 import nltk
 import MySQLdb
 import imdb
+import logging
 import ConfigParser
 from os import path
 
@@ -21,6 +22,8 @@ logfile = 0
 # possible movie attributes are: "title", "year", "plot", "director", "actor", "genre", "country", "filming_loc" "award" and "language"
 # TODO: award, gross
 def query(wanted, known, count=False):
+    logging.debug("wanted: "+wanted)
+    logging.debug("known: "+str(known))
     if (logfile):
         logfile.write("Wanted: \"")
         logfile.write(str(wanted))
