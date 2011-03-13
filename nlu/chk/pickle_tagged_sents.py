@@ -2,7 +2,7 @@ import pickle
 
 with open('./tagged_fixed', 'r') as infile:
 	tagged = infile.readlines()
-	with open('./training_sentences', 'w') as outfile:
+	with open('./../training_sentences', 'w') as outfile:
 
 		sentlist = []
 
