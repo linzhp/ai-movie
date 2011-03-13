@@ -387,9 +387,9 @@ class NLUnderstanding:
             if tuples[0] == 'but' or tuples[0] == 'however':
                 temp1 = chunked[0:counter]
                 temp2 = chunked[counter:]
-                break
+                return [temp1, temp2]
             counter = counter + 1
-        return [temp1, temp2]
+        return [chunked]
 
     def _decide_opinion(self, list):
         """
