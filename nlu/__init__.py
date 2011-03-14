@@ -9,7 +9,7 @@ import dm
 import chunker
 from utils import *
 
-
+#TODO animated->animation
 class NLUnderstanding:
     """
     Natural Language Understanding class.
