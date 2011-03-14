@@ -183,10 +183,10 @@ class NLUnderstanding:
         
         subsentences=self._partition(chunked)
         pref_list=[]
-        
+        prev_op = None
         for sentence in subsentences:
             cur_pref = self._process_subsentence(sentence)
-            positive = self._decide_opinion(sentence)
+            positive = self._decide_opinion(sentence, prev_op)
             
             if not positive:
                 cur_pref.negativate = negativate
@@ -201,6 +201,7 @@ class NLUnderstanding:
                 else:
                     pref_list.append(prev_pref)
             pref_list.append(cur_pref)
+            prev_op = positive
             
         for pref in pref_list:
             all_pref.concat(pref)
@@ -400,14 +401,14 @@ class NLUnderstanding:
         temp2 = []
         counter = 0
         for tuples in chunked:
-            if tuples[0] == 'but' or tuples[0] == 'however':
+            if isinstance(tuples, tuple) and tuples[1] == 'CC':
                 temp1 = chunked[0:counter]
                 temp2 = chunked[counter:]
                 return [temp1, temp2]
             counter = counter + 1
         return [chunked]
 
-    def _decide_opinion(self, list):
+    def _decide_opinion(self, list, prev):
         """
         Decide the user opinion in the current segment of sentence,
         represented by a list of tuples.
@@ -418,7 +419,7 @@ class NLUnderstanding:
         """
         print list
         modifier = True
-        verb = None
+        verb = prev
         
         for node in list:
             if isinstance(node, tuple):
@@ -435,6 +436,11 @@ class NLUnderstanding:
                         verb = True
                     if node[0] in negativeList:
                         verb = False
+#                    if node[0] in toBeList:
+#                        if node[0] in positiveAdjectiveList:
+#                            verb = True
+#                        if node[0] in negativeAdjectiveList:
+#                            verb = False 
 #                   
 #
         #list should be a list of tuples
