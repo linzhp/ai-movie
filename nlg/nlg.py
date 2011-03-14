@@ -88,6 +88,8 @@ def process(NLUOutput, DMOutput):
         rstring += answerResponse(NLUOutput,DMOutput)
     elif DMOutput.has_key("print"):
         rstring += printResults(NLUOutput,DMOutput)
+    elif DMOutput.has_key("list"):
+        rstring += listOutput(NLUOutput,DMOutput)
     elif DMOutput.has_key("question"):
         rstring += questionToUser(NLUOutput,DMOutput)
     elif DMOutput.has_key("off_topic"):
