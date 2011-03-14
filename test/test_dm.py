@@ -77,6 +77,11 @@ class Test(unittest.TestCase):
         self.dm.dbi.mockCheckCall(2, 'query','title',{'director':'Dummy','genre':'Dummy'},[0,50])
         
         self.assertEqual({'print':'title','results':["Dummy"]},result)
+        
+    def test_get_last_request(self):
+        self.dm.dbi.mockAddReturnValues(query=['Dummy'])
+        self.dm.request({'request':'title','person':'Tom Hanks'})
+        self.assertEqual('title',self.dm.state.last_request())
 
 if __name__ == "__main__":
     import sys

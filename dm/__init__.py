@@ -31,6 +31,7 @@ class DialogManager:
             internal_dict.pop(key)
         request_type = internal_dict.pop("request")
         if request_type == OPINION:
+            internal_dict['request']='title'
             self.state.add_request(internal_dict)
             internal_dict = self.state.get_all()
 
