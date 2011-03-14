@@ -22,6 +22,8 @@ logfile = 0
 # possible movie attributes are: "title", "year", "plot", "director", "actor", "genre", "country", "filming_loc" "award" and "language"
 # TODO: award, gross
 def query(wanted, known, count=False):
+    if not wanted:
+        return 0
     logging.debug("wanted: "+wanted)
     logging.debug("known: "+str(known))
     if (logfile):
@@ -212,7 +214,7 @@ def build_where(wanted, know):
         if (key == 'keyword'): 
             ele = know.get(key)
             first = 1
-            if (isinstance(key,list)): 
+            if (isinstance(ele,list)): 
                 for k in ele:
                     if (first):
                         where_list += 'AND k.keyword = "'+k+'" '
@@ -225,7 +227,7 @@ def build_where(wanted, know):
             ele = know.get(key)
             first = 1
             where_list += 'AND t.id NOT IN ( SELECT t.id FROM title t LEFT JOIN movie_keyword mk ON (t.id = mk.movie_id) LEFT JOIN keyword k ON (mk.keyword_id = k.id)  WHERE '
-            if (isinstance(act,list)): 
+            if (isinstance(ele,list)): 
                 for k in ele:
                     if (first):
                         where_list += 'k.keyword = "'+k+'" '
