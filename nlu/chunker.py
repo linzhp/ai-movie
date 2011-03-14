@@ -16,6 +16,7 @@
 import nltk
 import pickle
 from os import path
+import string
 
 class Chunker:
 
@@ -82,6 +83,8 @@ class Chunker:
             print "Chunker Initialized.#"
     
     def chunk(self, sentence):
+        if "." in sentence:
+            sentence = string.replace(sentence,"."," . ")
         tokd = nltk.word_tokenize(sentence)
         tagged = self.tagger.tag(tokd)
         if ('like', 'IN') in tagged:
