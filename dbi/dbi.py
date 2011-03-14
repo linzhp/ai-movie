@@ -252,6 +252,8 @@ def commonality(title1, title2):
     return result
 
 def munge_name(s):
+    if ',' in s:
+        return s
     a=s.rsplit(' ', 1)
     a.reverse()
     return ', '.join(a)

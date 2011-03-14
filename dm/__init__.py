@@ -76,6 +76,8 @@ class DialogManager:
                     internal_dict['genre']=self.dbi.query('genre', title_dict, [0,1])[0]
             
             movie_list = self.dbi.query("title", internal_dict, [0,result_length*5])
+            if title in movie_list:
+                movie_list.remove(title)
             if len(movie_list)>result_length:
                 commonalities = [dbi.commonality(title, movie) for movie in movie_list]
                 title_common=zip(movie_list, commonalities)
