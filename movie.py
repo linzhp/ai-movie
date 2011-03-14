@@ -11,13 +11,16 @@ nlu = NLUnderstanding()
 dialogManager = DialogManager()
 
 #TODO test MORE PREF
-#TODO I don't like Tom Cruise but I think "Magnolia" is good. Please show me some movies like that.
+
 try:
     greeting="Hi, there"#nlg.greet()
     logging.info('Bot: '+greeting)
 #    print('Bot: '+greeting)
     input = raw_input(greeting+'\n')
     while input is not None:
+        if len(input)==0:
+            input = raw_input("Could you speak louder? I can't hear you\n")
+            continue
         # NLU processing
         logging.info('User: '+input)
         nlu_out = nlu.process(input)

@@ -1,6 +1,7 @@
 import nltk
 import MySQLdb
 import imdb
+import logging
 import ConfigParser
 from os import path
 
@@ -21,6 +22,8 @@ logfile = 0
 # possible movie attributes are: "title", "year", "plot", "director", "actor", "genre", "country", "filming_loc" "award" and "language"
 # TODO: award, gross
 def query(wanted, known, count=False):
+    logging.debug("wanted: "+wanted)
+    logging.debug("known: "+str(known))
     if (logfile):
         logfile.write("Wanted: \"")
         logfile.write(str(wanted))
@@ -84,6 +87,8 @@ def query(wanted, known, count=False):
         res_list = [item[0] for item in res_list]
     if (len(res_list)>10 and not count and not isinstance(count,list)):
         return query(wanted, known, 1) 
+    if (count and not isinstance(count, list)): 
+        return res_list.pop() # Returns int instead of [int]
     return res_list
 
 # Get all films with a particular person.

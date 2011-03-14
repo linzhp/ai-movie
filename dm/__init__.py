@@ -6,6 +6,8 @@ from dbi import dbi
 import chatbot
 from state import State
 
+# TODO check people names before calling
+
 class DialogManager:
     def __init__(self):
         self.pending_question = None
@@ -53,6 +55,12 @@ class DialogManager:
                 self.pending_question = SEE_RESULT
                 result={"list":count, "question":self.pending_question}
             return result
+        elif request_type == SIMILAR:
+            self.state.add_request(internal_dict)
+            internal_dict = self.state.get_all()
+            if not internal_dict.has_key('result_length'):
+                internal_dict['result_length'] = 10
+            movie_list = self.dbi.query("title", internal_dict, [0,internal_dict['result_length']*2])
         else:
             count = internal_dict.get('result_length')
             if count:
@@ -125,3 +133,4 @@ EXIT="EXIT"
 CLEAR="CLEAR"
 COUNT="COUNT"
 OPINION='OPINION'
+SIMILAR = 'SIMILAR'
