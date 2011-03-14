@@ -69,7 +69,19 @@ class Test(unittest.TestCase):
         self.dm.state.mockCheckCall(2, 'add_request',{'request':'title','actor':'Keira Knightley'})
         self.assertEqual({'print':'title','results':["Pirates of the Caribbean", "Pride and Prejudice"]},result)
 
-
+    def test_request_similar(self):
+        self.dm.dbi.mockAddReturnValues(query=['Dummy'])
+        result = self.dm.request({'request':'SIMILAR','title':'Pirates of the Caribbean'})
+        self.dm.dbi.mockCheckCall(0, 'query','director',{'title':'Pirates of the Caribbean'},[0,1])
+        self.dm.dbi.mockCheckCall(1, 'query','genre',{'title':'Pirates of the Caribbean'},[0,1])
+        self.dm.dbi.mockCheckCall(2, 'query','title',{'director':'Dummy','genre':'Dummy'},[0,50])
+        
+        self.assertEqual({'print':'title','results':["Dummy"]},result)
+        
+    def test_get_last_request(self):
+        self.dm.dbi.mockAddReturnValues(query=['Dummy'])
+        self.dm.request({'request':'title','person':'Tom Hanks'})
+        self.assertEqual('title',self.dm.state.last_request())
 
 if __name__ == "__main__":
     import sys
