@@ -25,15 +25,17 @@ class Chunker:
             print "#Initializing chunker:"
         
         # Define regular expressions for punctuation tags
-        tagged_punc = [ (r'\"', ':'), (r'\?', 'QM') ]
+        tagged_punc = [ (r'\"', ':'), (r'\?', 'QM'),(r'\.', 'EOS') ]
         
-        if verbose:
-            print " Loading POS tagged training sentences."
+        
         
         # Load the tagged training sentences.
         if not test:
-            f = open( path.join(path.dirname(__file__),'training_sentences.bin'), 'r' )
+            f = open( path.join(path.dirname(__file__),'training_sentences.bin'), 'rb' )
             train_sents = pickle.load(f)
+            if verbose:
+                print " Loading POS tagged training sentences:"
+                print f
         elif test:
             f = open( path.join(path.dirname(__file__),'test_sentences'), 'r' )
             train_sents = pickle.load(f)
