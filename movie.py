@@ -17,6 +17,9 @@ try:
 #    print('Bot: '+greeting)
     input = raw_input(greeting+'\n')
     while input is not None:
+        if len(input)==0:
+            input = raw_input("Could you speak louder? I can't hear you\n")
+            continue
         # NLU processing
         logging.info('User: '+input)
         nlu_out = nlu.process(input)
