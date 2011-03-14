@@ -8,9 +8,9 @@ import nlu
 
 
 
-chk = nlu.chunker.Chunker(True)
+chk = nlu.chunker.Chunker(True,False)
 
-with open('./chunkerpickler','wb') as outfile:
+with open('./chunkerpickler.bin','wb') as outfile:
     print "starting pickle"
     pickle.dump(chk,outfile)
     outfile.closed
