@@ -44,7 +44,7 @@ def printResults(NLUOutput,DMOutput):
         return ""
     if DMOutput['results']== None:
         print "Error: None Type Returned"
-    if not isinstance(list,DMOutput['results']):
+    if not isinstance(DMOutput['results'], list):
         print "Error: Non-List Type 'results' Returned"
     elif len(DMOutput['results'])==0:
         return "Sorry, no results were found.\n"
