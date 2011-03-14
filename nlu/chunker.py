@@ -59,7 +59,7 @@ class Chunker:
         
         # Define a chunking grammar.
         chunk_grammar = r"""
-        B-QUESTION: {<WDT|WP|WRB><DT|RB.*|JJ>*<MD|VB.*|KW_.*>}
+        B-QUESTION: {<WDT|WP|WRB><DT|RB.*|JJ|GNRE>*<MD|VB.*|KW_.*>}
         {<WRB>}
         COMMAND: {^(<MD><PRP>)?(<RB>)*<VB|VBP>}
         {^<PRP><VB|VBP><TO>}
@@ -93,12 +93,12 @@ class Chunker:
         return chunked
 
 if __name__ == '__main__':
-    with open(path.join(path.dirname(__file__), "chunkerpickler.bin"),'rb') as pickled_file:
-        chk = pickle.load(pickled_file)
-        # chk = Chunker(False)
-        result = chk.chunk("""Are there other movies that are similar to "Inception"?""")
-        print result
-        result.draw()
+#    with open(path.join(path.dirname(__file__), "chunkerpickler.bin"),'rb') as pickled_file:
+#        chk = pickle.load(pickled_file)
+    chk = Chunker(False, True)
+    result = chk.chunk("""I don't like Tom Cruise but I think "Magnolia" is good. Please show me some movies like that.""")
+    print result
+    result.draw()
 
 """
 What are some movies made by Quentin Tarantino but without Uma Thurman?

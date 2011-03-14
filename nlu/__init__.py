@@ -205,7 +205,7 @@ class NLUnderstanding:
             all_pref.concat(pref)
         
         if 'KW_SIMILAR' in self.keywords:
-            all_pref['request']='SIMILAR'
+            all_pref['request']=dm.SIMILAR
         self._resolve_pronouns(all_pref)
         self._resolve_person(all_pref)
         self._clean_unary_values(all_pref, ['result_length','sort','order','request'])

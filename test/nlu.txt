@@ -1,65 +1,11 @@
-user: What's a fun fact about "Pulp Fiction"?
-NLU: [{'request': 'plot', 'title': 'Pulp Fiction'}]
 
-I don't like Tom Cruise but I think "Magnolia" is good. Please show me some movies like that.//period and good is not noun
-NLU: [{"request":"SIMILAR","!person":"Tom Cruise","title":"Magnolia"}]
-
-user: Which movie by Tom Hanks earns the most?
-NLU: [{"request":"title","sort":"gross","order":"desc","result_length":1,"person":"Tom Hanks"}]
-
-user: How many movies has Walt Disney directed?
-NLU:[{"request":"COUNT","director":"Walt Disney", "of":"title"}]
-
-user: Action movies about dreams.
-NLU:[{"request":"OPINION","genre":"action","keyword":"dreams"}]
-
-user:tell me about "Inception"
-NLU:[{"request":"plot","title":"Inception"}]
-
-user: It looks good
-NLU:[{"like":"title"}]
-
-
-did Wes Anderson act in any movies? //"act" is tagged as NN 
-NLU:[{"request":"title","actor":"Wes Anderson"}]
-
-user:what was his highest grossing film
-NLU:[{"request":"title","sort":"gross","order":"desc","result_length":1, "person":"PREV_HE"}]
-
-user: what other films came out in 2004?
-NLU:[{"request":"title","year":2004}]
-
-user: i like Robin Williams
-NLU:[{"request":"OPINION","person":"Robin Williams"}]
-
-user: how many movies has he been in?
-NLU:[{"request":"COUNT","of":"title", "person": "PREV_HE"}]
-
-what kinds of movies has he been in? // failed to mark kind
-NLU:[{"request":"genre", "person":"PREV_HE"}]
-
-user:who directed "the departed"?
-NLU:[{"request":"director","title":"the departed"}]
-
-user:what other movies has he directed?
-NLU:[{"request":"title","director":"PREV_HE"}]
-
-has he won any awards? 
-NLU:[{"request":"count","of":"award","person":"PREV_HE"}]
-
-user: Did Tom Hanks direct any comedy?
-NLU:[{"request":"OPINION", "director": "Tom Hanks", "genre":"comedy"}]
-
-user:i like Batman
-NLU:[{"request":"OPINION","person":"Batman"}]
-
-what animated movies has he been in? // failed to tag animated as GNRE
-NLU:[{"request":"title","genre":"animation","person":"PREV_HE"}]
+user: what animated movies has he been in?
+NLU:[{"request":"title","genre":"animated","person":"PREV_HE"}]
 
 user:I want to see some super hero movie
 NLU:[{"request":"title","keyword":"super hero"}]
 
-Who played Marty in "Back to the Future"?
+user: Who played Marty in "Back to the Future"?
 NLU:[{"request":"actor","character":"Marty", 'title': 'Back to the Future'}]
 
 user: How about a romantic movie with Nicole Kidman?
