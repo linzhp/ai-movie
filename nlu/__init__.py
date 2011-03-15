@@ -9,7 +9,6 @@ import dm
 import chunker
 from utils import *
 
-#TODO animated->animation
 class NLUnderstanding:
     """
     Natural Language Understanding class.
@@ -277,9 +276,6 @@ class NLUnderstanding:
            pref['request'] is that same with current keyword, get current role
            and set pref['request'] to next keyword
         """
-        #TODO if request is actor, then the other person in the question is 
-        #character.
-        # Who played Marty in "Back to the Future"?                
         role = None
         for keyword in self.keywords:
             if keyword=='KW_DIRECTOR' or keyword == 'KW_STAR':
