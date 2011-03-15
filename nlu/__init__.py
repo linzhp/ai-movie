@@ -38,6 +38,12 @@ class NLUnderstanding:
 #            self.chk = pickle.load(pickled_file)
         self.chk = chunker.Chunker(False, True)
         self.stemmer = nltk.stem.PorterStemmer()
+        self.keywords = []
+        self.positiveList = ["like","love"]
+        self.negativeList = ["hate","dislike"]
+        self.negativeAdjectiveList = []
+        self.positiveAdjectiveList = []
+        self.sure_role = False
 
     def process(self, input_string):
         self.keywords = []
@@ -274,9 +280,6 @@ class NLUnderstanding:
            pref['request'] is that same with current keyword, get current role
            and set pref['request'] to next keyword
         """
-        #TODO if request is actor, then the other person in the question is 
-        #character.
-        # Who played Marty in "Back to the Future"?                
         role = None
         for keyword in self.keywords:
             if keyword=='KW_DIRECTOR' or keyword == 'KW_STAR':
@@ -456,14 +459,14 @@ class NLUnderstanding:
                         modifier = not modifier
                         print modifier
                 if node[1][0]=='V':
-                    if node[0] in positiveList:
+                    if node[0] in self.positiveList:
                         verb = True
-                    if node[0] in negativeList:
+                    if node[0] in self.negativeList:
                         verb = False
 #                    if node[0] in toBeList:
-#                        if node[0] in positiveAdjectiveList:
+#                        if node[0] in self.positiveAdjectiveList:
 #                            verb = True
-#                        if node[0] in negativeAdjectiveList:
+#                        if node[0] in self.negativeAdjectiveList:
 #                            verb = False 
 #                   
 #
