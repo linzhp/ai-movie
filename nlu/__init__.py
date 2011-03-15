@@ -1,7 +1,9 @@
 from os import path 
+import logging
 import sys
 import re
 import nltk
+import pickle
 from nltk.corpus import wordnet
 import dm
 import chunker
@@ -31,7 +33,10 @@ class NLUnderstanding:
     """
     def __init__(self):
         self.expect = None
-        self.chk = chunker.Chunker(False)
+        with open(path.join(path.dirname(__file__), "chunkerpickler.bin"),'rb') as pickled_file:
+            __import__("nlu.chunker")
+            self.chk = pickle.load(pickled_file)
+        self.chk = chunker.Chunker(False, True)
         self.stemmer = nltk.stem.PorterStemmer()
         self.keywords = []
         self.sure_role = False
@@ -39,37 +44,41 @@ class NLUnderstanding:
     def process(self, input_string):
         dm.chatbot.submit(input_string)
         chunked = self.chk.chunk(input_string)
-
+        logging.debug("Chunked Tree:"+str(chunked))
         result = []
 
         if self.expect:
             response = self._response(chunked)
             if response:
                 result.append(response)
-        find_category = False
+        category = None
+        index = 0
         for x in chunked:
             if isinstance(x, nltk.Tree):
-                index = chunked.index(x)
                 if x.node == "B-QUESTION":
-                    request = self._parse_question(chunked,index)
-                    if request:
-                        result.append(request)
-                    find_category = True
-                    break
-                elif x.node == "COMMAND":
-                    request = self._parse_command(chunked, index)
-                    if request:
-                        result.append(request)
-                    find_category = True
+                    category = x.node
+                    index = chunked.index(x)
+                elif x.node == "COMMAND" and category != "B-QUESTION":
+                    category = x.node                    
+                    index = chunked.index(x)
+                elif x.node == 'TRUE_FALSE':
+                    category = x.node
             elif x[1]=="BYE":
                 return [{"command":dm.EXIT}]
             elif x[1]=="RESTART":
                 result.append({"command":dm.CLEAR})
-
-        if not find_category:
-            preference=self._parse_pref(chunked)
-            if preference and len(preference)>0:
-                result.append(preference)
+                
+        if category == "B-QUESTION":
+            request = self._parse_question(chunked, index)
+        elif category == "COMMAND":
+            request = self._parse_command(chunked, index)
+        elif category == 'TRUE_FALSE':
+            request = self._parse_pref(chunked, request='COUNT',of='title')
+        else:
+            request=self._parse_pref(chunked)
+        
+        if request and len(request)>0:
+                result.append(request)
                 
                     
         if len(result)==0:
@@ -103,7 +112,7 @@ class NLUnderstanding:
         next_index = all_leaves.index(next)
         keywords=self._search_keywords(all_leaves[next_index:])
         if len(keywords)>0:
-            request=self._parse_pref(chunked[command_index:], request=self._keyword2request(keywords[0]))
+            request=self._parse_pref(chunked, request=self._keyword2request(keywords[0]))
         return request
 
 
@@ -196,14 +205,19 @@ class NLUnderstanding:
         for pref in pref_list:
             all_pref.concat(pref)
         
+        if 'KW_SIMILAR' in self.keywords:
+            all_pref['request']=dm.SIMILAR
         self._resolve_pronouns(all_pref)
         self._resolve_person(all_pref)
         self._clean_unary_values(all_pref, ['result_length','sort','order','request'])
+        
+        if all_pref.has_key('title') and all_pref.has_key('keyword'):
+            all_pref.pop('keyword')
 
         if all_pref['request'] == dm.OPINION:
             if len(all_pref)==2 and all_pref.get('title')=='PREV_IT':
                 all_pref={'like':'title'}
-        if len(all_pref)==1:
+        if len(all_pref)==1 and all_pref.get('request') == dm.OPINION:
             all_pref={}
         
         return all_pref
@@ -218,11 +232,18 @@ class NLUnderstanding:
         titles=pref.get('title')
         if isinstance(titles, list) and 'PREV_IT' in titles:
             titles.remove('PREV_IT')
+            if len(titles) == 0:
+                pref.pop('title')
+            
+        if titles is not None and pref['request']=='title':
+            pref.pop('title')
 
         titles=pref.get('!title')
         if isinstance(titles, list) and 'PREV_IT' in titles:
             titles.remove('PREV_IT')
-            
+            if len(titles) == 0:
+                pref.pop('title')
+                
         person = pref.get('person')
         if isinstance(person, list) and 'PREV_HE' in person:
             person.remove('PREV_HE')
@@ -306,62 +327,63 @@ class NLUnderstanding:
                         break
             else:
                 self._process_word(item)
+                
+        if not self.cur_pref.has_key('order') and self.cur_pref.has_key('sort'):
+            self.cur_pref.pop('sort')
         return self.cur_pref
 
     def _process_word(self, item):
-        if item[0] == "he" or item[0]=="she" \
-          or item[0]=="his" or item[0]=="her":
+        cur_word = item[0].lower()
+        if cur_word == "he" or cur_word=="she" \
+          or cur_word=="his" or cur_word=="her":
             self.cur_pref.add('person','PREV_HE')
-        elif (item[0] == "it" or item[0]=="this" \
-          or item[0]=="they" or item[0]=="them" \
-          or item[0]=="ones"): #TODO "that"
+        elif (cur_word == "it" or cur_word=="this" \
+          or cur_word=="they" or cur_word=="them" \
+          or cur_word=="ones"): #TODO "that"
             self.cur_pref.add('title','PREV_IT')
         elif item[1] == 'GNRE':
-            self.cur_pref.add('genre',item[0])
+            self.cur_pref.add('genre',cur_word)
         elif item[1] == 'CD':
-            number = english2int(item[0])
+            number = english2int(cur_word)
             if number:
-                if len(item[0])==4:
+                if len(cur_word)==4:
                     self.cur_pref.add('year', number)
                 else:
                     self.cur_pref['result_length']=number
         elif item[1] == 'COUNTRY':
-            self.cur_pref.add('country', item[0])
+            self.cur_pref.add('country', cur_word)
         elif item[1] == 'LANGUAGE':
-            self.cur_pref.add('language', item[0])
-        elif item[0] == 'first':
+            self.cur_pref.add('language', cur_word)
+        elif cur_word == 'first':
             self.cur_pref['sort']='year'
             self.cur_pref['order'] = 'asc'
             self.cur_pref['result_length']=1
-        elif item[0] == 'last' or item[0] == 'latest':
+        elif cur_word == 'last' or cur_word == 'latest':
             self.cur_pref['sort']='year'
             self.cur_pref['order'] = 'desc' 
             self.cur_pref['result_length']=1
-        elif item[0] == 'worst':
+        elif cur_word == 'worst':
             self.cur_pref['sort']='rating'
             self.cur_pref['order'] = 'asc'
             self.cur_pref['result_length']=1                                              
-        elif item[0] == 'best':
-            self.cur_pref['sort']='rating'
-            self.cur_pref['order'] = 'desc'
-            self.cur_pref['result_length']=1                                              
-        elif item[1] == 'JJS':
+        elif item[1] == 'JJS' or item[1]=='RBS':
             self.cur_pref['result_length']=1
             # Default to rating
-            self.cur_pref['sort']='rating'
-            if item[0] == 'highest' or item[0] == 'most':
+            if not self.cur_pref.has_key('sort'):
+                self.cur_pref['sort']='rating'
+            if cur_word == 'highest' or cur_word == 'most' \
+                or cur_word == 'best':
                 self.cur_pref['order'] = 'desc'
             else:
                 self.cur_pref['order'] = 'asc'
         elif item[1][0:3] == 'KW_':
             self.keywords.append(item[1])
         else:
-            word=self.stemmer.stem(item[0])
-            if self.cur_pref.has_key('order') and self.cur_pref.has_key('result_length'):
-                if word == 'gross' or word=='earn':
-                    self.cur_pref['sort']='gross'
-                elif word == 'recent':
-                    self.cur_pref['sort']='year'
+            word=self.stemmer.stem(cur_word)
+            if word == 'gross' or word=='earn':
+                self.cur_pref['sort']='gross'
+            elif word == 'recent':
+                self.cur_pref['sort']='year'
         
         
     def _partition(self, chunked):
@@ -398,26 +420,29 @@ class NLUnderstanding:
         print list
         modifier = True
         verb = None
-        #list should be a list of tuples
-        for n in list:
-            if isinstance(n, nltk.tree.Tree):
-                if n.pos()[0][1][0] == 'V':
-                    for item in n[0]:
-                        print item
-                        if item[0] == "like":
-                            verb = True
-            else:
-                if n[1] == 'RB':
-                    if n[0] == "n't":
+        
+        for node in list:
+            if isinstance(node, tuple):
+                if node[1]=='RB':
+                    if node[0] == "n't" or node[0] == "not":
                         modifier = not modifier
-                    print n[0]
-        if modifier:
+                        print modifier
+                if node[1]=='IN':
+                    if node[0] == "without":
+                        modifier = not modifier
+                        print modifier
+                if node[1][0]=='V':
+                    if node[0] in positiveList:
+                        verb = True
+                    if node[0] in negativeList:
+                        verb = False
+#                   
+#
+        #list should be a list of tuples
+        if verb == None or modifier == True:
             return verb
         else:
-            if verb:
-                return not verb
-            else:
-                return verb
+            return not verb
 
     def _extract_words(self, tree):
         leaves = tree.leaves();

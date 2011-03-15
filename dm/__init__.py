@@ -6,6 +6,8 @@ from dbi import dbi
 import chatbot
 from state import State
 
+# TODO check people names before calling
+
 class DialogManager:
     def __init__(self):
         self.pending_question = None
@@ -29,6 +31,7 @@ class DialogManager:
             internal_dict.pop(key)
         request_type = internal_dict.pop("request")
         if request_type == OPINION:
+            internal_dict['request']='title'
             self.state.add_request(internal_dict)
             internal_dict = self.state.get_all()
             count=self.dbi.query('title',internal_dict, count=True)
@@ -49,12 +52,46 @@ class DialogManager:
                 return {"list":count, "question":HOW_MANY}
             else:
                 self.pending_question = SEE_RESULT
-                return {"list":count, "question":self.pending_question}
+                result={"list":count, "question":self.pending_question}
+            return result
+        elif request_type == SIMILAR:
+            self.state.add_request(internal_dict)
+            internal_dict = self.state.get_all()
+            if not internal_dict.has_key('title'):
+                return {'off_topic':chatbot.reply}
+            title = internal_dict['title']
+            if internal_dict.has_key('result_length'):
+                result_length= internal_dict.pop('result_length')
+            else:
+                result_length = 10
+            internal_dict.pop('title')
+            if len(internal_dict) <3:
+                if not internal_dict.has_key('director'):
+                    title_dict={'title':title}
+                    internal_dict['director']=self.dbi.query("director",\
+                                         title_dict, [0,1])[0]
+                if not internal_dict.has_key('genre'):
+                    internal_dict['genre']=self.dbi.query('genre', title_dict, [0,1])[0]
+            
+            movie_list = self.dbi.query("title", internal_dict, [0,result_length*5])
+            if title in movie_list:
+                movie_list.remove(title)
+            if len(movie_list)>result_length:
+                commonalities = [dbi.commonality(title, movie) for movie in movie_list]
+                title_common=zip(movie_list, commonalities)
+                title_common=sorted(title_common, \
+                                    lambda x,y:cmp(x[1],y[1]))[0,result_length]
+                results = [item[0] for item in title_common]
+            else:
+                results = movie_list
+            return {'print':'title','results':results}
         else:
             count = internal_dict.get('result_length')
             if count:
                 internal_dict.pop('result_length')
                 count = [0,count]
+            elif request_type=="plot" or request_type=="year":
+                count = [0, 1]
             results=self.dbi.query(request_type, internal_dict, count=count)
             state_dict = {'request':request_type}
             state_dict.update(internal_dict)
@@ -119,3 +156,4 @@ EXIT="EXIT"
 CLEAR="CLEAR"
 COUNT="COUNT"
 OPINION='OPINION'
+SIMILAR = 'SIMILAR'
