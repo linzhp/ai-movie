@@ -79,7 +79,6 @@ class NLUnderstanding:
         
         if request and len(request)>0:
                 result.append(request)
-                
                     
         if len(result)==0:
             result.append(self._off_topic(input_string))
