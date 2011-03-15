@@ -28,7 +28,7 @@ class Test(unittest.TestCase):
                     print "expected: "+str(expected_output)
                     self.assertEqual(expected_output, nlu_output)
                     nlu_output = None
-                    nlu = NLUnderstanding()
+#                    nlu.state
                     
     def testEnglish2Int(self):
         self.assertEqual(12,utils.english2int('12'))

@@ -33,15 +33,16 @@ class NLUnderstanding:
     """
     def __init__(self):
         self.expect = None
-        with open(path.join(path.dirname(__file__), "chunkerpickler.bin"),'rb') as pickled_file:
-            __import__("nlu.chunker")
-            self.chk = pickle.load(pickled_file)
+#        with open(path.join(path.dirname(__file__), "chunkerpickler.bin"),'rb') as pickled_file:
+#            __import__("nlu.chunker")
+#            self.chk = pickle.load(pickled_file)
         self.chk = chunker.Chunker(False, True)
         self.stemmer = nltk.stem.PorterStemmer()
-        self.keywords = []
-        self.sure_role = False
 
     def process(self, input_string):
+        self.keywords = []
+        self.sure_role = False
+        self.cur_pref = None
         dm.chatbot.submit(input_string)
         chunked = self.chk.chunk(input_string)
         logging.debug("Chunked Tree:"+str(chunked))
@@ -73,7 +74,7 @@ class NLUnderstanding:
         elif category == "COMMAND":
             request = self._parse_command(chunked, index)
         elif category == 'TRUE_FALSE':
-            request = self._parse_pref(chunked, request='COUNT',of='title')
+            request = self._parse_true_false(chunked)
         else:
             request=self._parse_pref(chunked)
         
@@ -102,6 +103,13 @@ class NLUnderstanding:
                     return {'response':node[1]}
         return None
     
+    def _parse_true_false(self, chunked):
+        keywords=self._search_keywords(chunked.leaves())
+        if len(keywords)>0:
+            request=self._parse_pref(chunked, request=dm.COUNT,of=self._keyword2request(keywords[0]))
+        return request
+        
+
     def _parse_command(self, chunked, command_index):
         request = None
         next=chunked[command_index+1]
@@ -182,10 +190,10 @@ class NLUnderstanding:
         
         subsentences=self._partition(chunked)
         pref_list=[]
-        
+        prev_op = None
         for sentence in subsentences:
             cur_pref = self._process_subsentence(sentence)
-            positive = self._decide_opinion(sentence)
+            positive = self._decide_opinion(sentence, prev_op)
             
             if not positive:
                 cur_pref.negativate = negativate
@@ -200,6 +208,7 @@ class NLUnderstanding:
                 else:
                     pref_list.append(prev_pref)
             pref_list.append(cur_pref)
+            prev_op = positive
             
         for pref in pref_list:
             all_pref.concat(pref)
@@ -280,15 +289,25 @@ class NLUnderstanding:
                         role=cur_role
                         pref['request']=None
                         continue
+                elif pref['request']==dm.COUNT and pref['of']==cur_role:
+                    if not self.sure_role:
+                        role=cur_role
+                        pref['of']=None
+                        continue
                 else:
                     role=cur_role
                     break
             if pref['request'] is None:
                 pref['request'] = self._keyword2request(keyword)
                 break
+            if pref['request']==dm.COUNT and pref['of'] is None:
+                pref['of'] = self._keyword2request(keyword)
+                break
 
         if pref['request'] is None:
             pref['request'] = 'title'
+        if pref['request']==dm.COUNT and pref['of'] is None:
+            pref['of'] = 'title'
             
         if not role and pref['request']=='actor':
             role = 'character'
@@ -341,6 +360,8 @@ class NLUnderstanding:
           or cur_word=="ones"): #TODO "that"
             self.cur_pref.add('title','PREV_IT')
         elif item[1] == 'GNRE':
+            if self.stemmer.stem(cur_word)=='anim':
+                cur_word = 'animation'
             self.cur_pref.add('genre',cur_word)
         elif item[1] == 'CD':
             number = english2int(cur_word)
@@ -400,14 +421,14 @@ class NLUnderstanding:
         temp2 = []
         counter = 0
         for tuples in chunked:
-            if tuples[0] == 'but' or tuples[0] == 'however':
+            if isinstance(tuples, tuple) and tuples[1] == 'CC':
                 temp1 = chunked[0:counter]
                 temp2 = chunked[counter:]
                 return [temp1, temp2]
             counter = counter + 1
         return [chunked]
 
-    def _decide_opinion(self, list):
+    def _decide_opinion(self, list, prev):
         """
         Decide the user opinion in the current segment of sentence,
         represented by a list of tuples.
@@ -418,7 +439,7 @@ class NLUnderstanding:
         """
         print list
         modifier = True
-        verb = None
+        verb = prev
         
         for node in list:
             if isinstance(node, tuple):
@@ -435,6 +456,11 @@ class NLUnderstanding:
                         verb = True
                     if node[0] in negativeList:
                         verb = False
+#                    if node[0] in toBeList:
+#                        if node[0] in positiveAdjectiveList:
+#                            verb = True
+#                        if node[0] in negativeAdjectiveList:
+#                            verb = False 
 #                   
 #
         #list should be a list of tuples
