@@ -22,8 +22,8 @@ NLU:[{"request":"plot","title":"Inception"}]
 user: It looks good
 NLU:[{"like":"title"}]
 
-did Wes Anderson act in any movies? 
-NLU:[{"request":"title","actor":"Wes Anderson"}]
+user: did Wes Anderson act in any movies? 
+NLU:[{"request":"COUNT", 'of':'title',"actor":"Wes Anderson"}]
 
 user:what was his highest grossing film
 NLU:[{"request":"title","sort":"gross","order":"desc","result_length":1, "person":"PREV_HE"}]
@@ -50,7 +50,7 @@ has he won any awards?
 NLU:[{"request":"count","of":"award","person":"PREV_HE"}]
 
 user: Did Tom Hanks direct any comedy?
-NLU:[{"request":"OPINION", "director": "Tom Hanks", "genre":"comedy"}]
+NLU:[{"request":"COUNT", 'of':'title', "director": "Tom Hanks", "genre":"comedy"}]
 
 user:i like Batman
 NLU:[{"request":"OPINION","person":"Batman"}]
