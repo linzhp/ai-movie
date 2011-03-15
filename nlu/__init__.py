@@ -204,15 +204,15 @@ class NLUnderstanding:
             positive = self._decide_opinion(sentence, prev_op)
             
             if not positive:
-                cur_pref.negativate = negativate
+                cur_pref.negate = negate
                 if positive is False:
-                    cur_pref=cur_pref.negativate(cur_pref)
-                #if positive is None, the negativate method is kept
+                    cur_pref=cur_pref.negate(cur_pref)
+                #if positive is None, the negate method is kept
             elif len(pref_list)>0:
                 prev_pref = pref_list.pop()
-                if 'negativate' in dir(prev_pref):
+                if 'negate' in dir(prev_pref):
                     # The previous preference is unknown
-                    pref_list.append(prev_pref.negativate(prev_pref))
+                    pref_list.append(prev_pref.negate(prev_pref))
                 else:
                     pref_list.append(prev_pref)
             pref_list.append(cur_pref)
@@ -485,7 +485,7 @@ class NLUnderstanding:
             words.remove('"')
         return " ".join(words)
 
-def negativate(self):
+def negate(self):
     """
     For amending dictionaries only
     """ 
