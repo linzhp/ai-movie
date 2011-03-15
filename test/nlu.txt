@@ -1,3 +1,6 @@
+user: How many movies has Mel Gibson made?
+NLU:[{"request":"COUNT","of":"title","director":"Mel Gibson"}]
+
 user: Show me some movies like "Sin City"
 NLU: [{'request':'SIMILAR','title':'Sin City'}]
 
