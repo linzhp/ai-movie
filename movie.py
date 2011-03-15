@@ -21,21 +21,20 @@ try:
         if len(input)==0:
             input = raw_input("Could you speak louder? I can't hear you\n")
             continue
-       # try:
-        # NLU processing
-        logging.info('User: '+input)
-        nlu_out = nlu.process(input)
-        logging.debug('nlu_out: '+str(nlu_out))
-        # Dialog manager processing
-        dm_out=dialogManager.input(nlu_out)
-        logging.debug('dm_out: '+str(dm_out))
-        # Dialog manager gives feed back to NLU
-        nlu.expect = dialogManager.pending_question
-        # Generate response to user
-        output=nlg.process(nlu_out,dm_out)
-#        except Exception, ex:
-#            raise ex
-#            output = chatbot.reply
+        try:
+            # NLU processing
+            logging.info('User: '+input)
+            nlu_out = nlu.process(input)
+            logging.debug('nlu_out: '+str(nlu_out))
+            # Dialog manager processing
+            dm_out=dialogManager.input(nlu_out)
+            logging.debug('dm_out: '+str(dm_out))
+            # Dialog manager gives feed back to NLU
+            nlu.expect = dialogManager.pending_question
+            # Generate response to user
+            output=nlg.process(nlu_out,dm_out)
+        except "nothing":#Exception, ex:
+            output = chatbot.reply
         # Print and log response  
         logging.info('Bot: '+str(output))
 #        print('Bot: '+str(output))
