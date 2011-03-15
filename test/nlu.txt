@@ -1,4 +1,7 @@
-user: How many movies has Mel Gibson made?
+user: I don't like Tom Cruise but I think "Magnolia" is good. Please show me some movies like that.
+NLU: [{"request":"SIMILAR","!person":"Tom Cruise","title":"Magnolia"}]
+
+How many movies has Mel Gibson made?
 NLU:[{"request":"COUNT","of":"title","director":"Mel Gibson"}]
 
 user: Show me some movies like "Sin City"
@@ -6,9 +9,6 @@ NLU: [{'request':'SIMILAR','title':'Sin City'}]
 
 user: What's a fun fact about "Pulp Fiction"?
 NLU: [{'request': 'plot', 'title': 'Pulp Fiction'}]
-
-I don't like Tom Cruise but I think "Magnolia" is good. Please show me some movies like that.//could not deside opinion
-NLU: [{"request":"SIMILAR","!person":"Tom Cruise","title":"Magnolia"}]
 
 user: Which movie by Tom Hanks earns the most?
 NLU: [{"request":"title","sort":"gross","order":"desc","result_length":1,"person":"Tom Hanks"}]

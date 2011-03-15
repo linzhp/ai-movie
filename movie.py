@@ -33,9 +33,8 @@ try:
             nlu.expect = dialogManager.pending_question
             # Generate response to user
             output=nlg.process(nlu_out,dm_out)
-        except Exception, ex:
-            raise ex
-#            output = chatbot.reply
+        except "nothing":#Exception, ex:
+            output = chatbot.reply
         # Print and log response  
         logging.info('Bot: '+str(output))
 #        print('Bot: '+str(output))
