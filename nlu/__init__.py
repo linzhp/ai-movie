@@ -40,6 +40,10 @@ class NLUnderstanding:
         self.chk = chunker.Chunker(False, True)
         self.stemmer = nltk.stem.PorterStemmer()
         self.keywords = []
+        self.positiveList = ["like","love"]
+        self.negativeList = ["hate","dislike"]
+        self.negativeAdjectiveList = []
+        self.positiveAdjectiveList = []
         self.sure_role = False
     
 
@@ -438,14 +442,14 @@ class NLUnderstanding:
                         modifier = not modifier
                         print modifier
                 if node[1][0]=='V':
-                    if node[0] in positiveList:
+                    if node[0] in self.positiveList:
                         verb = True
-                    if node[0] in negativeList:
+                    if node[0] in self.negativeList:
                         verb = False
 #                    if node[0] in toBeList:
-#                        if node[0] in positiveAdjectiveList:
+#                        if node[0] in self.positiveAdjectiveList:
 #                            verb = True
-#                        if node[0] in negativeAdjectiveList:
+#                        if node[0] in self.negativeAdjectiveList:
 #                            verb = False 
 #                   
 #
@@ -472,8 +476,6 @@ def negativate(self):
         new_dict['!'+key]=self[key]
     return new_dict
 
-positiveList = ["like","love"]
-negativeList = ["hate","dislike"]
 if __name__ == "__main__":
     nlu = NLUnderstanding()
     chuncked = nlu.process("I like Tom Hanks but don't like action movies!")
