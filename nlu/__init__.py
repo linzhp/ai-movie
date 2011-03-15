@@ -198,8 +198,9 @@ class NLUnderstanding:
         prev_op = None
         for sentence in subsentences:
             cur_pref = self._process_subsentence(sentence)
+#            print sentence
             positive = self._decide_opinion(sentence, prev_op)
-            
+            print positive
             if not positive:
                 cur_pref.negate = negate
                 if positive is False:
@@ -232,7 +233,7 @@ class NLUnderstanding:
                 all_pref={'like':'title'}
         if len(all_pref)==1 and all_pref.get('request') == dm.OPINION:
             all_pref={}
-        
+#        print all_pref
         return all_pref
     
     def _clean_unary_values(self, dic, keys):
@@ -367,6 +368,8 @@ class NLUnderstanding:
         elif item[1] == 'GNRE':
             if self.stemmer.stem(cur_word)=='anim':
                 cur_word = 'animation'
+            elif self.stemmer.stem(cur_word)=='comedi':
+                cur_word = 'comedy'
             self.cur_pref.add('genre',cur_word)
         elif item[1] == 'CD':
             number = english2int(cur_word)
@@ -426,7 +429,7 @@ class NLUnderstanding:
         temp2 = []
         counter = 0
         for tuples in chunked:
-            if isinstance(tuples, tuple) and tuples[1] == 'CC':
+            if isinstance(tuples, tuple) and (tuples[1] == 'CC' or tuples[1] == 'EOS'):
                 temp1 = chunked[0:counter]
                 temp2 = chunked[counter:]
                 return [temp1, temp2]
@@ -461,21 +464,23 @@ class NLUnderstanding:
         return: True if it is positive, False if it is negative, None
         if it is unknown
         """
-        print list
+#        print list
         modifier = True
         verb = prev
         checkAdjective = False
         
         for node in list:
+            if isinstance(node, nltk.Tree):
+                verb = self._decide_opinion(node.leaves(), verb)
             if isinstance(node, tuple):
                 if node[1]=='RB':
                     if node[0] == "n't" or node[0] == "not":
                         modifier = not modifier
-                        print modifier
+#                        print modifier
                 if node[1]=='IN':
                     if node[0] == "without":
                         modifier = not modifier
-                        print modifier
+#                        print modifier
                 if node[1][0]=='V':
                     if node[0] in self.positiveList:
                         verb = True
@@ -490,6 +495,8 @@ class NLUnderstanding:
                         verb = False
 #
         #list should be a list of tuples
+#        print "verb = "+str(verb)
+#        print "modifier = "+str(modifier)
         if verb == None or modifier == True:
             return verb
         else:

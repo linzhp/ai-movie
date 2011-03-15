@@ -7,7 +7,7 @@ import chatbot
 from state import State
 
 # TODO check people names before calling
-
+# TODO when user's preference include 'title', don't search 'title' anymore
 class DialogManager:
     def __init__(self):
         self.pending_question = None
