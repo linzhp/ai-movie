@@ -7,7 +7,6 @@ import dm
 import chunker
 from utils import *
 
-
 class NLUnderstanding:
     """
     Natural Language Understanding class.
@@ -36,7 +35,6 @@ class NLUnderstanding:
         self.stemmer = nltk.stem.PorterStemmer()
         self.keywords = []
         self.sure_role = False
-    
 
     def process(self, input_string):
         dm.chatbot.submit(input_string)
@@ -82,7 +80,7 @@ class NLUnderstanding:
     def _response(self, chuncked):
         """
         This method is called when user is supposed to answer a question
-        Precondition: self.expect is not None    
+        Precondition: self.expect is not None
         """
         if self.expect == "result_length":
             for node in chuncked:
@@ -281,10 +279,7 @@ class NLUnderstanding:
             elif pref.has_key('!person'):
                 name=pref.pop('!person')
                 pref["!"+role]=name
-            
-                
-                
-     
+
     def _process_subsentence(self, list):
         self.cur_pref=ListDict()
         first_type = True
@@ -312,7 +307,7 @@ class NLUnderstanding:
             else:
                 self._process_word(item)
         return self.cur_pref
-    
+
     def _process_word(self, item):
         if item[0] == "he" or item[0]=="she" \
           or item[0]=="his" or item[0]=="her":
@@ -415,8 +410,6 @@ class NLUnderstanding:
                 if n[1] == 'RB':
                     if n[0] == "n't":
                         modifier = not modifier
-                    if n[0] == "n't":
-                        modifier = not modifier
                     print n[0]
         if modifier:
             return verb
@@ -425,7 +418,7 @@ class NLUnderstanding:
                 return not verb
             else:
                 return verb
-        
+
     def _extract_words(self, tree):
         leaves = tree.leaves();
         words = [item[0] for item in leaves]
@@ -442,8 +435,3 @@ def negativate(self):
     for key in self:
         new_dict['!'+key]=self[key]
     return new_dict
-
-if __name__ == "__main__":
-    nlu = NLUnderstanding()
-    chuncked = nlu.process("I like Tom Hanks but don't like action movies!")
-    nlu._partition(chuncked)
