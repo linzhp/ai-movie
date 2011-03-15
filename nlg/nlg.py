@@ -21,13 +21,13 @@ def listOutput(NLUOutput,DMOutput):
     if resultNum < 0:
         print "NLG Error: List Size less than zero"
     elif resultNum == 1:
-        rstring += "There was one result."
+        rstring += get_random_line("one_result.txt")[:-1]
     elif resultNum == 0:
-        rstring += "No results were found."
+        rstring += get_random_line("no_result.txt")[:-1]
     elif resultNum < 60:
-        rstring += "There were {0} results.".format(nlgu.int_to_english(resultNum))
+        rstring += get_random_line("mutli_result.txt")[:-1].format(nlgu.int_to_english(resultNum))
     else:
-        rstring += "There were {0} results.".format(resultNum)
+        rstring += get_random_line("mutli_result.txt")[:-1].format(resultNum)
 
     if resultNum == 0:
         rstring += "  Type 'reset' to start over." # This should be removed
