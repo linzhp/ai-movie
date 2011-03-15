@@ -1,5 +1,6 @@
 import resultPrinter as rp
 import nlg_utils as nlgu
+from os import path
 
 def questionToUser(NLUOutput,DMOutput):
     # DMOutput should contain [question:FLAG]
@@ -18,16 +19,17 @@ def listOutput(NLUOutput,DMOutput):
     resultNum = DMOutput['list']
     #return listSize #different response depending on size
     rstring = ""
+    filePath = path.dirname(__file__)+'/prs/'
     if resultNum < 0:
         print "NLG Error: List Size less than zero"
     elif resultNum == 1:
-        rstring += get_random_line("one_result.txt")[:-1]
+        rstring += nlgu.get_random_line(filePath+"one_result.txt")[:-1]
     elif resultNum == 0:
-        rstring += get_random_line("no_result.txt")[:-1]
+        rstring += nlgu.get_random_line(filePath+"no_result.txt")[:-1]
     elif resultNum < 60:
-        rstring += get_random_line("mutli_result.txt")[:-1].format(nlgu.int_to_english(resultNum))
+        rstring += nlgu.get_random_line(filePath+"multi_result.txt")[:-1].format(nlgu.int_to_english(resultNum))
     else:
-        rstring += get_random_line("mutli_result.txt")[:-1].format(resultNum)
+        rstring += nlgu.get_random_line(filePath+"multi_result.txt")[:-1].format(resultNum)
 
     if resultNum == 0:
         rstring += "  Type 'reset' to start over." # This should be removed
@@ -83,6 +85,9 @@ def answerResponse(NLUOutput,DMOutput):
         rstring += '\n'
     return rstring
 
+def offtopicResponse(offtopic_string):
+    return offtopic_string
+
 def process(NLUOutput, DMOutput):
     rstring = ""
     if DMOutput.has_key("answer"):
@@ -94,7 +99,7 @@ def process(NLUOutput, DMOutput):
     elif DMOutput.has_key("question"):
         rstring += questionToUser(NLUOutput,DMOutput)
     elif DMOutput.has_key("off_topic"):
-        return DMOutput["off_topic"]
+        return offtopicResponse(DMOutput["off_topic"])
     elif NLUOutput[0].has_key("like"):
         rstring += likeResponse(NLUOutput,DMOutput)
     elif NLUOutput[0].get("command")=="EXIT":
