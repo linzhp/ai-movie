@@ -41,7 +41,7 @@ class NLUnderstanding:
         self.keywords = []
         self._create_opinion_lists()
         self.sure_role = False
-    
+
 
     def process(self, input_string):
         self.keywords = []
