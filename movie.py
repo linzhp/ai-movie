@@ -11,7 +11,7 @@ nlu = NLUnderstanding()
 dialogManager = DialogManager()
 
 #TODO test MORE PREF
-
+#TODO add catch all statement so that whenever it breaks, it will be off topic
 try:
     greeting="Hi, there"#nlg.greet()
     logging.info('Bot: '+greeting)

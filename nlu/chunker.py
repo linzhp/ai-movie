@@ -100,7 +100,7 @@ if __name__ == '__main__':
 #    with open(path.join(path.dirname(__file__), "chunkerpickler.bin"),'rb') as pickled_file:
 #        chk = pickle.load(pickled_file)
     chk = Chunker(False, True)
-    result = chk.chunk("""Has Wes Anderson acted in any movies?""")
+    result = chk.chunk("""what kinds of movies has he been in?""")
     print result
     result.draw()
 
