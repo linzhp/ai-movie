@@ -40,10 +40,7 @@ class NLUnderstanding:
         self.chk = chunker.Chunker(False, True)
         self.stemmer = nltk.stem.PorterStemmer()
         self.keywords = []
-        self.positiveList = ["like","love"]
-        self.negativeList = ["hate","dislike"]
-        self.negativeAdjectiveList = []
-        self.positiveAdjectiveList = []
+        self._create_opinion_lists()
         self.sure_role = False
     
 
@@ -440,6 +437,25 @@ class NLUnderstanding:
             counter = counter + 1
         return [chunked]
 
+    def _create_opinion_lists(self):
+        myPath = path.dirname(__file__)+"/opinions/"
+        self.positiveList = []
+        with open(myPath+"positiveList.txt") as file:
+            for line in file:
+                self.positiveList.append(line[:-1]) 
+        self.negativeList = []
+        with open(myPath+"negativeList.txt") as file:
+            for line in file:
+                self.negativeList.append(line[:-1])
+        self.negativeAdjectiveList = []
+        with open(myPath+"negativeAdjectiveList.txt") as file:
+            for line in file:
+                self.negativeAdjectiveList.append(line[:-1])
+        self.positiveAdjectiveList = []
+        with open(myPath+"positiveAdjectiveList.txt") as file:
+            for line in file:
+                self.positiveAdjectiveList.append(line[:-1])
+
     def _decide_opinion(self, list, prev):
         """
         Decide the user opinion in the current segment of sentence,
@@ -452,6 +468,7 @@ class NLUnderstanding:
         print list
         modifier = True
         verb = prev
+        checkAdjective = False
         
         for node in list:
             if isinstance(node, tuple):
@@ -468,12 +485,13 @@ class NLUnderstanding:
                         verb = True
                     if node[0] in self.negativeList:
                         verb = False
-#                    if node[0] in toBeList:
-#                        if node[0] in self.positiveAdjectiveList:
-#                            verb = True
-#                        if node[0] in self.negativeAdjectiveList:
-#                            verb = False 
-#                   
+                    if node[0] in ["is","are","was","were"]:
+                        checkAdjective = True
+                if checkAdjective:
+                    if node[0] in self.positiveAdjectiveList:
+                        verb = True
+                    if node[0] in self.negativeAdjectiveList:
+                        verb = False
 #
         #list should be a list of tuples
         if verb == None or modifier == True:

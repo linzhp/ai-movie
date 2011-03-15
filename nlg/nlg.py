@@ -8,7 +8,7 @@ def questionToUser(NLUOutput,DMOutput):
     elif DMOutput['question'] == 'MORE_PREF':
         return "Could you help me narrow it down a bit?\n"
     elif DMOutput['question'] == 'SEE_RESULT?':
-        return "Would you like to see the result?\n"
+        return "Would you like to see the results?\n"
     else:
         print "NLG Error: Unknown Question Type: "+DMOutput['question']
         return ""
@@ -22,6 +22,8 @@ def listOutput(NLUOutput,DMOutput):
         print "NLG Error: List Size less than zero"
     elif resultNum == 1:
         rstring += "There was one result."
+    elif resultNum == 0:
+        rstring += "No results were found."
     elif resultNum < 60:
         rstring += "There were {0} results.".format(nlgu.int_to_english(resultNum))
     else:
@@ -29,8 +31,7 @@ def listOutput(NLUOutput,DMOutput):
 
     if resultNum == 0:
         rstring += "  Type 'reset' to start over." # This should be removed
-
-    if DMOutput.has_key("question"):
+    elif DMOutput.has_key("question"):
         rstring += ' '+questionToUser(NLUOutput,DMOutput)
     else:
         rstring += "\n"

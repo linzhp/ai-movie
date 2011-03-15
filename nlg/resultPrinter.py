@@ -21,6 +21,8 @@ def getPrintSentence(itemType, subjectList):
     subjectString = "_".join(subjectList);
     if len(subjectList)>0:
         subjectString+='_'
+    elif itemType != "director":
+        itemType = "default"
     fileName = path.dirname(__file__)+'/prs/'+subjectString+itemType + '_sentences.txt'
     rstring = nlgu.get_random_line(fileName)
     if rstring == "":
@@ -45,8 +47,12 @@ def do(itemType, NLUOutput, resultList):
     if subject== None:
         itemType = "default"
         subject = []
-        
-    printSentence = getPrintSentence(itemType, subject)
+    
+#    printSentence = ""
+    if len(resultList)<5:
+        printSentence = getPrintSentence("default", subject)
+    else:
+        printSentence = getPrintSentence(itemType, subject)
 
     result = printItems(itemType, resultList)
 
