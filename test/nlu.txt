@@ -56,7 +56,7 @@ user:i like Batman
 NLU:[{"request":"OPINION","person":"Batman"}]
 
 user: what animated movies has he been in?
-NLU:[{"request":"title","genre":"animated","person":"PREV_HE"}]
+NLU:[{"request":"title","genre":"animation","person":"PREV_HE"}]
 
 user:I want to see some super hero movie
 NLU:[{"request":"title","keyword":"super hero"}]
@@ -66,3 +66,4 @@ NLU:[{"request":"actor","character":"Marty", 'title': 'Back to the Future'}]
 
 user: How about a romantic movie with Nicole Kidman?
 NLU:[{"request":"title", "genre":"romantic","person":"Nicole Kidman"}]
+

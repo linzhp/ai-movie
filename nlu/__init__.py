@@ -365,6 +365,8 @@ class NLUnderstanding:
           or cur_word=="ones"): #TODO "that"
             self.cur_pref.add('title','PREV_IT')
         elif item[1] == 'GNRE':
+            if self.stemmer.stem(cur_word)=='anim':
+                cur_word = 'animation'
             self.cur_pref.add('genre',cur_word)
         elif item[1] == 'CD':
             number = english2int(cur_word)
