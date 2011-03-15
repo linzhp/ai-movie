@@ -7,8 +7,10 @@ def questionToUser(NLUOutput,DMOutput):
         return "How many would you like to see?\n"
     elif DMOutput['question'] == 'MORE_PREF':
         return "Could you help me narrow it down a bit?\n"
+    elif DMOutput['question'] == 'SEE_RESULT?':
+        return "Would you like to see the result?\n"
     else:
-        print "NLG Error: Unknown Question Type"
+        print "NLG Error: Unknown Question Type: "+DMOutput['question']
         return ""
 
 def listOutput(NLUOutput,DMOutput):
@@ -24,7 +26,10 @@ def listOutput(NLUOutput,DMOutput):
         rstring += "There were {0} results.".format(nlgu.int_to_english(resultNum))
     else:
         rstring += "There were {0} results.".format(resultNum)
-        
+
+    if resultNum == 0:
+        rstring += "  Type 'reset' to start over." # This should be removed
+
     if DMOutput.has_key("question"):
         rstring += ' '+questionToUser(NLUOutput,DMOutput)
     else:
@@ -32,12 +37,16 @@ def listOutput(NLUOutput,DMOutput):
     return rstring
 
 def printResults(NLUOutput,DMOutput):
-    if not DMOutput.has_key('results'):
+    if DMOutput.has_key("list"):
+        rstring += listOutput(NLUOutput,DMOutput)
+    elif not DMOutput.has_key('results'):
         print "NLG Error: invalid print request\n"
         return ""
     if DMOutput['results']== None:
         print "Error: None Type Returned"
-    if len(DMOutput['results'])==0:
+    if not isinstance(DMOutput['results'], list):
+        print "Error: Non-List Type 'results' Returned"
+    elif len(DMOutput['results'])==0:
         return "Sorry, no results were found.\n"
     
     rstring = ""
