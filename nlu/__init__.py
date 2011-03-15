@@ -200,7 +200,7 @@ class NLUnderstanding:
             cur_pref = self._process_subsentence(sentence)
 #            print sentence
             positive = self._decide_opinion(sentence, prev_op)
-#            print positive
+            print positive
             if not positive:
                 cur_pref.negate = negate
                 if positive is False:
@@ -368,6 +368,8 @@ class NLUnderstanding:
         elif item[1] == 'GNRE':
             if self.stemmer.stem(cur_word)=='anim':
                 cur_word = 'animation'
+            elif self.stemmer.stem(cur_word)=='comedi':
+                cur_word = 'comedy'
             self.cur_pref.add('genre',cur_word)
         elif item[1] == 'CD':
             number = english2int(cur_word)
