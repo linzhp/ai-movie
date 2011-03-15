@@ -421,7 +421,11 @@ class NLUnderstanding:
         temp2 = []
         counter = 0
         for tuples in chunked:
-            if isinstance(tuples, tuple) and tuples[1] == 'CC':
+            if isinstance(tuples, tuple) and (tuples[0] == 'but' or tuples[0] == 'however' or tuples[0] == 'and'):
+                temp1 = chunked[0:counter]
+                temp2 = chunked[counter:]
+                return [temp1, temp2]
+            elif isinstance(tuples, tuple) and tuples[1] == 'EOS':
                 temp1 = chunked[0:counter]
                 temp2 = chunked[counter:]
                 return [temp1, temp2]
