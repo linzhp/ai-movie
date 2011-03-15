@@ -53,7 +53,6 @@ class NLUnderstanding:
             response = self._response(chunked)
             if response:
                 result.append(response)
-        find_category = False
         category = None
         index = 0
         for x in chunked:
@@ -64,6 +63,8 @@ class NLUnderstanding:
                 elif x.node == "COMMAND" and category != "B-QUESTION":
                     category = x.node                    
                     index = chunked.index(x)
+                elif x.node == 'TRUE_FALSE':
+                    category = x.node
             elif x[1]=="BYE":
                 return [{"command":dm.EXIT}]
             elif x[1]=="RESTART":
@@ -73,6 +74,8 @@ class NLUnderstanding:
             request = self._parse_question(chunked, index)
         elif category == "COMMAND":
             request = self._parse_command(chunked, index)
+        elif category == 'TRUE_FALSE':
+            request = self._parse_pref(chunked, request='COUNT',of='title')
         else:
             request=self._parse_pref(chunked)
         

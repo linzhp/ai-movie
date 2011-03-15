@@ -65,6 +65,7 @@ class Chunker:
         COMMAND: {^(<MD><PRP>)?(<RB>)*<VB|VBP>}
         {^<PRP><VB|VBP><TO>}
         {<RB><VBP|VB>}
+        TRUE_FALSE: {^<VBD|VBZ>}
         TITLE: {<:><[^:]*>*<:>}
         PERSON: {<NNP[S]?>+}
         NP: {<PRP\$>?<JJ>*<NN|NNS>(<POS>?<JJ>*<NN|NNS>)*}
@@ -99,7 +100,7 @@ if __name__ == '__main__':
 #    with open(path.join(path.dirname(__file__), "chunkerpickler.bin"),'rb') as pickled_file:
 #        chk = pickle.load(pickled_file)
     chk = Chunker(False, True)
-    result = chk.chunk("""I don't like Tom Cruise but I think "Magnolia" is good. Please show me some movies like that.""")
+    result = chk.chunk("""Has Wes Anderson acted in any movies?""")
     print result
     result.draw()
 
