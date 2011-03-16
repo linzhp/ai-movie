@@ -506,7 +506,9 @@ def awards(person):
     q += 'WHERE n.name="' + family_first(person) + '" AND t.title LIKE "%award%"'
     conn.query(q)
     result = conn.store_result()
-    return result.pop()
+    res_list = result.fetch_row(result.num_rows())
+    res_list = [item[0] for item in res_list]
+    return res_list.pop()
 
 # Find number of keywords in common between two movies.
 def commonality(title1, title2):

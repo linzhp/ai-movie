@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import logging
 from nlg import nlg
 from nlu import NLUnderstanding
