@@ -56,6 +56,8 @@ def query(wanted, known, count=False):
         fin_query += 't.production_year '
     elif (wanted == 'keyword'):
         fin_query += 'k.keyword '
+    elif (wanted == 'character'):
+        fin_query += 'cn.name '
     else:
         fin_query += 't.title, n.name, t.production_year '
         if (logfile):
@@ -91,11 +93,13 @@ def query(wanted, known, count=False):
     conn.query(fin_query)
     result = conn.store_result()
     res_list = result.fetch_row(result.num_rows())
-    if (wanted != 'cast' and wanted != 'keyword'):
+    if (wanted != 'cast'):
         res_list = [item[0] for item in res_list]
     if (len(res_list)>10 and not count and not isinstance(count,list)):
         return query(wanted, known, 1)
     if (count and not isinstance(count, list)): # Returns int instead of [int]
+        if (isinstance(res_list,dict)):
+            return [item[0] for item in res_list].pop()
         return res_list.pop() 
     return res_list
 
@@ -107,8 +111,7 @@ def build_from(wanted, know):
     # Looking for movie title
     if (wanted == 'title' or wanted == 'year'):
         from_list += 'title t ' # Covers the year with production_year
-        if (know.has_key('actor') or know.has_key('person') or know.has_key('role') or know.has_key('director')):
-
+        if (know.has_key('actor') or know.has_key('person') or know.has_key('role') or know.has_key('director') or know.has_key('character')):
             actors = know.get('actor')
             people = know.get('person')
             direct = know.get('director')
@@ -139,12 +142,15 @@ def build_from(wanted, know):
                 
             if (know.has_key('role') or know.has_key('director')):
                 from_list += 'LEFT JOIN role_type rt ON (c.role_id = rt.id) '
+            if (know.has_key('character')):
+                from_list += 'LEFT JOIN char_name cn ON (c.person_role_id = cn.id) '
                 
         if (know.has_key('genre')): # Must have WHERE clause mi.info_type_id = 3
             from_list += 'LEFT JOIN movie_info mi ON (t.id = mi.movie_id) ' 
-        if (wanted == 'keyword' or know.has_key('keyword')):
+        if (know.has_key('keyword')):
             from_list += 'LEFT JOIN movie_keyword mk ON (t.id = mk.movie_id) '
-            from_list += 'LEFT JOIN keyword k ON (mk.keyword_id = k.id) '
+            from_list += 'LEFT JOIN keyword k ON (mk.keyword_id = k.id) '   
+        
             
     # Looking for actor             #TODO: New FROM Statements for multiple titles.
     elif (wanted == 'actor' or wanted == 'person' or wanted=='director'):
@@ -155,6 +161,9 @@ def build_from(wanted, know):
                 from_list += 'LEFT JOIN movie_info mi ON (t.id = mi.movie_id) '
         if (know.has_key('role') or know.has_key('director')):
             from_list += 'LEFT JOIN role_type rt ON (c.role_id = rt.id) '
+        if (know.has_key('character')):
+            from_list += 'LEFT JOIN char_name cn ON (c.person_role_id = cn.id) '
+            
             
             
     elif (wanted == 'genre'  or wanted == 'country' or wanted == 'filming_loc' or wanted == 'languages' or wanted == 'plot' or wanted == 'keyword'):
@@ -172,7 +181,14 @@ def build_from(wanted, know):
         from_list += 'LEFT JOIN char_name cn ON (c.person_role_id = cn.id) '
         if (know.has_key('plot') or know.has_key('genre')):
             from_list += 'LEFT JOIN movie_info mi ON (c.movie_id = mi.movie_id) '
-    # To add keyword, link cast_info, title, and movie_keyword by movie_id, and keyword.id=movie_keyword.keyword_id     
+    elif (wanted == 'character'):
+        from_list += 'FROM cast_info c LEFT JOIN char_name cn ON (c.person_role_id = cn.id) '
+        if (know.has_key('title') or know.has_key('year')):
+            from_list += 'LEFT JOIN title t ON (c.movie_id = t.id) '
+        if (know.has_key('person') or know.has_key('actor') or know.has_key('director')):
+            from_list += 'LEFT JOIN name n ON (c.person_id = n.id) '
+            if (know.has_key('role') or know.has_key('director')):
+                from_list += 'LEFT JOIN role_type rt ON (c.role_id = rt.id) '
     else:
         if (logfile):
             logfile.write('WARNING: DBi: Could not identify desired info: "'+ str(wanted) +'"\n')
@@ -219,6 +235,7 @@ def build_where(wanted, know):
     where_list += where_year(know)
     where_list += where_info(know)   # Supports genre, plot, country, filming_loc, and languages
     where_list += where_keyword(know) 
+    where_list += where_character(know)
 
     return where_list
 
@@ -280,6 +297,7 @@ def where_person(know): #TODO: Insert new code
                     q += 'AND n' + str(idx) + '.name = "' + family_first(a) + '" '
         else:
             q += 'AND n.name = "' + family_first(actor) + '" '
+        q += 'AND c.role_id < 3 '
     if (person):
         if (isinstance(person,list)): # TODO: Add support for this in build_from AND check roll.
             for p in person:
@@ -300,6 +318,7 @@ def where_person(know): #TODO: Insert new code
                     q += 'AND n' + str(idx) + '.name = "' + family_first(d) + '" '
         else:
             q += 'AND n.name = "' + family_first(director) + '" '
+            q += 'c.role_id = 8 ' # Enforce that they directed.
     
     if (idx > 1):
         q += 'AND c.movie_id = c2.movie_id '
@@ -453,7 +472,35 @@ def where_keyword(know):
         where_list += ') '  
         if (where_list == None):
             return ''
-        return where_list      
+        return where_list   
+    
+def where_character(know):
+    chara = know.get('character')
+    not_chara = know.get('!character')
+    ret = ''
+    if (chara):
+        if (isinstance(chara,list)):
+            ret += 'AND cn.name = "' + str(chara.pop()) + '" ' 
+            for c in chara:
+                ret += 'OR cn.name = "'+c+'" '
+        else:
+            ret += 'AND cn.name = "'+chara+'" '
+    if (not_chara):
+        first = 1
+        ret += 'AND c.person_type_id NOT IN ( Snot_charaCT cn.id FROM char_name cn WHERE '
+        if (isinstance(not_chara,list)): 
+            for c in not_chara:
+                if (first):
+                    ret += 'cn.name = "'+c+'" '
+                    first = 0
+                else:
+                    ret += 'OR cn.name = "'+c+'" '
+        else:
+            ret += 'cn.name = "'+not_chara+'" '
+        ret += ') '  
+    if (ret == None):
+        return ''
+    return ret   
 
 # Find number of awards a person has recieved? Been niminated for? 
 def awards(person):
@@ -498,6 +545,8 @@ def invert_name(s):
 # Naieve Name Spell-check. Pass in the name, and it will return a list with either the name, or a list of similar names.
 def check_person(name):
     debug_spellcheck = False 
+    if (name.count(' ')): # If this is an atomic name
+        return [name] # TODO: Throw an exception.
     name = given_first(name)
     name_list = name.rsplit(' ', 1)
     family_name=name_list.pop()[:6]
