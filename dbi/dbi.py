@@ -346,7 +346,7 @@ def where_person(know): #TODO: Insert new code
             for nd in not_director:
                  q += 'OR n.name = ' + nd +' '
         else:
-            q += str(not_actor) + '" '
+            q += str(not_director) + '" '
         q += 'AND c.role_id = 8 ) '
     if (not_person): 
         q += 'AND t.id NOT IN ( '  
@@ -357,7 +357,7 @@ def where_person(know): #TODO: Insert new code
             for np in not_person:
                  q += 'OR n.name = ' + np +' '
         else:
-            q += str(not_actor) + '" ) '
+            q += str(not_person) + '" ) '
     if (q == None):
         return ''
     return q
