@@ -1,3 +1,20 @@
+NIMROD
+=========
+
+Dependencies
+------------
+Python module dependencies:
+
+* MySQLdb
+* numpy
+* imdbpy 
+
+Third party module dependencies:
+* Howie: https://github.com/linzhp/Howie
+
+Installation
+------------
+
 The movie selector uses a MySQL database generated from IMDB plain text data. Follow the instructions in <http://imdbpy.sourceforge.net/docs/README.sqldb.txt> to load data from IMDB plain text into a MySQL database.
 
 Before running the movie selector, you need to configure it first:
@@ -6,26 +23,19 @@ Before running the movie selector, you need to configure it first:
 
 Then change it configure in movie.cfg according to your MySQL database configuration.
 
-To run the movie selector cd to the dm directory and run 
-the python script movie.py:
+Run
+---
+To run the movie selector, run the python script movie.py:
 
-	cd dm
 	python movie.py
 
-Python module dependencies:
-
-* MySQLdb
-* numpy
-* imdbpy 
-
-Note: there are two log files session.log and session2.log. Initially both instances of our bot were writing to the same log file during evaluation. Because of this the first half of session.log has interlaced data from both sessions. session2.log is more readable.
+Note: The dialog is logged in session.log
 
 
 Description of directories in the project
+-----------------------------------------
 
 * nlu/		Natural Language Understanding
 * dm/		Dialog Manager
 * dbi/		Database Interface 
 * nlg/		Natural Language Generation
-* sample_input/	Sample user input
-* doc/		Documentation
