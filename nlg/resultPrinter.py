@@ -42,9 +42,9 @@ def getSubjectList(NLUOutput, itemType):
             rlist.append(key)
     return rlist
 
-def do(itemType, NLUOutput, resultList):
+def do(givenItemType, NLUOutput, resultList):
+    itemType = givenItemType
     subject = getSubjectList(NLUOutput, itemType)
-    
     if subject== None:
         itemType = "default"
         subject = []   
@@ -56,9 +56,9 @@ def do(itemType, NLUOutput, resultList):
     else:
         printSentence = getPrintSentence("default", [])
 
-    result = printItems(itemType, resultList)
+    result = printItems(givenItemType, resultList)
 
-    nouns = getNouns(NLUOutput, itemType, subject)
+    nouns = getNouns(NLUOutput, subject)
         
     printSentence = printSentence.format(nouns, result)
     
@@ -81,25 +81,26 @@ def printSmallItemList(itemType, resultList):
     for result in resultList:
         n += 1 
         if n == len(resultList):
-            rstring += " and "+str(result)
+            rstring += " and " + nlgu.flipPersons(itemType,str(result))
         elif n == len(resultList)-1:
-            rstring += str(result)
+            rstring += nlgu.flipPersons(itemType,str(result))
         else:
-            rstring += str(result)+", "
+            rstring += nlgu.flipPersons(itemType,str(result))+", "
     return rstring
 
 def printBigItemList(itemType, resultList):
     rstring = ""
     for result in resultList:
-        rstring += str(result)+"\n"
+        rstring += nlgu.flipPersons(itemType,str(result))+"\n"
     return rstring 
     pass
 
 def printItem(itemType, result):
-    return str(result)
+    return nlgu.flipPersons(itemType,str(result))
 
-def getNouns(NLUOutput, itemType, subjectList):
+def getNouns(NLUOutput, subjectList):
     returnList = []
+    
     for subject in subjectList:
         a = []
         if NLUOutput[0][subject] in pronounKeys:
@@ -124,7 +125,7 @@ def getNouns(NLUOutput, itemType, subjectList):
                     b = "newest"
             a = [b,b]
         else:
-            a = [NLUOutput[0][subject],NLUOutput[0][subject]]
+            a = [nlgu.flipPersons(subject, NLUOutput[0][subject]), nlgu.flipPersons(subject, NLUOutput[0][subject])]
         returnList.append(a)
 #    print subjectList, returnList
     return returnList

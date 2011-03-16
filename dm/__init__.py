@@ -12,7 +12,8 @@ class DialogManager:
     def __init__(self):
         self.pending_question = None
         self.state = State()
-        self.dbi = dbi 
+        self.dbi = dbi
+        self.spell_checked = False
 
     def request(self, dict):
         # NLG does not need to be aware of below operations
@@ -40,7 +41,7 @@ class DialogManager:
                 return self.request(internal_dict)
             count=self.dbi.query('title',internal_dict, count=True)
             if count>10:
-                self.pending_question = "result_length"
+                self.pending_question = MORE_PREF
                 return {"list":count, "question":MORE_PREF}
             else:
                 self.pending_question = SEE_RESULT
@@ -51,10 +52,9 @@ class DialogManager:
             state_dict.update(internal_dict)
             self.state.add_request(state_dict)
             count=self.dbi.query(of, internal_dict, count=True)
-            result={}
             if count>10:
                 self.pending_question = "result_length"
-                result={"list":count, "question":HOW_MANY}
+                return {"list":count, "question":HOW_MANY}
             else:
                 self.pending_question = SEE_RESULT
                 result={"list":count, "question":self.pending_question}
@@ -65,6 +65,8 @@ class DialogManager:
             if not internal_dict.has_key('title'):
                 return {'off_topic':chatbot.reply}
             title = internal_dict['title']
+            if isinstance(title, list):
+                title = title[0]
             if internal_dict.has_key('result_length'):
                 result_length= internal_dict.pop('result_length')
             else:
@@ -74,13 +76,13 @@ class DialogManager:
                 title_dict={'title':title}
                 if not internal_dict.has_key('director'):
                     directors = self.dbi.query("director",title_dict, [0,1])
-                    if len(directors)>1:
+                    if len(directors)>0:
                         internal_dict['director']=directors[0]
                     else:
                         return {'print':'title','results':[]}
                 if not internal_dict.has_key('genre'):
                     genres = self.dbi.query('genre', title_dict, [0,1])
-                    if len(genres)>1:
+                    if len(genres)>0:
                         internal_dict['genre']=genres[0]
                     else:
                         return {'print':'title','results':[]}            
@@ -91,11 +93,13 @@ class DialogManager:
                 commonalities = [dbi.commonality(title, movie) for movie in movie_list]
                 title_common=zip(movie_list, commonalities)
                 title_common=sorted(title_common, \
-                                    lambda x,y:cmp(x[1],y[1]))[0,result_length]
+                                    lambda x,y:cmp(x[1],y[1]))[0:result_length]
                 results = [item[0] for item in title_common]
             else:
                 results = movie_list
             return {'print':'title','results':results}
+        elif request_type == CHOICE:
+            pass # do something here
         else:
             count = internal_dict.get('result_length')
             if count:
@@ -117,18 +121,20 @@ class DialogManager:
             else:
                 self.state.add_result({request_type:results})
                 return {'print':request_type,'results':results}
-            
-    
+
     def command(self, dict):
         if dict["command"]==CLEAR:
             self.state.clear()
-    
+
     def response(self, dict):
         internal_dict = dict.copy()
         response = internal_dict.pop("response")
         if response=="NO":
-            # FIXME check any problem here 
-            return {}
+            if self.pending_question == MORE_PREF:
+                self.pending_question = "result_length"
+                return {"question":HOW_MANY}
+            else:
+                return {}
         elif response == "YES":
             if self.pending_question:
                 internal_dict["request"]=self.state.last_request()
@@ -146,24 +152,74 @@ class DialogManager:
             reply = chatbot.submit(dict['off_topic'])
         return {'off_topic':reply}
     
+    def check_spelling(self, mylist):
+        misspelled_names = {}
+        newInputList = []
+        for dict in mylist:
+            newDict = {}
+            for tuple in dict:
+                if tuple in ['person','actor','director','voice actor']:
+                    if isinstance(dict[tuple], list):
+                        newList = []
+                        new_name = ""
+                        for person in dict[tuple]:
+                            new_names = dbi.check_person(person)
+                            if len(new_names)==1:
+                                new_name = new_names.pop()
+                            else:
+                                new_name = person
+                                misspelled_names[person]=new_names
+                                #create output to nlg
+                            newList.append(new_name)
+                    else:
+                        new_names = dbi.check_person(dict[tuple])
+                        if len(new_names)==1:
+                            new_name = new_names.pop()
+                        else:
+                            new_name = dict[tuple]
+                            misspelled_names[dict[tuple]]=new_names
+                            #create output to nlg
+                        newList = new_name
+                    newDict[tuple] = newList
+                else:
+                    newDict[tuple] = dict[tuple]
+            newInputList.append(newDict)
+        if len(misspelled_names)==0:
+            return newInputList
+        else:
+            return misspelled_names
+                    
+    
     def input(self, list):
+        misspelled = self.check_spelling(list)
+        if isinstance(misspelled,dict):
+            self.pending_question = 'person' #FIXME: need to retain roles
+            misspelled['question']=CHOICE
+            for d in list:
+                if d.has_key('request'):
+                    self.state.add_request(d)
+            return misspelled
         result_dict={}
-        for dict in list:
-            if dict.has_key("request"):
-                result_dict.update(self.request(dict))
-            elif dict.has_key("command"):
-                self.command(dict)
-            elif dict.has_key("response"):
-                result_dict.update(self.response(dict))
-            elif dict.has_key("off_topic"):
-                result_dict=self.off_topic(dict)
-        self.state.add_result(result_dict)
+        for d in list:
+            if d.has_key("request"):
+                result_dict.update(self.request(d))
+            elif d.has_key("command"):
+                self.command(d)
+            elif d.has_key("response"):
+                result_dict.update(self.response(d))
+            elif d.has_key("off_topic"):
+                result_dict=self.off_topic(d)
+        print list
+        print result_dict
+
+        self.state.add_result(result_dict)          
         return result_dict
         
 # Define constants        
 HOW_MANY = "HOW_MANY"
 SEE_RESULT="SEE_RESULT?"
 MORE_PREF="MORE_PREF"
+CHOICE = "CHOICE"
 EXIT="EXIT"
 CLEAR="CLEAR"
 COUNT="COUNT"

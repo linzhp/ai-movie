@@ -1,5 +1,0 @@
-movies keys:
-['rating', 'plot', 'kind', 'runtimes', 'director', 'votes distribution', 'year', 'keywords', 'color info', 'production companies', 'votes', 'title', 'release dates', 'languages', 'cast', 'top 250 rank', 'genres', 'canonical title', 'long imdb title', 'long imdb canonical title']
-
-person keys:
-['pictorials', 'mini biography', 'height', 'director', 'quotes', 'episodes', 'books', 'salary history', 'magazine covers', 'trademarks', 'spouse', 'portrayed', 'articles', 'name', 'biographical movies', 'interviews', 'actor', 'imdbIndex', 'other works', 'birth name', 'trivia', 'birth notes', 'birth date', 'canonical name', 'long imdb name', 'long imdb canonical name']
