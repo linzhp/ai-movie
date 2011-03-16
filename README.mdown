@@ -1,5 +1,6 @@
 NIMROD
-=========
+https://github.com/linzhp/ai-movie
+======
 
 Dependencies
 ------------
@@ -10,6 +11,7 @@ Python module dependencies:
 * imdbpy 
 
 Third party module dependencies:
+
 * Howie: https://github.com/linzhp/Howie
 
 Installation
