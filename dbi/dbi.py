@@ -371,14 +371,31 @@ def where_year(know):
 def where_info(know): # Handles Genre, Plot, Country, Filming Location, and Languages. 
     # TODO: Put in new query code. Merge genres on items within type on OR, between type AND
     ele = []
-    if(know.get('genre')):
-        ele += know.get('genre')
-    if(know.get('country')):
-        ele += know.get('country')
-    if(know.get('languages')):
-        ele += know.get('languages')
-    if(know.get('filming_loc')):
-        ele += know.get('filming_loc')
+    genre = know.get('genre')
+    country = know.get('country')
+    languages = know.get('languages')
+    film_loc = know.get('filming_loc')
+    
+    if(genre):
+        if (isinstance(genre, list)):
+            ele += genre
+        else:
+            ele += [genre]
+    if(country):
+        if (isinstance(country, list)):
+            ele += country
+        else:
+            ele += [country]
+    if(languages):
+        if (isinstence(languages, list)):
+            ele += languages
+        else:
+            ele += [languages]
+    if(film_loc):
+        if (isinstance(film_loc, list)):   
+            ele += film_loc
+        else:
+            ele += [film_loc]
     ret = ''
     if (isinstance(ele,list)): 
         for k in ele:
@@ -453,7 +470,9 @@ def commonality(title1, title2):
     q += 'WHERE title="'+title1+'" OR title="'+title2+'" LIMIT 0,1000'
     conn.query(q)
     result = conn.store_result()
-    return result.pop()
+    if (result):
+        return result.pop()
+    return 0
 
 def family_first(name):
     if (name.count(',')):
