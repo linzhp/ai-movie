@@ -18,6 +18,8 @@ def listOutput(NLUOutput,DMOutput):
     # DMOutput should be [list:SIZE,question:FLAG]
     resultNum = DMOutput['list']
     #return listSize #different response depending on size
+    if isinstance(resultNum, long):
+        resultNum = int(resultNum)
     rstring = ""
     filePath = path.dirname(__file__)+'/prs/'
     if resultNum < 0:
@@ -40,15 +42,20 @@ def listOutput(NLUOutput,DMOutput):
     return rstring
 
 def printResults(NLUOutput,DMOutput):
+    if isinstance(DMOutput['results'],long):
+        DMOutput['list'] = DMOutput['results']
+    
     if DMOutput.has_key("list"):
-        rstring += listOutput(NLUOutput,DMOutput)
+        return listOutput(NLUOutput,DMOutput)
     elif not DMOutput.has_key('results'):
         print "NLG Error: invalid print request\n"
         return ""
+    
     if DMOutput['results']== None:
         print "Error: None Type Returned"
     if not isinstance(DMOutput['results'], list):
         print "Error: Non-List Type 'results' Returned"
+        return
     elif len(DMOutput['results'])==0:
         return "Sorry, no results were found.\n"
     

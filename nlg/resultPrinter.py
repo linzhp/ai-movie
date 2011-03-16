@@ -50,6 +50,7 @@ def do(itemType, NLUOutput, resultList):
         subject = []   
 
     printSentence = ""
+
     if len(resultList)<5:
         printSentence = getPrintSentence(itemType, subject)
     else:
