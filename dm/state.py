@@ -10,7 +10,7 @@ class State:
         all_states = {}
         for dict in lists:
             for key in dict:
-                if key == 'request':
+                if key == 'request' or key == 'results':
                     continue
                 # elif: a key is in all_states already
                 elif all_states.has_key(key):
@@ -21,17 +21,25 @@ class State:
                     #     a list then append old value and add new value
                     elif type(all_states[key]).__name__ != 'list':
                         temp = all_states[key]
-                        all_states[key] = []
-                        all_states[key].append(temp)
-                        all_states[key].append(dict[key])
+                        if temp != dict[key]:
+                            all_states[key] = []
+                            all_states[key].append(temp)
+                            all_states[key].append(dict[key])
                     # else: the value of the key is a list, append directly
                     else:
                         if dict[key] in all_states[key]:
                             continue
-                        all_states[key].append(dict[key])
+                        elif type(dict[key]).__name__ == 'list':
+                            for list_elem in dict[key]:
+                                if list_elem not in all_states[key]:
+                                    all_states[key].append(list_elem)
+                        else:
+                            all_states[key].append(dict[key])
                 # else: add the key:value pair directly into the all_states dict
                 else:
                     all_states[key] = dict[key]
+        print "list= ", lists
+        print "all_states= ", all_states
         return all_states
 
     def add_request(self, dict):
