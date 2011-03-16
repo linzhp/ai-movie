@@ -98,10 +98,10 @@ class Chunker:
         return chunked
 
 if __name__ == '__main__':
-#    with open(path.join(path.dirname(__file__), "chunkerpickler.bin"),'rb') as pickled_file:
-#        chk = pickle.load(pickled_file)
-    chk = Chunker(False, True)
-    result = chk.chunk("""How many movies has Mel Gibson made""")
+    with open(path.join(path.dirname(__file__), "chunkerpickler.bin"),'rb') as pickled_file:
+        chk = pickle.load(pickled_file)
+#    chk = Chunker(False, True)
+    result = chk.chunk("""I want to see some super hero movie""")
     print result
     result.draw()
 

@@ -169,8 +169,6 @@ class DialogManager:
                             else:
                                 new_name = person
                                 misspelled_names[person]=new_names
-                                print person
-                                print new_names
                                 #create output to nlg
                             newList.append(new_name)
                     else:
@@ -179,9 +177,7 @@ class DialogManager:
                             new_name = new_names.pop()
                         else:
                             new_name = dict[tuple]
-                            print dict[tuple]
                             misspelled_names[dict[tuple]]=new_names
-                            print new_names
                             #create output to nlg
                         newList = new_name
                     newDict[tuple] = newList
@@ -189,29 +185,30 @@ class DialogManager:
                     newDict[tuple] = dict[tuple]
             newInputList.append(newDict)
         if len(misspelled_names)==0:
-            print newInputList
             return newInputList
         else:
             return misspelled_names
                     
     
     def input(self, list):
-        print list
-        list = self.check_spelling(list)
-        if isinstance(list,type({})):
-            list['question']=CHOICE
-            self.pending_question = CHOICE
-            return list
+        misspelled = self.check_spelling(list)
+        if isinstance(misspelled,dict):
+            self.pending_question = 'person' #FIXME: need to retain roles
+            misspelled['question']=CHOICE
+            for d in list:
+                if d.has_key('request'):
+                    self.state.add_request(d)
+            return misspelled
         result_dict={}
-        for dict in list:
-            if dict.has_key("request"):
-                result_dict.update(self.request(dict))
-            elif dict.has_key("command"):
-                self.command(dict)
-            elif dict.has_key("response"):
-                result_dict.update(self.response(dict))
-            elif dict.has_key("off_topic"):
-                result_dict=self.off_topic(dict)
+        for d in list:
+            if d.has_key("request"):
+                result_dict.update(self.request(d))
+            elif d.has_key("command"):
+                self.command(d)
+            elif d.has_key("response"):
+                result_dict.update(self.response(d))
+            elif d.has_key("off_topic"):
+                result_dict=self.off_topic(d)
         print list
         print result_dict
 

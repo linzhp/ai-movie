@@ -89,20 +89,25 @@ class NLUnderstanding:
             
         return result
             
-    def _response(self, chuncked):
+    def _response(self, chunked):
         """
         This method is called when user is supposed to answer a question
         Precondition: self.expect is not None
         """
         if self.expect == "result_length":
-            for node in chuncked:
+            for node in chunked:
                 if isinstance(node, tuple) and (node[1]=='CD' or node[1]=='LS'):
-                    chuncked.remove(node)
+                    chunked.remove(node)
                     return {'response':int(node[0])}
+        elif self.expect == 'person':
+            for item in chunked:
+                if isinstance(item, nltk.Tree) and item.node == 'PERSON':
+                    chunked.remove(item)
+                    return {'response': self._extract_words(item)}
         elif self.expect == dm.SEE_RESULT or self.expect == dm.MORE_PREF:
-            for node in chuncked.leaves():
+            for node in chunked.leaves():
                 if isinstance(node, tuple) and (node[1]=='YES' or node[1]=='NO'):
-                    chuncked.remove(node)
+                    chunked.remove(node)
                     return {'response':node[1]}
         return None
     
