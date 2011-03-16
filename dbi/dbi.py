@@ -470,8 +470,10 @@ def commonality(title1, title2):
     q += 'WHERE title="'+title1+'" OR title="'+title2+'" LIMIT 0,1000'
     conn.query(q)
     result = conn.store_result()
-    if (result):
-        return result.pop()
+    res_list = result.fetch_row(result.num_rows())
+    res_list = [item[0] for item in res_list]
+    if (res_list and isinstance(res_list,list)):
+        return res_list.pop()
     return 0
 
 def family_first(name):
