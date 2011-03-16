@@ -25,5 +25,5 @@ def int_to_english(myInt):
 def get_random_line(fileName):
     with open(fileName) as file:
         lines = file.readlines()
-        return lines[random.randrange(0,len(lines))]
+        return lines[random.randrange(0,len(lines))].replace('\n', ' ')
      

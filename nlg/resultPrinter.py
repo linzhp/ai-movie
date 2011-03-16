@@ -126,5 +126,5 @@ def getNouns(NLUOutput, itemType, subjectList):
         else:
             a = [NLUOutput[0][subject],NLUOutput[0][subject]]
         returnList.append(a)
-    print subjectList, returnList
+#    print subjectList, returnList
     return returnList
