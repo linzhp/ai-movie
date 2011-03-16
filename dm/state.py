@@ -68,17 +68,17 @@ class State:
         lists = self.states[:]
         lists.reverse()
         for dict in lists:
-            if value == 'PRE_HE':
+            if value == 'PREV_HE':
                 # Assuming actor/director are the only people we care about!
-                if dict.has_key('actor') and dict['actor'] != 'PRE_HE':
+                if dict.has_key('actor') and dict['actor'] != 'PREV_HE':
                     return dict['actor']
-                elif dict.has_key('person') and dict['person'] != 'PRE_HE':
+                elif dict.has_key('person') and dict['person'] != 'PREV_HE':
                     return dict['person']
-                elif dict.has_key('director') and dict['director'] != 'PRE_HE':
+                elif dict.has_key('director') and dict['director'] != 'PREV_HE':
                     return dict['director']
-            elif value == 'PRE_IT':
+            elif value == 'PREV_IT':
                 # Assuming title is the only attribute PRE_IT will refer!
-                if dict.has_key('title') and dict['title'] != 'PRE_IT':
+                if dict.has_key('title') and dict['title'] != 'PREV_IT':
                     return dict['title']
         # user entered it/he/she but state doesn't have their info.
         return 'error'
