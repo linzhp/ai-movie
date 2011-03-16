@@ -11,7 +11,7 @@ nlu = NLUnderstanding()
 dialogManager = DialogManager()
 
 #TODO test MORE PREF
-#TODO add catch all statement so that whenever it breaks, it will be off topic
+
 try:
     greeting="Hi, I am NIMROD, and you can ask me to help you find movies,\nTell me your preferences, and i can find movies that match them"#nlg.greet()
     logging.info('Bot: '+greeting)
@@ -35,6 +35,7 @@ try:
             # Generate response to user
             output=nlg.process(nlu_out,dm_out)
         except "nothing":#Exception, ex:
+            dialogManager.state.clear()
             output = chatbot.reply
         # Print and log response  
         logging.info('Bot: '+str(output))

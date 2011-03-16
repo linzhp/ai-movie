@@ -34,11 +34,14 @@ class DialogManager:
             internal_dict['request']='title'
             self.state.add_request(internal_dict)
             internal_dict = self.state.get_all()
-
+            if internal_dict.has_key('title'):
+                internal_dict=dict
+                internal_dict['request']='SIMILAR'
+                return self.request(internal_dict)
             count=self.dbi.query('title',internal_dict, count=True)
             if count>10:
                 self.pending_question = "result_length"
-                return {"list":count, "question":HOW_MANY}
+                return {"list":count, "question":MORE_PREF}
             else:
                 self.pending_question = SEE_RESULT
                 return {"list":count, "question":self.pending_question}
@@ -68,13 +71,19 @@ class DialogManager:
                 result_length = 10
             internal_dict.pop('title')
             if len(internal_dict) <3:
+                title_dict={'title':title}
                 if not internal_dict.has_key('director'):
-                    title_dict={'title':title}
-                    internal_dict['director']=self.dbi.query("director",\
-                                         title_dict, [0,1])[0]
+                    directors = self.dbi.query("director",title_dict, [0,1])
+                    if len(directors)>1:
+                        internal_dict['director']=directors[0]
+                    else:
+                        return {'print':'title','results':[]}
                 if not internal_dict.has_key('genre'):
-                    internal_dict['genre']=self.dbi.query('genre', title_dict, [0,1])[0]
-            
+                    genres = self.dbi.query('genre', title_dict, [0,1])
+                    if len(genres)>1:
+                        internal_dict['genre']=genres[0]
+                    else:
+                        return {'print':'title','results':[]}            
             movie_list = self.dbi.query("title", internal_dict, [0,result_length*5])
             if title in movie_list:
                 movie_list.remove(title)
@@ -98,7 +107,7 @@ class DialogManager:
             state_dict = {'request':request_type}
             state_dict.update(internal_dict)
             self.state.add_request(state_dict)
-            if isinstance(results, int):
+            if isinstance(results, int) or isinstance(results, long):
                 if len(internal_dict)<2:
                     self.pending_question=MORE_PREF
                     return {"question":MORE_PREF}
