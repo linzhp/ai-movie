@@ -1,31 +1,33 @@
-The movie selector uses a MySQL database generated from IMDB plain text data. Follow the instructions in <http://imdbpy.sourceforge.net/docs/README.sqldb.txt> to load data from IMDB plain text into a MySQL database.
+                   NIMROD - movie selector project
 
-Before running the movie selector, you need to configure it first:
+NIMROD uses several Python and NLTK modules, MySQL, and Howie chatbot.
+Please follow the instructions below to setup its environment.
 
-	cp movie.cfg.sample movie.cfg
+//////////////////////// configure MySQL /////////////////////////////
+Modify the movie.cfg in the root directory according to your MySQL
+database configuration. Please use movie.cfg.sample as a template.
 
-Then change it configure in movie.cfg according to your MySQL database configuration.
 
-To run the movie selector cd to the dm directory and run 
-the python script movie.py:
+/////////////////////// configure Howie //////////////////////////////
+clive, it's better for you to write this part.
 
-	cd dm
+
+
+/////////////////////// to run NIMROD ////////////////////////////////
+Change to the root directory of the project, issue command:
 	python movie.py
 
-Python module dependencies:
 
+//////////////////////// Python modules //////////////////////////////
+Python module dependencies:
 * MySQLdb
 * numpy
 * imdbpy 
 
-Note: there are two log files session.log and session2.log. Initially both instances of our bot were writing to the same log file during evaluation. Because of this the first half of session.log has interlaced data from both sessions. session2.log is more readable.
 
-
-Description of directories in the project
-
+//////////// Description of directories in the project ///////////////
 * nlu/		Natural Language Understanding
-* dm/		Dialog Manager
-* dbi/		Database Interface 
+* dm/		Dialog Manager, State, Howie chatbot
+* dbi/		Database Interface
 * nlg/		Natural Language Generation
-* sample_input/	Sample user input
-* doc/		Documentation
+* test/     Test modules
