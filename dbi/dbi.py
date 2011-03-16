@@ -421,13 +421,25 @@ def where_info(know): # Handles Genre, Plot, Country, Filming Location, and Lang
         ret += 'AND mi.info = "'+ele+'" '
     ele = []
     if(know.get('!genre')):
-        ele += know.get('!genre')
+        if (isinstance(know.get('!genre'),list)):
+            ele += know.get('!genre')
+        else:
+            ele += [know.get('!genre')]
     if(know.get('!country')):
-        ele += know.get('!country')
+        if (isinstance(know.get('!country'),list)):
+            ele += know.get('!country')
+        else:
+            ele += [know.get('!country')]
     if(know.get('!languages')):
-        ele += know.get('!languages')
+        if (isinstance(know.get('!languages'),list)):
+            ele += know.get('!languages')
+        else:
+            ele += [know.get('!languages')]
     if(know.get('!filming_loc')):
-        ele += know.get('!filming_loc')
+        if (isinstance(know.get('!filming_loc'),list)):
+            ele += know.get('!filming_loc')
+        else:
+            ele += [know.get('!filming_loc')]
         
     if (isinstance(ele,list)): 
         for k in ele:
