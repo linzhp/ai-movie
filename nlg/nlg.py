@@ -1,6 +1,7 @@
 import resultPrinter as rp
 import nlg_utils as nlgu
 from os import path
+import random
 
 def questionToUser(NLUOutput,DMOutput):
     # DMOutput should contain [question:FLAG]
@@ -25,13 +26,17 @@ def listOutput(NLUOutput,DMOutput):
     if resultNum < 0:
         print "NLG Error: List Size less than zero"
     elif resultNum == 1:
-        rstring += nlgu.get_random_line(filePath+"one_result.txt")[:-1]
+        rstring += nlgu.get_random_line(filePath+"one_result.txt")
     elif resultNum == 0:
-        rstring += nlgu.get_random_line(filePath+"no_result.txt")[:-1]
+        rstring += nlgu.get_random_line(filePath+"no_result.txt")
     elif resultNum < 60:
-        rstring += nlgu.get_random_line(filePath+"multi_result.txt")[:-1].format(nlgu.int_to_english(resultNum))
+        rstring += nlgu.get_random_line(filePath+"multi_result.txt").format(nlgu.int_to_english(resultNum))
+    elif resultNum < 101:
+        rstring += nlgu.get_random_line(filePath+"multi_result.txt").format(resultNum)
     else:
-        rstring += nlgu.get_random_line(filePath+"multi_result.txt")[:-1].format(resultNum)
+        print resultNum
+        rstring += nlgu.get_random_line(filePath+"multi_result.txt").format(getRandomQuantifier())
+        DMOutput['question'] == 'MORE_PREF'
 
     if resultNum == 0:
         rstring += "  Type 'reset' to start over." # This should be removed
@@ -40,6 +45,11 @@ def listOutput(NLUOutput,DMOutput):
     else:
         rstring += "\n"
     return rstring
+
+def getRandomQuantifier():
+    largeNumbers = ["hella","a lot of","many","a large number of","tons of"]
+    return largeNumbers[random.randrange(0,len(largeNumbers))]
+
 
 def printResults(NLUOutput,DMOutput):
     if isinstance(DMOutput['results'],long):
