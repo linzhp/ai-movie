@@ -1,4 +1,4 @@
-I don't like Tom Cruise but I think "Magnolia" is good. Please show me some movies like that.
+user: I don't like Tom Cruise but I think "Magnolia" is good. Please show me some movies like that.
 NLU: [{"request":"SIMILAR","!person":"Tom Cruise","title":"Magnolia"}]
 
 user: How many movies has Mel Gibson made?
