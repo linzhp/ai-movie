@@ -38,7 +38,7 @@ class DialogManager:
             count=self.dbi.query('title',internal_dict, count=True)
             if count>10:
                 self.pending_question = "result_length"
-                return {"list":count, "question":HOW_MANY}
+                return {"list":count, "question":MORE_PREF}
             else:
                 self.pending_question = SEE_RESULT
                 return {"list":count, "question":self.pending_question}

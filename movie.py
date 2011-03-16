@@ -34,6 +34,7 @@ try:
             # Generate response to user
             output=nlg.process(nlu_out,dm_out)
         except "nothing":#Exception, ex:
+            dialogManager.state.clear()
             output = chatbot.reply
         # Print and log response  
         logging.info('Bot: '+str(output))
