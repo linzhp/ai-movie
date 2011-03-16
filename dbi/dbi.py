@@ -370,17 +370,17 @@ def where_year(know):
         if (isinstance(year,list)):
             ret += 'AND t.production_year = "' + str(year.pop()) + '" ' 
             for y in year:
-                ret += 'OR t.production_year = "'+y+'" '
+                ret += 'OR t.production_year = "'+str(y)+'" '
         else:
-            ret += 'AND t.production_year = "'+year+'" '
+            ret += 'AND t.production_year = "'+str(year)+'" '
     if (not_year):
         if (isinstance(not_year, list)):
             ret += 'AND NOT ( t.production_year = "' + str(year.pop()) + '" ' 
             for y in year:
-                ret += 'OR t.production_year = "'+y+'" '
+                ret += 'OR t.production_year = "'+str(y)+'" '
             ret += ') '
         else:
-            ret += 'AND NOT t.production_year = "'+year+'" ' 
+            ret += 'AND NOT t.production_year = "'+str(year)+'" ' 
     if (ret == None):
         return ''
     return ret
