@@ -93,7 +93,7 @@ class DialogManager:
                 commonalities = [dbi.commonality(title, movie) for movie in movie_list]
                 title_common=zip(movie_list, commonalities)
                 title_common=sorted(title_common, \
-                                    lambda x,y:cmp(x[1],y[1]))[0,result_length]
+                                    lambda x,y:cmp(x[1],y[1]))[0:result_length]
                 results = [item[0] for item in title_common]
             else:
                 results = movie_list
