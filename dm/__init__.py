@@ -7,7 +7,7 @@ import chatbot
 from state import State
 
 # TODO check people names before calling
-
+# TODO when user's preference include 'title', don't search 'title' anymore
 class DialogManager:
     def __init__(self):
         self.pending_question = None
@@ -34,10 +34,17 @@ class DialogManager:
             internal_dict['request']='title'
             self.state.add_request(internal_dict)
             internal_dict = self.state.get_all()
+<<<<<<< HEAD
+=======
+            if internal_dict.has_key('title'):
+                internal_dict=dict
+                internal_dict['request']='SIMILAR'
+                return self.request(internal_dict)
+>>>>>>> da3ef8a23bc49ea5d6e437225afdcd3ef542996e
             count=self.dbi.query('title',internal_dict, count=True)
             if count>10:
                 self.pending_question = "result_length"
-                return {"list":count, "question":HOW_MANY}
+                return {"list":count, "question":MORE_PREF}
             else:
                 self.pending_question = SEE_RESULT
                 return {"list":count, "question":self.pending_question}
@@ -60,19 +67,27 @@ class DialogManager:
             if not internal_dict.has_key('title'):
                 return {'off_topic':chatbot.reply}
             title = internal_dict['title']
+            if isinstance(title, list):
+                title = title[0]
             if internal_dict.has_key('result_length'):
                 result_length= internal_dict.pop('result_length')
             else:
                 result_length = 10
             internal_dict.pop('title')
             if len(internal_dict) <3:
+                title_dict={'title':title}
                 if not internal_dict.has_key('director'):
-                    title_dict={'title':title}
-                    internal_dict['director']=self.dbi.query("director",\
-                                         title_dict, [0,1])[0]
+                    directors = self.dbi.query("director",title_dict, [0,1])
+                    if len(directors)>1:
+                        internal_dict['director']=directors[0]
+                    else:
+                        return {'print':'title','results':[]}
                 if not internal_dict.has_key('genre'):
-                    internal_dict['genre']=self.dbi.query('genre', title_dict, [0,1])[0]
-            
+                    genres = self.dbi.query('genre', title_dict, [0,1])
+                    if len(genres)>1:
+                        internal_dict['genre']=genres[0]
+                    else:
+                        return {'print':'title','results':[]}            
             movie_list = self.dbi.query("title", internal_dict, [0,result_length*5])
             if title in movie_list:
                 movie_list.remove(title)
@@ -80,7 +95,7 @@ class DialogManager:
                 commonalities = [dbi.commonality(title, movie) for movie in movie_list]
                 title_common=zip(movie_list, commonalities)
                 title_common=sorted(title_common, \
-                                    lambda x,y:cmp(x[1],y[1]))[0,result_length]
+                                    lambda x,y:cmp(x[1],y[1]))[0:result_length]
                 results = [item[0] for item in title_common]
             else:
                 results = movie_list
@@ -96,7 +111,7 @@ class DialogManager:
             state_dict = {'request':request_type}
             state_dict.update(internal_dict)
             self.state.add_request(state_dict)
-            if isinstance(results, int):
+            if isinstance(results, int) or isinstance(results, long):
                 if len(internal_dict)<2:
                     self.pending_question=MORE_PREF
                     return {"question":MORE_PREF}

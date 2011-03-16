@@ -33,16 +33,13 @@ class NLUnderstanding:
     """
     def __init__(self):
         self.expect = None
-#        with open(path.join(path.dirname(__file__), "chunkerpickler.bin"),'rb') as pickled_file:
-#            __import__("nlu.chunker")
-#            self.chk = pickle.load(pickled_file)
-        self.chk = chunker.Chunker(False, True)
+        with open(path.join(path.dirname(__file__), "chunkerpickler.bin"),'rb') as pickled_file:
+            __import__("nlu.chunker")
+            self.chk = pickle.load(pickled_file)
+#        self.chk = chunker.Chunker(False, True)
         self.stemmer = nltk.stem.PorterStemmer()
         self.keywords = []
-        self.positiveList = ["like","love"]
-        self.negativeList = ["hate","dislike"]
-        self.negativeAdjectiveList = []
-        self.positiveAdjectiveList = []
+        self._create_opinion_lists()
         self.sure_role = False
 
     def process(self, input_string):
@@ -113,6 +110,8 @@ class NLUnderstanding:
         keywords=self._search_keywords(chunked.leaves())
         if len(keywords)>0:
             request=self._parse_pref(chunked, request=dm.COUNT,of=self._keyword2request(keywords[0]))
+        else:
+            request=self._parse_pref(chunked, request=dm.COUNT,of='title')
         return request
         
 
@@ -199,18 +198,19 @@ class NLUnderstanding:
         prev_op = None
         for sentence in subsentences:
             cur_pref = self._process_subsentence(sentence)
+#            print sentence
             positive = self._decide_opinion(sentence, prev_op)
-            
+            print positive
             if not positive:
-                cur_pref.negativate = negativate
+                cur_pref.negate = negate
                 if positive is False:
-                    cur_pref=cur_pref.negativate(cur_pref)
-                #if positive is None, the negativate method is kept
+                    cur_pref=cur_pref.negate(cur_pref)
+                #if positive is None, the negate method is kept
             elif len(pref_list)>0:
                 prev_pref = pref_list.pop()
-                if 'negativate' in dir(prev_pref):
+                if 'negate' in dir(prev_pref):
                     # The previous preference is unknown
-                    pref_list.append(prev_pref.negativate(prev_pref))
+                    pref_list.append(prev_pref.negate(prev_pref))
                 else:
                     pref_list.append(prev_pref)
             pref_list.append(cur_pref)
@@ -233,7 +233,7 @@ class NLUnderstanding:
                 all_pref={'like':'title'}
         if len(all_pref)==1 and all_pref.get('request') == dm.OPINION:
             all_pref={}
-        
+#        print all_pref
         return all_pref
     
     def _clean_unary_values(self, dic, keys):
@@ -365,6 +365,8 @@ class NLUnderstanding:
         elif item[1] == 'GNRE':
             if self.stemmer.stem(cur_word)=='anim':
                 cur_word = 'animation'
+            elif self.stemmer.stem(cur_word)=='comedi':
+                cur_word = 'comedy'
             self.cur_pref.add('genre',cur_word)
         elif item[1] == 'CD':
             number = english2int(cur_word)
@@ -449,6 +451,25 @@ class NLUnderstanding:
             counter = counter + 1
         return [chunked]
 
+    def _create_opinion_lists(self):
+        myPath = path.dirname(__file__)+"/opinions/"
+        self.positiveList = []
+        with open(myPath+"positiveList.txt") as file:
+            for line in file:
+                self.positiveList.append(line[:-1]) 
+        self.negativeList = []
+        with open(myPath+"negativeList.txt") as file:
+            for line in file:
+                self.negativeList.append(line[:-1])
+        self.negativeAdjectiveList = []
+        with open(myPath+"negativeAdjectiveList.txt") as file:
+            for line in file:
+                self.negativeAdjectiveList.append(line[:-1])
+        self.positiveAdjectiveList = []
+        with open(myPath+"positiveAdjectiveList.txt") as file:
+            for line in file:
+                self.positiveAdjectiveList.append(line[:-1])
+
     def _decide_opinion(self, list, prev):
         """
         Decide the user opinion in the current segment of sentence,
@@ -458,33 +479,39 @@ class NLUnderstanding:
         return: True if it is positive, False if it is negative, None
         if it is unknown
         """
-        print list
+#        print list
         modifier = True
         verb = prev
+        checkAdjective = False
         
         for node in list:
+            if isinstance(node, nltk.Tree):
+                verb = self._decide_opinion(node.leaves(), verb)
             if isinstance(node, tuple):
                 if node[1]=='RB':
                     if node[0] == "n't" or node[0] == "not":
                         modifier = not modifier
-                        print modifier
+#                        print modifier
                 if node[1]=='IN':
                     if node[0] == "without":
                         modifier = not modifier
-                        print modifier
+#                        print modifier
                 if node[1][0]=='V':
                     if node[0] in self.positiveList:
                         verb = True
                     if node[0] in self.negativeList:
                         verb = False
-#                    if node[0] in toBeList:
-#                        if node[0] in self.positiveAdjectiveList:
-#                            verb = True
-#                        if node[0] in self.negativeAdjectiveList:
-#                            verb = False 
-#                   
+                    if node[0] in ["is","are","was","were"]:
+                        checkAdjective = True
+                if checkAdjective:
+                    if node[0] in self.positiveAdjectiveList:
+                        verb = True
+                    if node[0] in self.negativeAdjectiveList:
+                        verb = False
 #
         #list should be a list of tuples
+#        print "verb = "+str(verb)
+#        print "modifier = "+str(modifier)
         if verb == None or modifier == True:
             return verb
         else:
@@ -498,7 +525,7 @@ class NLUnderstanding:
             words.remove('"')
         return " ".join(words)
 
-def negativate(self):
+def negate(self):
     """
     For amending dictionaries only
     """ 

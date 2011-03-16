@@ -61,14 +61,15 @@ class Chunker:
         # Define a chunking grammar.
         chunk_grammar = r"""
         B-QUESTION: {<WDT|WP|WRB><DT|RB.*|JJ|GNRE>*<MD|VB.*|KW_.*>}
-        {<WRB>}
+            {<WRB>}
         COMMAND: {^(<MD><PRP>)?(<RB>)*<VB|VBP>}
-        {^<PRP><VB|VBP><TO>}
-        {<RB><VBP|VB>}
+            {^<PRP><VB|VBP><TO>}
+            {<RB><VBP|VB>}
         TRUE_FALSE: {^<VBD|VBZ>}
         TITLE: {<:><[^:]*>*<:>}
         PERSON: {<NNP[S]?>+}
         NP: {<PRP\$>?<JJ>*<NN|NNS>(<POS>?<JJ>*<NN|NNS>)*}
+        VP: { <MD>?<[V].*>+<IN|CC>? }        
         PP: { <IN><NP> }
         """
         #ACTOR_IN_MOVIE: {<PERSON><.*>*<IN><TITLE>}

@@ -6,6 +6,9 @@ ones = {0:"zero", 1:"one", 2:"two", 3:"three", 4:"four", 5:"five", 6:"six", 7:"s
 teens = {0:"ten", 1:"eleven", 2:"twelve", 3:"thirteen", 4:"fourteen", 5:"fifteen", 6:"sixteen", 7:"nineteen"}
 
 def int_to_english(myInt):
+    if not isinstance(myInt,int):
+        print "NLG Integer Error: '"+str(myInt)+"'is not an integer"
+        return myInt
     if myInt > 59 or myInt < 0:
         return "Error"
     returnString = ""
@@ -22,5 +25,5 @@ def int_to_english(myInt):
 def get_random_line(fileName):
     with open(fileName) as file:
         lines = file.readlines()
-        return lines[random.randrange(0,len(lines))]
+        return lines[random.randrange(0,len(lines))].replace('\n', ' ')
      

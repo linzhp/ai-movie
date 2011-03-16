@@ -1,0 +1,4 @@
+dislike
+disliked
+hate
+hated

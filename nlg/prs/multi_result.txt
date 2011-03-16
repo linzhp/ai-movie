@@ -1,0 +1,5 @@
+I found {0} results.
+{0} results were found.
+There are {0} items that match.
+There were {0} results found.
+I've got {0} results for you.

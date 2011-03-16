@@ -19,8 +19,11 @@ subjFromObj = {
 
 def getPrintSentence(itemType, subjectList):
     subjectString = "_".join(subjectList);
+
     if len(subjectList)>0:
         subjectString+='_'
+    elif len(subjectList)==0 and itemType != "director":
+        itemType = "default"
     fileName = path.dirname(__file__)+'/prs/'+subjectString+itemType + '_sentences.txt'
     rstring = nlgu.get_random_line(fileName)
     if rstring == "":
@@ -44,9 +47,14 @@ def do(itemType, NLUOutput, resultList):
     
     if subject== None:
         itemType = "default"
-        subject = []
-        
-    printSentence = getPrintSentence(itemType, subject)
+        subject = []   
+
+    printSentence = ""
+
+    if len(resultList)<5:
+        printSentence = getPrintSentence(itemType, subject)
+    else:
+        printSentence = getPrintSentence("default", [])
 
     result = printItems(itemType, resultList)
 
@@ -118,5 +126,5 @@ def getNouns(NLUOutput, itemType, subjectList):
         else:
             a = [NLUOutput[0][subject],NLUOutput[0][subject]]
         returnList.append(a)
-    print subjectList, returnList
+#    print subjectList, returnList
     return returnList
