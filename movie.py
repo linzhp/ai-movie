@@ -13,7 +13,9 @@ dialogManager = DialogManager()
 #TODO test MORE PREF
 
 try:
-    greeting="Hi, I am NIMROD, and you can ask me to help you find movies,\nTell me your preferences, and i can find movies that match them"#nlg.greet()
+    greeting="Hi, I am NIMROD, and you can ask me to help you find movies,\nTell me your preferences, and i can find movies that match them\n\
+please put movie titles in quotes, although you do not have to capitalize names, although you certainly may if you wish. \n\
+you can also ask me trivia questions, and i will answer to the best of my ability"#nlg.greet()
     logging.info('Bot: '+greeting)
 #    print('Bot: '+greeting)
     input = raw_input(greeting+'\n')
