@@ -52,10 +52,9 @@ class DialogManager:
             state_dict.update(internal_dict)
             self.state.add_request(state_dict)
             count=self.dbi.query(of, internal_dict, count=True)
-            result={}
             if count>10:
                 self.pending_question = "result_length"
-                result={"list":count, "question":HOW_MANY}
+                return {"list":count, "question":HOW_MANY}
             else:
                 self.pending_question = SEE_RESULT
                 result={"list":count, "question":self.pending_question}
@@ -122,12 +121,11 @@ class DialogManager:
             else:
                 self.state.add_result({request_type:results})
                 return {'print':request_type,'results':results}
-            
-    
+
     def command(self, dict):
         if dict["command"]==CLEAR:
             self.state.clear()
-    
+
     def response(self, dict):
         internal_dict = dict.copy()
         response = internal_dict.pop("response")

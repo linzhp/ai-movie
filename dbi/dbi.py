@@ -100,7 +100,7 @@ def query(wanted, known, count=False):
     return res_list
 
 # Get all films with a particular person.
-# SELECT * FROM title t LEFT JOIN cast_info c ON (c.movie_id = t.id) LEFT JOIN name n ON (n.id = c.person_id) WHERE name="Family, Given" AND kind_id <> 7 LIMIT 0,100;    
+# SELECT * FROM title t LEFT JOIN cast_info c ON (c.movie_id = t.id) LEFT JOIN name n ON (n.id = c.person_id) WHERE name="Family, Given" AND kind_id <> 7 LIMIT 0,100;
 
 def build_from(wanted, know):
     from_list = 'FROM '

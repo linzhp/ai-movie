@@ -42,7 +42,6 @@ class NLUnderstanding:
         self._create_opinion_lists()
         self.sure_role = False
 
-
     def process(self, input_string):
         self.keywords = []
         self.sure_role = False
@@ -84,7 +83,6 @@ class NLUnderstanding:
         
         if request and len(request)>0:
                 result.append(request)
-                
                     
         if len(result)==0:
             result.append(self._off_topic(input_string))
@@ -94,7 +92,7 @@ class NLUnderstanding:
     def _response(self, chuncked):
         """
         This method is called when user is supposed to answer a question
-        Precondition: self.expect is not None    
+        Precondition: self.expect is not None
         """
         if self.expect == "result_length":
             for node in chuncked:
@@ -323,10 +321,7 @@ class NLUnderstanding:
             elif pref.has_key('!person'):
                 name=pref.pop('!person')
                 pref["!"+role]=name
-            
-                
-                
-     
+
     def _process_subsentence(self, list):
         self.cur_pref=ListDict()
         first_type = True
@@ -357,7 +352,7 @@ class NLUnderstanding:
         if not self.cur_pref.has_key('order') and self.cur_pref.has_key('sort'):
             self.cur_pref.pop('sort')
         return self.cur_pref
-    
+
     def _process_word(self, item):
         cur_word = item[0].lower()
         if cur_word == "he" or cur_word=="she" \
@@ -431,7 +426,27 @@ class NLUnderstanding:
         temp2 = []
         counter = 0
         for tuples in chunked:
-            if isinstance(tuples, tuple) and (tuples[1] == 'CC' or tuples[1] == 'EOS'):
+            # break a sentence if it has a period. break further if it has 'but', 'however'
+            if isinstance(tuples, tuple) and tuples[1] == 'EOS':
+                temp1 = chunked[0:counter]
+                temp2 = chunked[counter:]
+                counter1 = 0
+                temp3 = []
+                temp4 = []
+                temp5 = []
+                for tuples1 in temp1:
+                    if isinstance(tuples1, tuple) and (tuples1[0] == 'but' or tuples1[0] == 'however'):
+                        temp3 = temp1[0:counter1]
+                        temp4 = temp1[counter1:]
+                        return [temp3, temp4, temp2]
+                for tuples2 in temp2:
+                    if isinstance(tuples2, tuple) and (tuples2[0] == 'but' or tuples2[0] == 'however'):
+                        temp3 = temp2[0:counter1]
+                        temp4 = temp2[counter1:]
+                        return [temp1, temp3, temp4]
+                return [temp1, temp2]
+            # break a sentence if it has 'but' and 'however'
+            elif isinstance(tuples, tuple) and (tuples[0] == 'but' or tuples[0] == 'however'):
                 temp1 = chunked[0:counter]
                 temp2 = chunked[counter:]
                 return [temp1, temp2]
@@ -522,8 +537,3 @@ def negate(self):
     for key in self:
         new_dict['!'+key]=self[key]
     return new_dict
-
-if __name__ == "__main__":
-    nlu = NLUnderstanding()
-    chuncked = nlu.process("I like Tom Hanks but don't like action movies!")
-    nlu._partition(chuncked)
