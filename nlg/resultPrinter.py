@@ -127,5 +127,4 @@ def getNouns(NLUOutput, subjectList):
         else:
             a = [nlgu.flipPersons(subject, NLUOutput[0][subject]), nlgu.flipPersons(subject, NLUOutput[0][subject])]
         returnList.append(a)
-#    print subjectList, returnList
     return returnList
