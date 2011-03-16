@@ -40,7 +40,7 @@ class Test(unittest.TestCase):
         self.dm.dbi.mockAddReturnValues(query=70)
         result=self.dm.request({'request':dm.OPINION, "person":"Batman"})
         self.dm.dbi.mockCheckCall(0, 'query', 'title',condition, count=True)
-        self.assertEqual({"list":70,"question":dm.HOW_MANY}, result)
+        self.assertEqual({"list":70,"question":dm.MORE_PREF}, result)
         
     def test_request_count(self):
         condition={"actor":"Kate Winslet"}
