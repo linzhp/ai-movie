@@ -497,7 +497,7 @@ def invert_name(s):
   
 # Naieve Name Spell-check. Pass in the name, and it will return a list with either the name, or a list of similar names.
 def check_person(name):
-    debug_spellcheck = True 
+    debug_spellcheck = False 
     name = given_first(name)
     name_list = name.rsplit(' ', 1)
     family_name=name_list.pop()[:6]
@@ -530,7 +530,9 @@ def check_person(name):
         if (len(family_name) < 4 or (len(family_name) < 5 and failed)): # Try an alternative method
             failed += 1
             family_name = name.rsplit(' ', 1).pop()[:9]
-            family_name[:1]+'__'+family_name[3:]
+            family_name = family_name[:1]+'__'+family_name[3:]
+            given_name = name_list.pop()[:6]
+            given_name = given_name[:1]+'__'+given_name[3:]
 
 
     #Sort by word distance comparison here, if there is time.
