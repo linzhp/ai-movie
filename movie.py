@@ -11,7 +11,8 @@ nlu = NLUnderstanding()
 dialogManager = DialogManager()
 
 #TODO test MORE PREF
-#TODO add catch all statement so that whenever it breaks, it will be off topic
+#TODO Is Kate Winslet in "Titanic"?
+
 try:
     greeting="Hi, I am NIMROD, and you can ask me to help you find movies,\nTell me your preferences, and i can find movies that match them"#nlg.greet()
     logging.info('Bot: '+greeting)

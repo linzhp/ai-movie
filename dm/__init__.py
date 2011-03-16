@@ -98,7 +98,7 @@ class DialogManager:
             state_dict = {'request':request_type}
             state_dict.update(internal_dict)
             self.state.add_request(state_dict)
-            if isinstance(results, int):
+            if isinstance(results, int) or isinstance(results, long):
                 if len(internal_dict)<2:
                     self.pending_question=MORE_PREF
                     return {"question":MORE_PREF}

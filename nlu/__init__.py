@@ -33,10 +33,10 @@ class NLUnderstanding:
     """
     def __init__(self):
         self.expect = None
-#        with open(path.join(path.dirname(__file__), "chunkerpickler.bin"),'rb') as pickled_file:
-#            __import__("nlu.chunker")
-#            self.chk = pickle.load(pickled_file)
-        self.chk = chunker.Chunker(False, True)
+        with open(path.join(path.dirname(__file__), "chunkerpickler.bin"),'rb') as pickled_file:
+            __import__("nlu.chunker")
+            self.chk = pickle.load(pickled_file)
+#        self.chk = chunker.Chunker(False, True)
         self.stemmer = nltk.stem.PorterStemmer()
         self.keywords = []
         self._create_opinion_lists()
@@ -112,6 +112,8 @@ class NLUnderstanding:
         keywords=self._search_keywords(chunked.leaves())
         if len(keywords)>0:
             request=self._parse_pref(chunked, request=dm.COUNT,of=self._keyword2request(keywords[0]))
+        else:
+            request=self._parse_pref(chunked, request=dm.COUNT,of='title')
         return request
         
 

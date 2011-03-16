@@ -244,7 +244,7 @@ def commonality(title1, title2):
     q += 'FROM title t LEFT JOIN movie_keyword mk ON (t.id = mk.movie_id) '
     q += 'WHERE title="'+title1+'" OR title="'+title2+'" LIMIT 0,1000'
 
-    conn.query(fin_query)
+    conn.query(q)
     result = conn.store_result()
     
     # Process result here
