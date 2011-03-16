@@ -34,7 +34,10 @@ class DialogManager:
             internal_dict['request']='title'
             self.state.add_request(internal_dict)
             internal_dict = self.state.get_all()
-
+            if internal_dict.has_key('title'):
+                internal_dict=dict
+                internal_dict['request']='SIMILAR'
+                return self.request(internal_dict)
             count=self.dbi.query('title',internal_dict, count=True)
             if count>10:
                 self.pending_question = "result_length"
