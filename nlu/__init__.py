@@ -424,11 +424,25 @@ class NLUnderstanding:
         temp2 = []
         counter = 0
         for tuples in chunked:
-            if isinstance(tuples, tuple) and (tuples[0] == 'but' or tuples[0] == 'however' or tuples[0] == 'and'):
+            if isinstance(tuples, tuple) and tuples[1] == 'EOS':
                 temp1 = chunked[0:counter]
                 temp2 = chunked[counter:]
+                counter1 = 0
+                temp3 = []
+                temp4 = []
+                temp5 = []
+                for tuples1 in temp1:
+                    if isinstance(tuples1, tuple) and (tuples1[0] == 'but' or tuples1[0] == 'however' or tuples1[0] == 'and'):
+                        temp3 = temp1[0:counter1]
+                        temp4 = temp1[counter1:]
+                        return [temp3, temp4, temp2]
+                for tuples2 in temp2:
+                    if isinstance(tuples2, tuple) and (tuples2[0] == 'but' or tuples2[0] == 'however' or tuples2[0] == 'and'):
+                        temp3 = temp2[0:counter1]
+                        temp4 = temp2[counter1:]
+                        return [temp1, temp3, temp4]
                 return [temp1, temp2]
-            elif isinstance(tuples, tuple) and tuples[1] == 'EOS':
+            elif isinstance(tuples, tuple) and (tuples[0] == 'but' or tuples[0] == 'however' or tuples[0] == 'and'):
                 temp1 = chunked[0:counter]
                 temp2 = chunked[counter:]
                 return [temp1, temp2]
