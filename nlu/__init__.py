@@ -112,6 +112,8 @@ class NLUnderstanding:
         keywords=self._search_keywords(chunked.leaves())
         if len(keywords)>0:
             request=self._parse_pref(chunked, request=dm.COUNT,of=self._keyword2request(keywords[0]))
+        else:
+            request = {}
         return request
         
 

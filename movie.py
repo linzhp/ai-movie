@@ -25,6 +25,7 @@ try:
             # NLU processing
             logging.info('User: '+input)
             nlu_out = nlu.process(input)
+            print nlu_out
             logging.debug('nlu_out: '+str(nlu_out))
             # Dialog manager processing
             dm_out=dialogManager.input(nlu_out)

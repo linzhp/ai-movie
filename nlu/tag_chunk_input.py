@@ -8,9 +8,10 @@ import nlu
 
 
 print "loading chunker"
-f  = open('./chunkerpickler','rb')
+f  = open('./chunkerpickler.bin','rb')
 chk = pickle.load(f)
 print "done loading chunker"
+#chk = chunker.Chunker(True,True)
 input_text = ""
 
 while input_text != "shoebox":

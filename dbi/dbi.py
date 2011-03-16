@@ -37,7 +37,7 @@ def query(wanted, known, count=False):
     fin_query = 'SELECT DISTINCT '
 
     if (count and not isinstance(count,list)):
-        fin_query += 'COUNT( '
+        fin_query += 'COUNT( DISTINCT '
     if (wanted == 'title'):
         fin_query += 't.title '
     elif (wanted == 'actor' or wanted == 'person' or wanted == 'director'):
@@ -244,7 +244,7 @@ def commonality(title1, title2):
     q += 'FROM title t LEFT JOIN movie_keyword mk ON (t.id = mk.movie_id) '
     q += 'WHERE title="'+title1+'" OR title="'+title2+'" LIMIT 0,1000'
 
-    conn.query(fin_query)
+    conn.query(q)
     result = conn.store_result()
     
     # Process result here
