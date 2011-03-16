@@ -29,9 +29,9 @@ def get_random_line(fileName):
 
 def flipPersons(itemType, item):
     if itemType in ['person','actor','director','voice actor']:
-        return given_first(item)
+        return given_first(item).strip('.')
     else:
-        return item
+        return item.strip('.')
 
 def given_first(name):
     if (name.count(',')):
