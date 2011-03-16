@@ -17,6 +17,9 @@ conn = MySQLdb.connect (host = host, user = user_name, db = db_name, passwd = pa
 #logfile = open('dbi.log', 'w')
 logfile = 0
 
+#query_debug: Inserts 'EXPLAIN' before any query in order to help optimize the queries.
+query_debug = False
+
 ## select/cout object: all movie attributes
 # conditions: all movie attributes, "keyword", "sort" (with the value of some movie attribute), "order" ("desc" or "asc")
 # possible movie attributes are: "title", "year", "plot", "director", "actor", "genre", "country", "filming_loc" "award" and "language"
@@ -34,10 +37,13 @@ def query(wanted, known, count=False):
         logfile.write('\n')
     fin_query = ''
     from_clause = build_from(wanted, known)
-    fin_query = 'SELECT DISTINCT '
+    if (query_debug):
+        fin_query = 'EXPLAIN SELECT DISTINCT '
+    else:
+        fin_query = 'SELECT DISTINCT '
 
     if (count and not isinstance(count,list)):
-        fin_query += 'COUNT( '
+        fin_query += 'COUNT( DISTINCT '
     if (wanted == 'title'):
         fin_query += 't.title '
     elif (wanted == 'actor' or wanted == 'person' or wanted == 'director'):
@@ -88,9 +94,9 @@ def query(wanted, known, count=False):
     if (wanted != 'cast' and wanted != 'keyword'):
         res_list = [item[0] for item in res_list]
     if (len(res_list)>10 and not count and not isinstance(count,list)):
-        return query(wanted, known, 1) 
-    if (count and not isinstance(count, list)): 
-        return res_list.pop() # Returns int instead of [int]
+        return query(wanted, known, 1)
+    if (count and not isinstance(count, list)): # Returns int instead of [int]
+        return res_list.pop() 
     return res_list
 
 # Get all films with a particular person.
@@ -102,15 +108,44 @@ def build_from(wanted, know):
     if (wanted == 'title' or wanted == 'year'):
         from_list += 'title t ' # Covers the year with production_year
         if (know.has_key('actor') or know.has_key('person') or know.has_key('role') or know.has_key('director')):
+
+            actors = know.get('actor')
+            people = know.get('person')
+            direct = know.get('director')
+            total_people = 0
+            if (actors):
+                if (isinstance(actors, list)):
+                    total_people += len(actors)
+                else:
+                    total_people += 1
+            if (direct):
+                if (isinstance(direct, list)):
+                    total_people += len(direct)
+                else:
+                    total_people += 1
+            if (people):
+                if (isinstance(people, list)):
+                    total_people += len(people)
+                else:
+                    total_people += 1                                     
+                    
+            #len(know.has_key('actor')) + len(know.has_key('person')) + len(know.has_key('director'))
             from_list += 'LEFT JOIN cast_info c ON (c.movie_id = t.id) LEFT JOIN name n ON (n.id = c.person_id) '
+            if (total_people > 1):
+                for i in range (2, total_people + 1):
+                    from_list += 'LEFT JOIN cast_info c' + str(i) + ' ON (c.movie_id = t.id) ' 
+                    from_list += 'LEFT JOIN name n' + str(i) + ' ON (n.id = c.person_id) '
+                
             if (know.has_key('role') or know.has_key('director')):
                 from_list += 'LEFT JOIN role_type rt ON (c.role_id = rt.id) '
+                
         if (know.has_key('genre')): # Must have WHERE clause mi.info_type_id = 3
             from_list += 'LEFT JOIN movie_info mi ON (t.id = mi.movie_id) ' 
         if (wanted == 'keyword' or know.has_key('keyword')):
             from_list += 'LEFT JOIN movie_keyword mk ON (t.id = mk.movie_id) '
             from_list += 'LEFT JOIN keyword k ON (mk.keyword_id = k.id) '
-    # Looking for actor
+            
+    # Looking for actor             #TODO: New FROM Statements for multiple titles.
     elif (wanted == 'actor' or wanted == 'person' or wanted=='director'):
         from_list += 'name n LEFT JOIN cast_info c ON (n.id = c.person_id) '
         if (know.has_key('title') or know.has_key('year') or know.has_key('role') or know.has_key('genre')):
@@ -119,6 +154,8 @@ def build_from(wanted, know):
                 from_list += 'LEFT JOIN movie_info mi ON (t.id = mi.movie_id) '
         if (know.has_key('role') or know.has_key('director')):
             from_list += 'LEFT JOIN role_type rt ON (c.role_id = rt.id) '
+            
+            
     elif (wanted == 'genre'  or wanted == 'country' or wanted == 'filming_loc' or wanted == 'languages' or wanted == 'plot' or wanted == 'keyword'):
         from_list += 'title t LEFT JOIN movie_info mi ON (t.id = mi.movie_id) '
         if (know.has_key('person') or know.has_key('actor') or know.has_key('director')):
@@ -151,9 +188,14 @@ def build_from(wanted, know):
     return from_list
 
 # possible movie attributes are: "title", "year", "plot", "director", "actor", "genre", "country", "filming_loc" "award" and "language"
+
+
 def build_where(wanted, know):
     if (wanted == 'title'):
-        where_list = 'WHERE t.kind_id <> 7 '
+        if (know.has_key('expand')): # TODO: Check this is good keyword to use.
+            where_list = 'WHERE t.kind_id <> 7 ' 
+        else: # If expansion is off, only look at movie titles.
+            where_list = 'WHERE t.kind_id = 1 '            
     elif (wanted == 'plot'):
         where_list = 'WHERE mi.info_type_id = 98 '
     elif (wanted == 'genre'):
@@ -170,112 +212,261 @@ def build_where(wanted, know):
         where_list = 'WHERE c.role_id = 8 '
     else:
         where_list = 'WHERE 1=1 '
-    # Looking for movie title
-    for key in know.keys():
-        if (key == 'actor' or key == 'director' or key == 'person'): # Needs testing
-            act = know.get(key)
-            if (isinstance(act,list)): # TODO: Really a more complex case. Must Re-write SQL.
-                for a in act:
-                    # Need to invert the name if it doesn't contain a , here
-                    where_list += 'AND n.name = "'+munge_name(a)+'" '
-            else:
-                # And here
-                where_list += 'AND n.name = "'+munge_name(act)+'" '
-        if (key == 'title'): 
-            ele = know.get(key)
-            if (isinstance(ele,list)): 
-                first = 1
-                where_list += 'AND ( '
-                for k in ele:
-                    if (first):
-                        where_list += 't.title = "'+k+ '" '
-                        first = 0
-                    else:
-                        where_list += 'OR t.title = "'+k+ '" '
-                where_list += ' ) '
-            else:
-                where_list += 'AND t.title = "'+ele+'" '
-        if (key == 'year'): 
-            ele = know.get(key)
-            if (isinstance(ele,list)): 
-                for k in ele:
-                    where_list += 'AND t.production_year = "'+k+'" '
-            else:
-                where_list += 'AND t.production_year = "'+ele+'" '
 
-        if (key == 'genre'  or key == 'plot' or key == 'country' or key == 'filming_loc' or key == 'languages'):
-            ele = know.get(key)
-            if (isinstance(ele,list)): 
-                for k in ele:
-                    where_list += 'AND mi.info = "'+k+'" '
-            else:
-                where_list += 'AND mi.info = "'+ele+'" '
-            
-        if (key == 'keyword'): 
-            ele = know.get(key)
-            first = 1
-            if (isinstance(ele,list)): 
-                for k in ele:
-                    if (first):
-                        where_list += 'AND k.keyword = "'+k+'" '
-                        first = 0
-                    else:
-                        where_list += 'OR k.keyword = "'+k+'" '
-            else:
-                where_list += 'AND k.keyword = "'+ele+'" '
-        if (key == '!keyword'): # REALLY WEIRD CASE. May not play well with others.
-            ele = know.get(key)
-            first = 1
-            where_list += 'AND t.id NOT IN ( SELECT t.id FROM title t LEFT JOIN movie_keyword mk ON (t.id = mk.movie_id) LEFT JOIN keyword k ON (mk.keyword_id = k.id)  WHERE '
-            if (isinstance(ele,list)): 
-                for k in ele:
-                    if (first):
-                        where_list += 'k.keyword = "'+k+'" '
-                        first = 0
-                    else:
-                        where_list += 'OR k.keyword = "'+k+'" '
-            else:
-                where_list += 'k.keyword = "'+ele+'" '
-            where_list += ') '
+    where_list += where_person(know) # Supports actor, director, and person 
+    where_list += where_title(know)
+    where_list += where_year(know)
+    where_list += where_info(know)   # Supports genre, plot, country, filming_loc, and languages
+    where_list += where_keyword(know) 
+
     return where_list
 
+def where_title(know): #TODO: Insert new code
+    titles = know.get('title')
+    not_titles = know.get('!title')
+    tw = '' # title where 
+    if (titles):
+        if (isinstance(titles, list)):
+            first = 1
+            tw += 'AND ( '
+            for k in titles:
+                if (first):
+                    tw += 't.title = "' + k + '" '
+                    first = 0
+                else:
+                    tw += 'OR t.title = "' + k + '" '
+            
+            tw += ' ) '
+        else:
+            tw += 'AND t.title = "' + titles + '" '
+    if (not_titles):
+        tw += 'AND t.id NOT IN ( SELECT t.id FROM title t WHERE t.title = '
+        if (isinstance(not_titles, list)):
+            tw += str(not_titles.pop()) + ' '
+            for k in not_titles:
+                tw += 'OR t.title = ' + k + ' '
+        else:
+            tw += not_titles + ' '
+        tw += ') '
+    if (tw == None):
+        return ''
+    return tw
+
+def where_person(know): #TODO: Insert new code
+    q = ''
+    actor = know.get('actor')
+    director = know.get('director')
+    person = know.get('person')
+    not_actor = know.get('!actor')
+    not_director = know.get('!director')
+    not_person = know.get('!person')
+    
+    # Positive cases: Desired query follows.
+    # TODO: Make changes in build_from so this code gets used.
+    # SELECT t.title 
+    #FROM cast_info c LEFT JOIN title t ON (c.movie_id = t.id) LEFT JOIN name n ON (c.person_id = n.id),
+    #cast_info c2 LEFT JOIN name n2 ON (c2.person_id = n2.id)
+    #WHERE n.name = "Tilly, Jennifer" AND n2.name = "Gershon, Gina" AND kind_id = 1 AND c1.movie_id = c2.movie_id
+    
+    idx = 0 # Index of which person we are on.
+    if (actor):
+        if (isinstance(actor,list)): # TODO: Add support for this in build_from AND check roll.
+            for a in actor:
+                idx += 1
+                if (idx == 1):
+                    q += 'AND n.name = "' + family_first(a) + '" '
+                else:
+                    q += 'AND n' + str(idx) + '.name = "' + family_first(a) + '" '
+        else:
+            q += 'AND n.name = "' + family_first(actor) + '" '
+    
+    if (idx > 1):
+        q += 'AND c.movie_id = c2.movie_id '
+        if (idx > 2):
+            for i in range(2,idx+1): 
+                q += 'AND c.movie_id = c' + str(i) + '.movie_id '
+        
+    # Negative cases
+
+    if (not_actor): 
+        q += 'AND t.id NOT IN ( '  
+        q += '  SELECT DISTINCT c.movie_id FROM cast_info c LEFT JOIN name n ON (c.person_id = n.id) '
+        q += '  WHERE n.name = "'
+        if (isinstance(not_actor, list)):
+            q += str(not_actor.pop()) + '" '
+            for na in not_actor:
+                 q += 'OR n.name = ' + na +' '
+        else:
+            q += str(not_actor) + '" '
+        q += 'AND c.role_id < 3 ) ' 
+    if (not_director): 
+        q += 'AND t.id NOT IN ( '  
+        q += '  SELECT DISTINCT c.movie_id FROM cast_info c LEFT JOIN name n ON (c.person_id = n.id) '
+        q += '  WHERE n.name = "'        
+        if (isinstance(not_director, list)):
+            q += str(not_director.pop()) + '" '
+            for nd in not_director:
+                 q += 'OR n.name = ' + nd +' '
+        else:
+            q += str(not_actor) + '" '
+        q += 'AND c.role_id = 8 ) '
+    if (not_person): 
+        q += 'AND t.id NOT IN ( '  
+        q += '  SELECT DISTINCT c.movie_id FROM cast_info c LEFT JOIN name n ON (c.person_id = n.id) '
+        q += '  WHERE n.name = "'        
+        if (isinstance(not_person, list)):
+            q += str(not_person.pop()) + '" '
+            for np in not_person:
+                 q += 'OR n.name = ' + np +' '
+        else:
+            q += str(not_actor) + '" ) '
+    if (q == None):
+        return ''
+    return q
+
+def where_year(know):
+    year = know.get('year')
+    not_year = know.get('!year')
+    ret = ''
+    if (year):
+        if (isinstance(year,list)):
+            ret += 'AND t.production_year = "' + str(year.pop()) + '" ' 
+            for y in year:
+                ret += 'OR t.production_year = "'+y+'" '
+        else:
+            ret += 'AND t.production_year = "'+year+'" '
+    if (not_year):
+        if (isinstance(not_year, list)):
+            ret += 'AND NOT ( t.production_year = "' + str(year.pop()) + '" ' 
+            for y in year:
+                ret += 'OR t.production_year = "'+y+'" '
+            ret += ') '
+        else:
+            ret += 'AND NOT t.production_year = "'+year+'" ' 
+    if (ret == None):
+        return ''
+    return ret
+
+def where_info(know): # Handles Genre, Plot, Country, Filming Location, and Languages. 
+    # TODO: Put in new query code. Merge genres on items within type on OR, between type AND
+    ele = []
+    if(know.get('genre')):
+        ele += know.get('genre')
+    if(know.get('country')):
+        ele += know.get('country')
+    if(know.get('languages')):
+        ele += know.get('languages')
+    if(know.get('filming_loc')):
+        ele += know.get('filming_loc')
+    ret = ''
+    if (isinstance(ele,list)): 
+        for k in ele:
+            ret += 'AND mi.info = "'+k+'" '
+    else:
+        ret += 'AND mi.info = "'+ele+'" '
+    ele = []
+    if(know.get('!genre')):
+        ele += know.get('!genre')
+    if(know.get('!country')):
+        ele += know.get('!country')
+    if(know.get('!languages')):
+        ele += know.get('!languages')
+    if(know.get('!filming_loc')):
+        ele += know.get('!filming_loc')
+        
+    if (isinstance(ele,list)): 
+        for k in ele:
+            ret += 'AND NOT mi.info = "'+k+'" '
+    else:
+        ret += 'AND NOT mi.info = "'+ele+'" '
+    if (ret == None):
+        return ''
+    return ret
+
+# Assumes looking for title, but could work in other cases.         
+def where_keyword(know): 
+        ele = know.get('keyword')
+        if (not ele):
+            return ''
+        where_list = ''
+        first = 1
+        if (isinstance(ele,list)): 
+            for k in ele:
+                if (first):
+                    where_list += 'AND ( k.keyword = "'+k+'" '
+                    first = 0
+                else:
+                    where_list += 'OR k.keyword = "'+k+'" '
+            where_list += ') '
+        else:
+            where_list += 'AND k.keyword = "'+ele+'" '
+        ele = know.get('!keyword')
+        first = 1
+        where_list += 'AND t.id NOT IN ( SELECT t.id FROM title t LEFT JOIN movie_keyword mk ON (t.id = mk.movie_id) LEFT JOIN keyword k ON (mk.keyword_id = k.id)  WHERE '
+        if (isinstance(ele,list)): 
+            for k in ele:
+                if (first):
+                    where_list += 'k.keyword = "'+k+'" '
+                    first = 0
+                else:
+                    where_list += 'OR k.keyword = "'+k+'" '
+        else:
+            where_list += 'k.keyword = "'+ele+'" '
+        where_list += ') '  
+        if (where_list == None):
+            return ''
+        return where_list      
+
+# Find number of awards a person has recieved? Been niminated for? 
+def awards(person):
+    q = 'SELECT count(t.id) FROM cast_info c LEFT JOIN title t ON (c.movie_id = t.id) LEFT JOIN name n ON (c.person_id = n.id) '
+    q += 'WHERE n.name="' + family_first(person) + '" AND t.title LIKE "%award%"'
+    conn.query(q)
+    result = conn.store_result()
+    return result.pop()
+
+# Find number of keywords in common between two movies.
 def commonality(title1, title2):
     q = 'SELECT COUNT(keyword_id) - COUNT(DISTINCT keyword_id)'
     q += 'FROM title t LEFT JOIN movie_keyword mk ON (t.id = mk.movie_id) '
     q += 'WHERE title="'+title1+'" OR title="'+title2+'" LIMIT 0,1000'
-
     conn.query(q)
     result = conn.store_result()
+    return result.pop()
+
+def family_first(name):
+    if (name.count(',')):
+        return name
+    return invert_name(name)
     
-    # Process result here
+def given_first(name):
+    if (name.count(',')):
+        return invert_name(name)
+    return name
 
-    return result
-
-def munge_name(s):
-    if ',' in s:
-        return s
-    a=s.rsplit(' ', 1)
+# Take a name in the form Given1 Given2 GevenN FamilyName and return it as FamilyName, Given1 Given2 ...
+def invert_name(s):
+    if (s.count(',')):
+        a=s.split(', ', 1)
+    else:
+        a=s.rsplit(' ', 1)
     a.reverse()
     return ', '.join(a)
-   
-"""
-Get list of genres for a movie.
-SELECT mi.info FROM title t LEFT JOIN movie_info mi ON (mi.movie_id = t.id) WHERE t.kind_id = "1" AND mi.info_type_id = 3 AND t.title = "A Scanner Darkly" LIMIT 100
-
-"""
-
+  
+# Naieve Name Spell-check. Pass in the name, and it will return a list with either the name, or a list of similar names.
 def check_person(name):
-    debug_spellcheck = True 
+    debug_spellcheck = False 
     name_list = name.rsplit(' ', 1)
     family_name=name_list.pop()[:6]
     given_name =name_list.pop()[:4]
-    name = munge_name(name)
+    name = invert_name(name)
     q = 'SELECT DISTINCT n.name FROM name n WHERE n.name = "' + str(name) + '" LIMIT 0,10'
     conn.query(q)
     result = conn.store_result()
     res_list = result.fetch_row(result.num_rows())
     res_list = [item[0] for item in res_list]
-    while (len(res_list)==0 and len(family_name) > 3):
+    failed = 0
+    while (len(res_list)==0 and not failed == 2):
         q = 'SELECT DISTINCT n.name FROM name n WHERE n.name LIKE "'
         q += family_name + '%, ' + given_name + '%" LIMIT 0,10'
         conn.query(q)
@@ -293,10 +484,13 @@ def check_person(name):
             given_name = given_name[:-2]
         elif (len(given_name) == 2):
             given_name = given_name[:-1]
+        if (len(family_name) < 4 or (len(family_name) < 5 and failed)): # Try an alternative method
+            failed += 1
+            family_name = name.rsplit(' ', 1).pop()[:9]
+            family_name[:1]+'__'+family_name[3:]
 
 
-
-    #Put word distance comparison here.
+    #Sort by word distance comparison here, if there is time.
     return res_list
 
 
