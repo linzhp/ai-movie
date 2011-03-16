@@ -41,7 +41,7 @@ class DialogManager:
                 return self.request(internal_dict)
             count=self.dbi.query('title',internal_dict, count=True)
             if count>10:
-                self.pending_question = "result_length"
+                self.pending_question = MORE_PREF
                 return {"list":count, "question":MORE_PREF}
             else:
                 self.pending_question = SEE_RESULT
@@ -130,8 +130,11 @@ class DialogManager:
         internal_dict = dict.copy()
         response = internal_dict.pop("response")
         if response=="NO":
-            # FIXME check any problem here 
-            return {}
+            if self.pending_question == MORE_PREF:
+                self.pending_question = "result_length"
+                return {"question":HOW_MANY}
+            else:
+                return {}
         elif response == "YES":
             if self.pending_question:
                 internal_dict["request"]=self.state.last_request()
