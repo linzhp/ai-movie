@@ -2,3 +2,5 @@ dislike
 disliked
 hate
 hated
+detest
+detested

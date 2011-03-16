@@ -200,7 +200,7 @@ class NLUnderstanding:
             cur_pref = self._process_subsentence(sentence)
 #            print sentence
             positive = self._decide_opinion(sentence, prev_op)
-            print positive
+#            print positive
             if not positive:
                 cur_pref.negate = negate
                 if positive is False:
@@ -497,6 +497,8 @@ class NLUnderstanding:
                 if node[1]=='IN':
                     if node[0] == "without":
                         modifier = not modifier
+                    if node[0] == "like":
+                        verb = True
 #                        print modifier
                 if node[1][0]=='V':
                     if node[0] in self.positiveList:

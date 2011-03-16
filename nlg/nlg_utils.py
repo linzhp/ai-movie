@@ -25,5 +25,24 @@ def int_to_english(myInt):
 def get_random_line(fileName):
     with open(fileName) as file:
         lines = file.readlines()
-        return lines[random.randrange(0,len(lines))].replace('\n', ' ')
-     
+        return (lines[random.randrange(0,len(lines))].replace('\n',' ')).rstrip()
+
+def flipPersons(itemType, item):
+    if itemType in ['person','actor','director','voice actor']:
+        return given_first(item).strip('.')
+    else:
+        return item.strip('.')
+
+def given_first(name):
+    if (name.count(',')):
+        return invert_name(name)
+    return name
+
+# Take a name in the form Given1 Given2 GevenN FamilyName and return it as FamilyName, Given1 Given2 ...
+def invert_name(s):
+    if (s.count(',')):
+        a=s.split(', ', 1)
+    else:
+        a=s.rsplit(' ', 1)
+    a.reverse()
+    return ' '.join(a)

@@ -498,6 +498,7 @@ def invert_name(s):
 # Naieve Name Spell-check. Pass in the name, and it will return a list with either the name, or a list of similar names.
 def check_person(name):
     debug_spellcheck = False 
+    name = given_first(name)
     name_list = name.rsplit(' ', 1)
     family_name=name_list.pop()[:6]
     given_name =name_list.pop()[:4]
@@ -508,7 +509,7 @@ def check_person(name):
     res_list = result.fetch_row(result.num_rows())
     res_list = [item[0] for item in res_list]
     failed = 0
-    while (len(res_list)==0 and not failed == 2):
+    while (len(res_list)==0 and (failed < 2)):
         q = 'SELECT DISTINCT n.name FROM name n WHERE n.name LIKE "'
         q += family_name + '%, ' + given_name + '%" LIMIT 0,10'
         conn.query(q)
@@ -521,15 +522,18 @@ def check_person(name):
             print 'Query: ' + q + '\n'
             print 'Results: ' + str(len(res_list)) + '\n'
 
-        family_name = family_name[:-2]
+        family_name = family_name[:-1]
         if (len(given_name) > 2):
-            given_name = given_name[:-2]
+            given_name = given_name[:-1]
         elif (len(given_name) == 2):
             given_name = given_name[:-1]
         if (len(family_name) < 4 or (len(family_name) < 5 and failed)): # Try an alternative method
             failed += 1
-            family_name = name.rsplit(' ', 1).pop()[:9]
-            family_name[:1]+'__'+family_name[3:]
+            name_list = name.rsplit(' ', 1)
+            family_name = name_list.pop()[:9]
+            family_name = family_name[:1]+'__'+family_name[3:]
+            given_name = name_list.pop()[:6]
+            given_name = given_name[:1]+'__'+given_name[3:]
 
 
     #Sort by word distance comparison here, if there is time.
