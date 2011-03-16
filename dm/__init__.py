@@ -65,6 +65,8 @@ class DialogManager:
             if not internal_dict.has_key('title'):
                 return {'off_topic':chatbot.reply}
             title = internal_dict['title']
+            if isinstance(title, list):
+                title = title[0]
             if internal_dict.has_key('result_length'):
                 result_length= internal_dict.pop('result_length')
             else:
