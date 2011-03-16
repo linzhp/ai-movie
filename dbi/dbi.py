@@ -134,7 +134,8 @@ def build_from(wanted, know):
             if (total_people > 1):
                 for i in range (2, total_people + 1):
                     from_list += 'LEFT JOIN cast_info c' + str(i) + ' ON (c.movie_id = t.id) ' 
-                    from_list += 'LEFT JOIN name n' + str(i) + ' ON (n.id = c.person_id) '
+                    from_list += 'LEFT JOIN name n' + str(i) + ' ON (n' + str(i) 
+                    from_list += '.id = c' + str(i) + '.person_id) '
                 
             if (know.has_key('role') or know.has_key('director')):
                 from_list += 'LEFT JOIN role_type rt ON (c.role_id = rt.id) '
@@ -421,7 +422,7 @@ def where_keyword(know):
 def awards(person):
     q = 'SELECT count(t.id) FROM cast_info c LEFT JOIN title t ON (c.movie_id = t.id) LEFT JOIN name n ON (c.person_id = n.id) '
     q += 'WHERE n.name="' + family_first(person) + '" AND t.title LIKE "%award%"'
-    conn.query(fin_query)
+    conn.query(q)
     result = conn.store_result()
     return result.pop()
 
