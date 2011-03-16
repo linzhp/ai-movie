@@ -200,7 +200,7 @@ class NLUnderstanding:
         prev_op = None
         for sentence in subsentences:
             cur_pref = self._process_subsentence(sentence)
-#            print sentence
+            print sentence
             positive = self._decide_opinion(sentence, prev_op)
             print positive
             if not positive:
@@ -466,7 +466,7 @@ class NLUnderstanding:
         return: True if it is positive, False if it is negative, None
         if it is unknown
         """
-#        print list
+        print list
         modifier = True
         verb = prev
         checkAdjective = False
@@ -482,6 +482,8 @@ class NLUnderstanding:
                 if node[1]=='IN':
                     if node[0] == "without":
                         modifier = not modifier
+                    if node[0] == "like":
+                        verb = True
 #                        print modifier
                 if node[1][0]=='V':
                     if node[0] in self.positiveList:
@@ -497,8 +499,8 @@ class NLUnderstanding:
                         verb = False
 #
         #list should be a list of tuples
-#        print "verb = "+str(verb)
-#        print "modifier = "+str(modifier)
+        print "verb = "+str(verb)
+        print "modifier = "+str(modifier)
         if verb == None or modifier == True:
             return verb
         else:

@@ -68,8 +68,7 @@ class Chunker:
         TRUE_FALSE: {^<VBD|VBZ>}
         TITLE: {<:><[^:]*>*<:>}
         PERSON: {<NNP[S]?>+}
-        NP: {<PRP\$>?<JJ>*<NN|NNS>(<POS>?<JJ>*<NN|NNS>)*}
-        VP: { <MD>?<[V].*>+<IN|CC>? }        
+        NP: {<PRP\$>?<JJ>*<NN|NNS>(<POS>?<JJ>*<NN|NNS>)*}        
         PP: { <IN><NP> }
         """
         #ACTOR_IN_MOVIE: {<PERSON><.*>*<IN><TITLE>}
@@ -91,8 +90,9 @@ class Chunker:
         tagged = self.tagger.tag(tokd)
         if ('like', 'IN') in tagged:
            i = tagged.index(('like', 'IN'))
-           tagged.insert(i,('like','KW_SIMILAR'))
-           tagged.remove(('like', 'IN'))
+           if i==0 or tagged[i-1]!=('do','VBP'):
+               tagged.insert(i,('like','KW_SIMILAR'))
+               tagged.remove(('like', 'IN'))
         print tagged
         chunked = self.cp.parse(tagged)
         return chunked
