@@ -11,9 +11,30 @@ def questionToUser(NLUOutput,DMOutput):
         return "Could you help me narrow it down a bit?\n"
     elif DMOutput['question'] == 'SEE_RESULT?':
         return "Would you like to see the results?\n"
+    elif DMOutput['question'] == 'CHOICE':
+        DMOutput.pop('question')
+        return giveSpellingOptions(DMOutput)
     else:
         print "NLG Error: Unknown Question Type: "+DMOutput['question']
         return ""
+    
+def giveSpellingOptions(misspelled_names):
+    rstring = "I'm sorry I couldn't quite understand that.\n"
+    mylist  = {}
+    for name, spellings in misspelled_names:
+        rstring+= "Specifically, who do you mean by "+nlgu.given_first(name)+"?\n Could it be "
+        i=0
+        while i<len(spellings): 
+            i = i+1
+            if i == len(spellings):
+                rstring += " or "+nlgu.given_first(spellings[0])+"?"
+            elif i == 1:
+                rstring += nlgu.given_first(spellings[0])
+            else:
+                rstring += ", "+ nlgu.given_first(spellings[0])
+    if len(mylist) >1:
+        "Please list the correct spellings separated by commas so I can better understand you. Thanks!"
+            
 
 def listOutput(NLUOutput,DMOutput):
     # DMOutput should be [list:SIZE,question:FLAG]

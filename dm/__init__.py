@@ -12,7 +12,8 @@ class DialogManager:
     def __init__(self):
         self.pending_question = None
         self.state = State()
-        self.dbi = dbi 
+        self.dbi = dbi
+        self.spell_checked = False
 
     def request(self, dict):
         # NLG does not need to be aware of below operations
@@ -98,6 +99,8 @@ class DialogManager:
             else:
                 results = movie_list
             return {'print':'title','results':results}
+        elif request_type == CHOICE:
+            pass # do something here
         else:
             count = internal_dict.get('result_length')
             if count:
@@ -148,7 +151,56 @@ class DialogManager:
             reply = chatbot.submit(dict['off_topic'])
         return {'off_topic':reply}
     
+    def check_spelling(self, mylist):
+        misspelled_names = {}
+        newInputList = []
+        for dict in mylist:
+            newDict = {}
+            for tuple in dict:
+                if tuple in ['person','actor','director','voice actor']:
+                    if isinstance(dict[tuple], list):
+                        newList = []
+                        new_name = ""
+                        for person in dict[tuple]:
+                            new_names = dbi.check_person(person)
+                            if len(new_names)==1:
+                                new_name = new_names.pop()
+                            else:
+                                new_name = person
+                                misspelled_names[person]=new_names
+                                print person
+                                print new_names
+                                #create output to nlg
+                            newList.append(new_name)
+                    else:
+                        new_names = dbi.check_person(dict[tuple])
+                        if len(new_names)==1:
+                            new_name = new_names.pop()
+                        else:
+                            new_name = dict[tuple]
+                            print dict[tuple]
+                            misspelled_names[dict[tuple]]=new_names
+                            print new_names
+                            #create output to nlg
+                        newList = new_name
+                    newDict[tuple] = newList
+                else:
+                    newDict[tuple] = dict[tuple]
+            newInputList.append(newDict)
+        if len(misspelled_names)==0:
+            print newInputList
+            return newInputList
+        else:
+            return misspelled_names
+                    
+    
     def input(self, list):
+        print list
+        list = self.check_spelling(list)
+        if isinstance(list,type({})):
+            list['question']=CHOICE
+            self.pending_question = CHOICE
+            return list
         result_dict={}
         for dict in list:
             if dict.has_key("request"):
@@ -159,13 +211,17 @@ class DialogManager:
                 result_dict.update(self.response(dict))
             elif dict.has_key("off_topic"):
                 result_dict=self.off_topic(dict)
-        self.state.add_result(result_dict)
+        print list
+        print result_dict
+
+        self.state.add_result(result_dict)          
         return result_dict
         
 # Define constants        
 HOW_MANY = "HOW_MANY"
 SEE_RESULT="SEE_RESULT?"
 MORE_PREF="MORE_PREF"
+CHOICE = "CHOICE"
 EXIT="EXIT"
 CLEAR="CLEAR"
 COUNT="COUNT"
