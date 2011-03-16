@@ -76,13 +76,13 @@ class DialogManager:
                 title_dict={'title':title}
                 if not internal_dict.has_key('director'):
                     directors = self.dbi.query("director",title_dict, [0,1])
-                    if len(directors)>1:
+                    if len(directors)>0:
                         internal_dict['director']=directors[0]
                     else:
                         return {'print':'title','results':[]}
                 if not internal_dict.has_key('genre'):
                     genres = self.dbi.query('genre', title_dict, [0,1])
-                    if len(genres)>1:
+                    if len(genres)>0:
                         internal_dict['genre']=genres[0]
                     else:
                         return {'print':'title','results':[]}            

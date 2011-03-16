@@ -1,3 +1,4 @@
+import logging
 class State:
     def __init__(self):
         self.states = []
@@ -38,8 +39,9 @@ class State:
                 # else: add the key:value pair directly into the all_states dict
                 else:
                     all_states[key] = dict[key]
-        print "list= ", lists
-        print "all_states= ", all_states
+        # log to session.log
+        logging.debug("list= "+str(lists))
+        logging.debug("all_states= "+str(all_states))
         return all_states
 
     def add_request(self, dict):
