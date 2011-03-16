@@ -1,5 +1,6 @@
 NIMROD
 ======
+Source Repository address: 
 https://github.com/linzhp/ai-movie
 
 Dependencies
@@ -12,7 +13,7 @@ Python module dependencies:
 
 Third party module dependencies:
 
-* Howie: https://github.com/linzhp/Howie
+* Howie: <https://github.com/linzhp/Howie>
 
 Installation
 ------------
@@ -41,3 +42,4 @@ Description of directories in the project
 * dm/		Dialog Manager
 * dbi/		Database Interface 
 * nlg/		Natural Language Generation
+* test/		Python unittest, including test corpora and a mock object module from <http://python-mock.sourceforge.net/>

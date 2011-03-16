@@ -125,6 +125,8 @@ class NLUnderstanding:
         keywords=self._search_keywords(all_leaves[next_index:])
         if len(keywords)>0:
             request=self._parse_pref(chunked, request=self._keyword2request(keywords[0]))
+        else:
+            request=self._parse_pref(chunked)
         return request
 
 
@@ -200,7 +202,7 @@ class NLUnderstanding:
             cur_pref = self._process_subsentence(sentence)
 #            print sentence
             positive = self._decide_opinion(sentence, prev_op)
-#            print positive
+            logging.debug("Opinion: "+str(positive)) 
             if not positive:
                 cur_pref.negate = negate
                 if positive is False:
