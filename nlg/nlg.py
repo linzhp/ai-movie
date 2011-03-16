@@ -77,7 +77,7 @@ def getRandomQuantifier():
 
 
 def printResults(NLUOutput,DMOutput):
-    if isinstance(DMOutput['results'],long):
+    if isinstance(DMOutput.get('results'),long):
         DMOutput['list'] = DMOutput['results']
     
     if DMOutput.has_key("list"):
