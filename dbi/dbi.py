@@ -280,6 +280,26 @@ def where_person(know): #TODO: Insert new code
                     q += 'AND n' + str(idx) + '.name = "' + family_first(a) + '" '
         else:
             q += 'AND n.name = "' + family_first(actor) + '" '
+    if (person):
+        if (isinstance(person,list)): # TODO: Add support for this in build_from AND check roll.
+            for p in person:
+                idx += 1
+                if (idx == 1):
+                    q += 'AND n.name = "' + family_first(p) + '" '
+                else:
+                    q += 'AND n' + str(idx) + '.name = "' + family_first(p) + '" '
+        else:
+            q += 'AND n.name = "' + family_first(person) + '" '
+    if (director):
+        if (isinstance(director,list)): # TODO: Add support for this in build_from AND check roll.
+            for d in director:
+                idx += 1
+                if (idx == 1):
+                    q += 'AND n.name = "' + family_first(d) + '" '
+                else:
+                    q += 'AND n' + str(idx) + '.name = "' + family_first(d) + '" '
+        else:
+            q += 'AND n.name = "' + family_first(director) + '" '
     
     if (idx > 1):
         q += 'AND c.movie_id = c2.movie_id '
