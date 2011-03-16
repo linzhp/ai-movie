@@ -10,7 +10,7 @@ class State:
         all_states = {}
         for dict in lists:
             for key in dict:
-                if key == 'request' or key == 'results':
+                if key == 'request' or key == 'results' or key == 'list':
                     continue
                 # elif: a key is in all_states already
                 elif all_states.has_key(key):
