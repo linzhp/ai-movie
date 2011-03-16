@@ -68,13 +68,19 @@ class DialogManager:
                 result_length = 10
             internal_dict.pop('title')
             if len(internal_dict) <3:
+                title_dict={'title':title}
                 if not internal_dict.has_key('director'):
-                    title_dict={'title':title}
-                    internal_dict['director']=self.dbi.query("director",\
-                                         title_dict, [0,1])[0]
+                    directors = self.dbi.query("director",title_dict, [0,1])
+                    if len(directors)>1:
+                        internal_dict['director']=directors[0]
+                    else:
+                        return {'print':'title','results':[]}
                 if not internal_dict.has_key('genre'):
-                    internal_dict['genre']=self.dbi.query('genre', title_dict, [0,1])[0]
-            
+                    genres = self.dbi.query('genre', title_dict, [0,1])
+                    if len(genres)>1:
+                        internal_dict['genre']=genres[0]
+                    else:
+                        return {'print':'title','results':[]}            
             movie_list = self.dbi.query("title", internal_dict, [0,result_length*5])
             if title in movie_list:
                 movie_list.remove(title)

@@ -11,7 +11,6 @@ nlu = NLUnderstanding()
 dialogManager = DialogManager()
 
 #TODO test MORE PREF
-#TODO Is Kate Winslet in "Titanic"?
 
 try:
     greeting="Hi, I am NIMROD, and you can ask me to help you find movies,\nTell me your preferences, and i can find movies that match them"#nlg.greet()
