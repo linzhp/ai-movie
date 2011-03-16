@@ -25,14 +25,10 @@ query_debug = False
 def query(wanted, known, count=False):
     if not wanted:
         return 0
-    logging.debug("wanted: "+wanted)
-    logging.debug("known: "+str(known))
+    logging.debug("Wanted: "+wanted)
+    logging.debug("Known: "+str(known))
     if (logfile):
-        logfile.write("Wanted: \"")
-        logfile.write(str(wanted))
-        logfile.write("\" Known: ")
-        logfile.write(str(known)) 
-        logfile.write('\n')
+        logfile.write('Wanted: "' + str(wanted) + ' ::: Known: ' + str(known) + '\n')
     fin_query = ''
     from_clause = build_from(wanted, known)
     if (query_debug):
@@ -59,9 +55,9 @@ def query(wanted, known, count=False):
     else:
         fin_query += 't.title, n.name, t.production_year '
         if (logfile):
-            logfile.write('DBI: '+str(wanted)+' is unimpliment.\n')
+            logfile.write('DBI: '+str(wanted)+' is unimplimented.\n')
         else: # Remove this block for final presentation
-            print 'DBI: '+str(wanted)+' is unimpliment.'
+            logging.warning('DBI: '+str(wanted)+' is unimplimented.')
     if (count and not isinstance(count,list)):
         fin_query += ') '
 
@@ -87,7 +83,7 @@ def query(wanted, known, count=False):
         logfile.write('Executing: '+fin_query+'\n')
         logfile.flush()
     else:
-        print 'Executing: '+fin_query+'\n'
+        logging.debug('Executing: '+fin_query+'\n')
     conn.query(fin_query)
     result = conn.store_result()
     res_list = result.fetch_row(result.num_rows())
@@ -192,8 +188,8 @@ def build_from(wanted, know):
             logfile.write('WARNING: DBi: Could not identify desired info: "'+ str(wanted) +'"\n')
             logfile.write('Making a generic guess... results could be slow as a result.\n')
         else:
-            print 'WARNING: DBi: Could not identify desired info: "'+ str(wanted) +'"\n'
-            print 'Making a generic guess... results could be slow as a result.\n'
+            logging.warning('WARNING: DBi: Could not identify desired info: "'+ str(wanted) +'"')
+            logging.warning('Making a generic guess... results could be slow or wrong as a result.')
         from_list += 'title t LEFT JOIN cast_info c ON (c.movie_id = t.id) LEFT JOIN name n ON (c.person_id = n.id) '
         from_list += 'LEFT JOIN role_type rt ON (c.role_id = rt.id) '
         from_list += 'LEFT JOIN char_name cn ON (c.person_role_id = cn.id) '
@@ -579,9 +575,9 @@ def check_person(name):
         res_list = [item[0] for item in res_list]
 
         if (debug_spellcheck):
-            print 'Name: ' + family_name + ', ' + given_name + '\n'
-            print 'Query: ' + q + '\n'
-            print 'Results: ' + str(len(res_list)) + '\n'
+            logging.debug('Name: ' + family_name + ', ' + given_name)
+            logging.debug('Query: ' + q)
+            logging.debug('Results: ' + str(len(res_list)))
 
         family_name = family_name[:-1]
         if (len(given_name) > 2):
