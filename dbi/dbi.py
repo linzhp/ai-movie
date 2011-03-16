@@ -464,18 +464,20 @@ def where_keyword(know):
         else:
             where_list += 'AND k.keyword = "'+ele+'" '
         ele = know.get('!keyword')
-        first = 1
-        where_list += 'AND t.id NOT IN ( SELECT t.id FROM title t LEFT JOIN movie_keyword mk ON (t.id = mk.movie_id) LEFT JOIN keyword k ON (mk.keyword_id = k.id)  WHERE '
-        if (isinstance(ele,list)): 
-            for k in ele:
-                if (first):
-                    where_list += 'k.keyword = "'+k+'" '
-                    first = 0
-                else:
-                    where_list += 'OR k.keyword = "'+k+'" '
-        else:
-            where_list += 'k.keyword = "'+ele+'" '
-        where_list += ') '  
+        if (ele):
+            first = 1
+            where_list += 'AND t.id NOT IN ( SELECT t.id FROM title t LEFT JOIN movie_keyword mk ON (t.id = mk.movie_id) LEFT JOIN keyword k ON (mk.keyword_id = k.id)  WHERE '
+            if (isinstance(ele,list)): 
+                for k in ele:
+                    if (first):
+                        where_list += 'k.keyword = "'+k+'" '
+                        first = 0
+                    else:
+                        where_list += 'OR k.keyword = "'+k+'" '
+            else:
+                if (ele):
+                    where_list += 'k.keyword = "'+str(ele)+'" '
+            where_list += ') '  
         if (where_list == None):
             return ''
         return where_list   
