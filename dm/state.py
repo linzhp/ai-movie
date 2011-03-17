@@ -81,12 +81,14 @@ class State:
                 # Assuming title is the only attribute PRE_IT will refer!
                 if dict.has_key('title') and dict['title'] != 'PREV_IT':
                     if type(dict['title']).__name__ == 'list':
-                        temp = dict['title'].reverse()
-                        logging.debug("pre_it.list= "+str( temp[0]))
+                        temp = dict['title']
+                        temp.reverse()
+                        logging.debug("pre_it.list= "+str(temp[0]))
                         return temp[0]
                     else:
                         logging.debug("pre_it.str= "+str( temp[0]))
                         return dict['title']
+                    return dict['title']
         # user entered it/he/she but state doesn't have their info.
         return 'error'
 

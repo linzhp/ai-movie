@@ -13,7 +13,7 @@ Python module dependencies:
 
 Third party module dependencies:
 
-* Howie: <https://github.com/linzhp/Howie>
+* [Howie](https://github.com/linzhp/Howie): Howie can be installed by downloading/uncompressing it and adding its location to to PYTHONPATH environment variable.
 
 Installation
 ------------
@@ -25,6 +25,7 @@ Before running the movie selector, you need to configure it first:
 	cp movie.cfg.sample movie.cfg
 
 Then change it configure in movie.cfg according to your MySQL database configuration.
+
 
 Run
 ---

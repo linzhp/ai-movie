@@ -63,6 +63,7 @@ class Chunker:
         B-QUESTION: {<WDT|WP|WRB><DT|RB.*|JJ|GNRE>*<MD|VB.*|KW_.*>}
             {<WRB>}
         COMMAND: {^(<MD><PRP>)?(<RB>)*<VB|VBP>}
+            {<EOS>(<MD><PRP>)?(<RB>)*<VB|VBP>}
             {^<PRP><VB|VBP><TO>}
             {<RB><VBP|VB>}
         TRUE_FALSE: {^<VBD|VBZ>}
@@ -98,10 +99,10 @@ class Chunker:
         return chunked
 
 if __name__ == '__main__':
-    with open(path.join(path.dirname(__file__), "chunkerpickler.bin"),'rb') as pickled_file:
-        chk = pickle.load(pickled_file)
-#    chk = Chunker(False, True)
-    result = chk.chunk("""I want to see some super hero movie""")
+#    with open(path.join(path.dirname(__file__), "chunkerpickler.bin"),'rb') as pickled_file:
+#        chk = pickle.load(pickled_file)
+    chk = Chunker(False, True)
+    result = chk.chunk("""Yes. Could you show me his action movies?""")
     print result
     result.draw()
 
