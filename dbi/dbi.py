@@ -346,7 +346,7 @@ def where_person(know): #TODO: Insert new code
             for nd in not_director:
                  q += 'OR n.name = ' + nd +' '
         else:
-            q += str(not_actor) + '" '
+            q += str(not_director) + '" '
         q += 'AND c.role_id = 8 ) '
     if (not_person): 
         q += 'AND t.id NOT IN ( '  
@@ -357,7 +357,7 @@ def where_person(know): #TODO: Insert new code
             for np in not_person:
                  q += 'OR n.name = ' + np +' '
         else:
-            q += str(not_actor) + '" ) '
+            q += str(not_person) + '" ) '
     if (q == None):
         return ''
     return q
@@ -370,17 +370,17 @@ def where_year(know):
         if (isinstance(year,list)):
             ret += 'AND t.production_year = "' + str(year.pop()) + '" ' 
             for y in year:
-                ret += 'OR t.production_year = "'+y+'" '
+                ret += 'OR t.production_year = "'+str(y)+'" '
         else:
-            ret += 'AND t.production_year = "'+year+'" '
+            ret += 'AND t.production_year = "'+str(year)+'" '
     if (not_year):
         if (isinstance(not_year, list)):
             ret += 'AND NOT ( t.production_year = "' + str(year.pop()) + '" ' 
             for y in year:
-                ret += 'OR t.production_year = "'+y+'" '
+                ret += 'OR t.production_year = "'+str(y)+'" '
             ret += ') '
         else:
-            ret += 'AND NOT t.production_year = "'+year+'" ' 
+            ret += 'AND NOT t.production_year = "'+str(year)+'" ' 
     if (ret == None):
         return ''
     return ret
@@ -421,13 +421,25 @@ def where_info(know): # Handles Genre, Plot, Country, Filming Location, and Lang
         ret += 'AND mi.info = "'+ele+'" '
     ele = []
     if(know.get('!genre')):
-        ele += know.get('!genre')
+        if (isinstance(know.get('!genre'),list)):
+            ele += know.get('!genre')
+        else:
+            ele += [know.get('!genre')]
     if(know.get('!country')):
-        ele += know.get('!country')
+        if (isinstance(know.get('!country'),list)):
+            ele += know.get('!country')
+        else:
+            ele += [know.get('!country')]
     if(know.get('!languages')):
-        ele += know.get('!languages')
+        if (isinstance(know.get('!languages'),list)):
+            ele += know.get('!languages')
+        else:
+            ele += [know.get('!languages')]
     if(know.get('!filming_loc')):
-        ele += know.get('!filming_loc')
+        if (isinstance(know.get('!filming_loc'),list)):
+            ele += know.get('!filming_loc')
+        else:
+            ele += [know.get('!filming_loc')]
         
     if (isinstance(ele,list)): 
         for k in ele:
@@ -506,13 +518,16 @@ def awards(person):
     q += 'WHERE n.name="' + family_first(person) + '" AND t.title LIKE "%award%"'
     conn.query(q)
     result = conn.store_result()
-    return result.pop()
+    res_list = result.fetch_row(result.num_rows())
+    res_list = [item[0] for item in res_list]
+    return res_list.pop()
 
 # Find number of keywords in common between two movies.
 def commonality(title1, title2):
     q = 'SELECT COUNT(keyword_id) - COUNT(DISTINCT keyword_id)'
     q += 'FROM title t LEFT JOIN movie_keyword mk ON (t.id = mk.movie_id) '
     q += 'WHERE title="'+title1+'" OR title="'+title2+'" LIMIT 0,1000'
+
     conn.query(q)
     result = conn.store_result()
     res_list = result.fetch_row(result.num_rows())
