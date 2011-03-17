@@ -1,9 +1,5 @@
 import nltk
 import MySQLdb
-<<<<<<< HEAD
-=======
-#import imdb
->>>>>>> 2695a62a8b4dd97d40090ad6ca6f697b79d37528
 import logging
 import ConfigParser
 from os import path
