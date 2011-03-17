@@ -58,7 +58,7 @@ def listOutput(NLUOutput,DMOutput):
         rstring += nlgu.get_random_line(filePath+"no_result.txt")
     elif resultNum < 60:
         rstring += nlgu.get_random_line(filePath+"multi_result.txt").format(nlgu.int_to_english(resultNum))
-    elif resultNum < 101:
+    elif resultNum < 101 or (NLUOutput[0].has_key('request') and NLUOutput[0]['request']=='COUNT'):
         rstring += nlgu.get_random_line(filePath+"multi_result.txt").format(resultNum)
     else:
         rstring += nlgu.get_random_line(filePath+"multi_result.txt").format(getRandomQuantifier())
