@@ -1,5 +1,9 @@
 import nltk
 import MySQLdb
+<<<<<<< HEAD
+=======
+#import imdb
+>>>>>>> 2695a62a8b4dd97d40090ad6ca6f697b79d37528
 import logging
 import ConfigParser
 from os import path
@@ -316,7 +320,7 @@ def where_person(know): #TODO: Insert new code
                     q += 'AND n' + str(idx) + '.name = "' + family_first(d) + '" '
         else:
             q += 'AND n.name = "' + family_first(director) + '" '
-            q += 'c.role_id = 8 ' # Enforce that they directed.
+            q += 'AND c.role_id = 8 ' # Enforce that they directed.
     
     if (idx > 1):
         q += 'AND c.movie_id = c2.movie_id '
