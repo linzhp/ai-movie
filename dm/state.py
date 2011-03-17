@@ -67,7 +67,7 @@ class State:
         # Find the last PRE_HE/PRE_IT.
         lists = self.states[:]
         lists.reverse()
-        logging.debug("all= "+str( lists) )
+        logging.debug("resolve_pronoun:states= "+str( lists) )
         for dict in lists:
             if value == 'PREV_HE':
                 # Assuming actor/director are the only people we care about!
@@ -83,10 +83,10 @@ class State:
                     if type(dict['title']).__name__ == 'list':
                         temp = dict['title']
                         temp.reverse()
-                        logging.debug("pre_it.list= "+str(temp[0]))
+                        logging.debug("resolve_pronoun:pre_it.list= "+str(temp[0]))
                         return temp[0]
                     else:
-                        logging.debug("pre_it.str= "+str( temp[0]))
+                        logging.debug("resolve_pronoun:pre_it.str= "+str( temp[0]))
                         return dict['title']
                     return dict['title']
         # user entered it/he/she but state doesn't have their info.
