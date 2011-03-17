@@ -13,9 +13,7 @@ Python module dependencies:
 
 Third party module dependencies:
 
-* Howie: <https://github.com/linzhp/Howie>
-
-Howie can be installed by adding its location to to PYTHONPATH environment variable.
+* [Howie](https://github.com/linzhp/Howie): Howie can be installed by downloading/uncompressing it and adding its location to to PYTHONPATH environment variable.
 
 Installation
 ------------

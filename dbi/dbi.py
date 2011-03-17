@@ -1,6 +1,5 @@
 import nltk
 import MySQLdb
-import imdb
 import logging
 import ConfigParser
 from os import path
@@ -12,7 +11,6 @@ password = config.get("database", "password")
 host = config.get("database", "host")
 db_name = config.get("database", "db_name")
 #i =  imdb.IMDb('sql', uri='mysql://maw_imdb:pugOrz2u@mysql.cse.ucsc.edu/maw_imdb')
-i =  imdb.IMDb('sql', uri='mysql://%s:%s@%s:3306/%s'%(user_name,password,host,db_name))
 conn = MySQLdb.connect (host = host, user = user_name, db = db_name, passwd = password)
 #logfile = open('dbi.log', 'w')
 logfile = 0
@@ -406,7 +404,7 @@ def where_info(know): # Handles Genre, Plot, Country, Filming Location, and Lang
         else:
             ele += [country]
     if(languages):
-        if (isinstence(languages, list)):
+        if (isinstance(languages, list)):
             ele += languages
         else:
             ele += [languages]
@@ -545,7 +543,7 @@ def invert_name(s):
 # Naieve Name Spell-check. Pass in the name, and it will return a list with either the name, or a list of similar names.
 def check_person(name):
     debug_spellcheck = False 
-    if (name.count(' ')): # If this is an atomic name
+    if (name.count(' ')==0 or name == None or name == '' or len(name) < 3): # If this is an atomic name
         return [name] # TODO: Throw an exception.
     name = given_first(name)
     name_list = name.rsplit(' ', 1)
