@@ -2,6 +2,7 @@ import resultPrinter as rp
 import nlg_utils as nlgu
 from os import path
 import random
+import logging
 
 def questionToUser(NLUOutput,DMOutput):
     # DMOutput should contain [question:FLAG]
@@ -15,7 +16,7 @@ def questionToUser(NLUOutput,DMOutput):
         DMOutput.pop('question')
         return giveSpellingOptions(DMOutput)
     else:
-        print "NLG Error: Unknown Question Type: "+DMOutput['question']
+        logging.debug( "NLG Error: Unknown Question Type: "+DMOutput['question'])
         return ""
     
 def giveSpellingOptions(misspelled_names):
@@ -50,7 +51,7 @@ def listOutput(NLUOutput,DMOutput):
     rstring = ""
     filePath = path.dirname(__file__)+'/prs/'
     if resultNum < 0:
-        print "NLG Error: List Size less than zero"
+        logging.debug( "NLG Error: List Size less than zero")
     elif resultNum == 1:
         rstring += nlgu.get_random_line(filePath+"one_result.txt")
     elif resultNum == 0:
@@ -60,9 +61,9 @@ def listOutput(NLUOutput,DMOutput):
     elif resultNum < 101:
         rstring += nlgu.get_random_line(filePath+"multi_result.txt").format(resultNum)
     else:
-        print resultNum
         rstring += nlgu.get_random_line(filePath+"multi_result.txt").format(getRandomQuantifier())
-        DMOutput['question'] == 'MORE_PREF'
+        if not DMOutput.has_key('question'):
+            DMOutput['question'] == 'MORE_PREF'
 
     if resultNum == 0:
         rstring += "  Type 'reset' to start over." # This should be removed

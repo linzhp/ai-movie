@@ -205,9 +205,9 @@ class NLUnderstanding:
         prev_op = None
         for sentence in subsentences:
             cur_pref = self._process_subsentence(sentence)
-            print sentence
+
             positive = self._decide_opinion(sentence, prev_op)
-            print positive
+
             logging.debug("Opinion: "+str(positive)) 
             if not positive:
                 cur_pref.negate = negate
@@ -466,19 +466,19 @@ class NLUnderstanding:
         self.positiveList = []
         with open(myPath+"positiveList.txt") as file:
             for line in file:
-                self.positiveList.append(line[:-1]) 
+                self.positiveList.append(line.rstrip()) 
         self.negativeList = []
         with open(myPath+"negativeList.txt") as file:
             for line in file:
-                self.negativeList.append(line[:-1])
+                self.negativeList.append(line.rstrip())
         self.negativeAdjectiveList = []
         with open(myPath+"negativeAdjectiveList.txt") as file:
             for line in file:
-                self.negativeAdjectiveList.append(line[:-1])
+                self.negativeAdjectiveList.append(line.rstrip())
         self.positiveAdjectiveList = []
         with open(myPath+"positiveAdjectiveList.txt") as file:
             for line in file:
-                self.positiveAdjectiveList.append(line[:-1])
+                self.positiveAdjectiveList.append(line.rstrip())
 
     def _decide_opinion(self, list, prev):
         """
