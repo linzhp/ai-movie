@@ -40,8 +40,8 @@ class State:
                 else:
                     all_states[key] = dict[key]
         # log to session.log
-        logging.debug("list= "+str(lists))
-        logging.debug("all_states= "+str(all_states))
+        logging.debug("get_all:initial list= "+str(lists))
+        logging.debug("get_all:all_states= "+str(all_states))
         return all_states
 
     def add_request(self, dict):
