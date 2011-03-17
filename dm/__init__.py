@@ -51,13 +51,16 @@ class DialogManager:
             state_dict = {'request':of}
             state_dict.update(internal_dict)
             self.state.add_request(state_dict)
-            count=self.dbi.query(of, internal_dict, count=True)
-            if count>10:
-                self.pending_question = "result_length"
-                return {"list":count, "question":HOW_MANY}
+            if of == "award":
+                person = internal_dict.get('person')
+                if person:
+                    count = self.dbi.awards(person)
+                else:
+                    count = 0
             else:
-                self.pending_question = SEE_RESULT
-                result={"list":count, "question":self.pending_question}
+                count=self.dbi.query(of, internal_dict, count=True)
+            self.pending_question = SEE_RESULT
+            result={"list":count, "question":self.pending_question}
             return result
         elif request_type == SIMILAR:
             self.state.add_request(internal_dict)
@@ -141,7 +144,11 @@ class DialogManager:
                 internal_dict.update(self.state.get_all())
         elif self.pending_question:
             internal_dict[self.pending_question]=response
-            internal_dict["request"]=self.state.last_request()
+            request =self.state.last_request()
+            if request == OPINION:
+                request = 'title'
+            internal_dict["request"] =request
+            
             internal_dict.update(self.state.get_all())
         self.pending_question = None
         return self.request(internal_dict)
