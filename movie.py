@@ -1,4 +1,3 @@
-#!/usr/bin/python
 import logging
 from nlg import nlg
 from nlu import NLUnderstanding
@@ -8,6 +7,7 @@ logging.basicConfig(level=logging.DEBUG,
                     filename='session.log',
                     format='%(message)s',
                     filemode='a')
+
 nlu = NLUnderstanding()
 dialogManager = DialogManager()
 
