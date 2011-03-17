@@ -2,6 +2,7 @@ import resultPrinter as rp
 import nlg_utils as nlgu
 from os import path
 import random
+import logging
 
 def questionToUser(NLUOutput,DMOutput):
     # DMOutput should contain [question:FLAG]
@@ -15,25 +16,26 @@ def questionToUser(NLUOutput,DMOutput):
         DMOutput.pop('question')
         return giveSpellingOptions(DMOutput)
     else:
-        print "NLG Error: Unknown Question Type: "+DMOutput['question']
+        logging.debug( "NLG Error: Unknown Question Type: "+DMOutput['question'])
         return ""
     
 def giveSpellingOptions(misspelled_names):
     rstring = "I'm sorry I couldn't quite understand that.\n"
     misspelled_names  = misspelled_names 
     for name in misspelled_names:
-        rstring+= "Specifically, who do you mean by {0}? ".format(nlgu.given_first(name))
-        rstring+="Could it be "
+        rstring+= "Specifically, who do you mean by {0}? ".format(nlgu.given_first(name))        
         i=0
+        options = ""
         spellings = misspelled_names[name]
         while i<len(spellings): 
             if i == len(spellings)-1:
-                rstring += " or "+nlgu.given_first(spellings[i])+"?"
+                options += " or "+nlgu.given_first(spellings[i])
             elif i == 0:
-                rstring += nlgu.given_first(spellings[i])
+                options += nlgu.given_first(spellings[i])
             else:
-                rstring += ", "+ nlgu.given_first(spellings[i])
+                options += ", "+ nlgu.given_first(spellings[i])
             i = i+1
+        rstring+="Could it be {0}?".format(options)
     if len(misspelled_names) >1:
         rstring += "Please list the correct spellings separated by commas so I can better understand you. Thanks!"
     return rstring
@@ -49,7 +51,7 @@ def listOutput(NLUOutput,DMOutput):
     rstring = ""
     filePath = path.dirname(__file__)+'/prs/'
     if resultNum < 0:
-        print "NLG Error: List Size less than zero"
+        logging.debug( "NLG Error: List Size less than zero")
     elif resultNum == 1:
         rstring += nlgu.get_random_line(filePath+"one_result.txt")
     elif resultNum == 0:
@@ -59,9 +61,9 @@ def listOutput(NLUOutput,DMOutput):
     elif resultNum < 101:
         rstring += nlgu.get_random_line(filePath+"multi_result.txt").format(resultNum)
     else:
-        print resultNum
         rstring += nlgu.get_random_line(filePath+"multi_result.txt").format(getRandomQuantifier())
-        DMOutput['question'] == 'MORE_PREF'
+        if not DMOutput.has_key('question'):
+            DMOutput['question'] == 'MORE_PREF'
 
     if resultNum == 0:
         rstring += "  Type 'reset' to start over." # This should be removed
