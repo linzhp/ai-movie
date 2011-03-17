@@ -32,7 +32,7 @@ def flipPersons(itemType, item):
     if itemType in ['person','actor','director','voice actor']:
         return given_first(item).strip('.')
     else:
-        return item.strip
+        return item.strip()
 
 def given_first(name):
     if (name.count(',')):
