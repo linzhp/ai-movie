@@ -22,18 +22,19 @@ def giveSpellingOptions(misspelled_names):
     rstring = "I'm sorry I couldn't quite understand that.\n"
     misspelled_names  = misspelled_names 
     for name in misspelled_names:
-        rstring+= "Specifically, who do you mean by {0}? ".format(nlgu.given_first(name))
-        rstring+="Could it be "
+        rstring+= "Specifically, who do you mean by {0}? ".format(nlgu.given_first(name))        
         i=0
+        options = ""
         spellings = misspelled_names[name]
         while i<len(spellings): 
             if i == len(spellings)-1:
-                rstring += " or "+nlgu.given_first(spellings[i])+"?"
+                options += " or "+nlgu.given_first(spellings[i])
             elif i == 0:
-                rstring += nlgu.given_first(spellings[i])
+                options += nlgu.given_first(spellings[i])
             else:
-                rstring += ", "+ nlgu.given_first(spellings[i])
+                options += ", "+ nlgu.given_first(spellings[i])
             i = i+1
+        rstring+="Could it be {0}?".format(options)
     if len(misspelled_names) >1:
         rstring += "Please list the correct spellings separated by commas so I can better understand you. Thanks!"
     return rstring

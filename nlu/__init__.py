@@ -205,8 +205,9 @@ class NLUnderstanding:
         prev_op = None
         for sentence in subsentences:
             cur_pref = self._process_subsentence(sentence)
-#            print sentence
+            print sentence
             positive = self._decide_opinion(sentence, prev_op)
+            print positive
             logging.debug("Opinion: "+str(positive)) 
             if not positive:
                 cur_pref.negate = negate
