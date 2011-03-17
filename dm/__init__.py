@@ -163,6 +163,8 @@ class DialogManager:
                         newList = []
                         new_name = ""
                         for person in dict[tuple]:
+                            if person == "PREV_HE":
+                                continue
                             new_names = dbi.check_person(person)
                             if len(new_names)==1:
                                 new_name = new_names.pop()
@@ -172,7 +174,10 @@ class DialogManager:
                                 #create output to nlg
                             newList.append(new_name)
                     else:
-                        new_names = dbi.check_person(dict[tuple])
+                        person = dict[tuple]
+                        if person == 'PREV_HE':
+                            continue
+                        new_names = dbi.check_person(person)
                         if len(new_names)==1:
                             new_name = new_names.pop()
                         else:

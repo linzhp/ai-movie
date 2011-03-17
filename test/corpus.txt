@@ -85,7 +85,7 @@ DM:{"print":"title","results":["Batman Beyond","The Original Batman"]}
 NLG:He was in"Batman Byeond" and "The Original Batman".
  
 user:who voiced him?
-NLU:[{"request":"voice actor","part":"PRE_HE"}]
+NLU:[{"request":"voice actor","part":"PREV_HE"}]
 DM:{"print":"voice actor","results":["Brian"]}
 NLG:Brian voiced him.
 
