@@ -557,7 +557,8 @@ def invert_name(s):
 def check_person(name):
     debug_spellcheck = False 
     if (name.count(' ')==0 or name == None or name == '' or len(name) < 3): # If this is an atomic name
-        return [name] # TODO: Throw an exception.
+        raise "Invalid name "+ str(name) +"\n"
+        #return [name] # TODO: Throw an exception.
     name = given_first(name)
     name_list = name.rsplit(' ', 1)
     family_name=name_list.pop()[:6]
